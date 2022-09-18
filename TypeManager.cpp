@@ -57,8 +57,12 @@ Array<Vec2> GorlSide{ {(WindowWide - goalWide) / 2,tableUpper},{(WindowWide + go
 
 int32 nowtype = 0;
 
-TypeManager::TypeManager(int32 ScoreInit) :PreScore(ScoreInit), Score(ScoreInit)
+int32 TypeManager::PreScore = 0;
+int32 TypeManager::Score = 0;
+
+TypeManager::TypeManager(int32 ScoreInit)
 {
+	PreScore = Score = ScoreInit;
 	int32 lifeX = WindowWide - tableLeft + 120;
 	int32 lifeY = WindowHight - 80;
 	Array<Vec2> playerlife = { {lifeX,lifeY},{lifeX + 25,lifeY},{lifeX + 50,lifeY},{lifeX + 75,lifeY},{lifeX + 100,lifeY} };
@@ -71,32 +75,39 @@ TypeManager::TypeManager(int32 ScoreInit) :PreScore(ScoreInit), Score(ScoreInit)
 	enemy_m = new Enemy(WindowWide / 2, tableUpper + Mr, eme, Mr, highSpeed, rowSpeed, MalletSpeed, tableLeft, tableUpper, WindowWide, WindowHight, gr, enemylife);
 }
 
+TypeManager::~TypeManager()
+{
+	//最初からを選択したとき
+	m_pType->Setm_score(0);
+}
+
 void TypeManager::ChangeType(int32 type)
 {
 	if (m_pType != NULL)
 	{
+		Score = m_pType->Getm_score();
 		delete m_pType;
 	}
 	switch (type)
 	{
 	case TYPE1:
-		m_pType = new Type1();
+		m_pType = new Type1(Score);
 		nowtype = TYPE1;
 		break;
 	case TYPE2:
-		m_pType = new Type2();
+		m_pType = new Type2(Score);
 		nowtype = TYPE2;
 		break;
 	case TYPE3:
-		m_pType = new Type3();
+		m_pType = new Type3(Score);
 		nowtype = TYPE3;
 		break;
 	case TYPE4:
-		m_pType = new Type4();
+		m_pType = new Type4(Score);
 		nowtype = TYPE4;
 		break;
 	case TYPE5:
-		m_pType = new Type5();
+		m_pType = new Type5(Score);
 		nowtype = TYPE5;
 		break;
 	case Clear:
@@ -120,6 +131,7 @@ void TypeManager::Retry()
 	Array<Vec2> playerlife = { {lifeX,lifeY},{lifeX + 25,lifeY},{lifeX + 50,lifeY},{lifeX + 75,lifeY},{lifeX + 100,lifeY} };
 	player_m = new Player(WindowWide / 2, WindowHight - tableUpper - Mr, em, Mr, highSpeed, rowSpeed, MalletSpeed, tableLeft, tableUpper, WindowWide, WindowHight, gr, playerlife);
 	enemy_m->GetRevivaled();
+	m_pType->Setm_score(PreScore);
 }
 
 void TypeManager::Update()
@@ -189,6 +201,7 @@ void TypeManager::Update()
 
 void TypeManager::Draw()
 {
+//	Print << Score;
 	Scene::SetBackground(Palette::Black);
 
 	pgoal.drawFrame(0, 8, ColorF(Palette::Yellow));

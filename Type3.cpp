@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "Type3.h"
 
-Type3::Type3(int32* sco)
+Type3::Type3(int32 sco)
 	:bullet1(0), ball1(0), type(0), TypeChange(true), FirstGene(true), BaseType(sco)
 {
 	Edamage = 0.14;

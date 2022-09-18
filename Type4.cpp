@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "Type4.h"
 
-Type4::Type4(int32* sco)
+Type4::Type4(int32 sco)
 	:bullet1(0), ball1(0), type(0), TypeChange(true), FirstGene(true), BaseType(sco)
 {
 	Edamage = 0.13;

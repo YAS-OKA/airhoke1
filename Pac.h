@@ -37,7 +37,7 @@ public:
 
 	void pacSpeedRestrict();
 
-	void intersects(Mallet* m);	//インターセクト
+	void intersects(Mallet* m);	
 	bool intersects(Enemy* e);
 
 	void reflect(double eWall);

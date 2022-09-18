@@ -31,7 +31,7 @@ public:
 	EneBall(int32 BallR,int32 BallVR);
 	virtual ~EneBall();
 
-	void IntersectsPac(Pac* pac);			//パックと衝突したときんの処理
+	void IntersectsPac(Pac* pac);// , int32* score);			//パックと衝突したとき、スコアの加算も兼ねる
 	void IntersectsPac(Pac* pac,double iryoku);//敵がパックと衝突（なんでここに宣言されるんだ…）
 	Array<bool> IntersectsPac(Pac* pac, Vec2 start);//レーザーとパックの衝突、startはレーザーの起点
 	void IntersectsHunsui(Pac* pac, double iryoku);//レーザーとの衝突、上方向に加速iryokuは噴水の押し返す力

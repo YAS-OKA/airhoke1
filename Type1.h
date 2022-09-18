@@ -15,7 +15,7 @@ private:
 	int32 bullet_R = 10;//バレットの当たり判定の半径
 	EneBullet_1* bullet1 = 0;
 	EneBullet_1* bullet2 = 0;
-	EneBullet_1* bullet3 = 0;		//ショットタイマーのせいだ！！
+	EneBullet_1* bullet3 = 0;		
 	
 	int32 ball_r = 5;
 	int32 ball_R = 6;
@@ -30,10 +30,8 @@ private:
 
 	Array<double>jiku{ 3.14 / 3,3.14 * 2 / 3 };
 public:
-	Type1(int32* sco);
+	Type1(int32 sco);
 	~Type1();
-
-	//void SetBullets();
 
 	void Update(Pac* pac, Player* player, Enemy* enemy);
 	void Draw();

@@ -58,7 +58,8 @@ class Game : public App::Scene
 {
 private:
 	int32 Score;
-	TypeManager t_manager;
+	int32 ScoreInit = 0;
+	TypeManager* t_manager = NULL;
 	Font font{ 60 };
 	bool oneTime = true;
 public:
@@ -66,8 +67,10 @@ public:
 	Game(const InitData& init)
 		:IScene(init),Score(0)
 	{
+		
+		t_manager = new TypeManager(ScoreInit);
 		changeSc = false;
-		t_manager.ChangeType(0);
+		t_manager->ChangeType(0);
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"再開", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RESTART);
 		b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);
@@ -76,17 +79,17 @@ public:
 
 	void update() override
 	{
-		t_manager.Update();
+		t_manager->Update();
 
 		if (rebegin)
 		{
+			delete t_manager;
 			pause = false;
 			gameover = false;
 			rebegin = false;
 			changeScene(State::Game);
 		}
-
-		
+				
 		if (BackChangeSc)
 		{
 			changeScene(State::Title);
@@ -101,7 +104,7 @@ public:
 			b_manager.RemoveAllButton();
 			b_manager.SetButton(U"タイトルに戻る", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 100), 30, 150, Palette::White, BACK_TO_TITLE);
 			b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);
-			b_manager.SetButton(U"リトライ", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RETRY);
+			b_manager.SetButton(U"途中から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4), 30, 150, Palette::White, RETRY);
 			oneTime = false;
 		}
 		if (gameover)
@@ -112,8 +115,8 @@ public:
 
 		if (retry)
 		{
-			t_manager.ChangeType(t_manager.GetNowType());
-			t_manager.Retry();
+			t_manager->ChangeType(t_manager->GetNowType());
+			t_manager->Retry();
 			oneTime = true;
 			changeSc = false;
 			gameover = false;
@@ -125,7 +128,7 @@ public:
 	void draw() const override
 	{
 		if(!changeSc)
-			t_manager.Draw();
+			t_manager->Draw();
 		if (pause)
 		{
 			Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(Palette::Black, 0.7));

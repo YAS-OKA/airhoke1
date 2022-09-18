@@ -66,7 +66,7 @@ private:
 	bool TypeChange;
 	bool FirstGene;
 public:
-	Type5(int32* sco);
+	Type5(int32 sco);
 	~Type5();
 
 	void Update(Pac* pac, Player* player, Enemy* enemy);

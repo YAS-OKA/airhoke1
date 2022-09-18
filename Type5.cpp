@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "Type5.h"
 
-Type5::Type5(int32* sco) :FirstGene(true), TypeChange(true), BaseType(sco)
+Type5::Type5(int32 sco) :FirstGene(true), TypeChange(true), BaseType(sco)
 {
 	
 	Edamage = 0.16;

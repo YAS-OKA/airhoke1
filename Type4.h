@@ -49,7 +49,7 @@ private:
 	RainShot* bullet100;
 	RainShot* bullet200;
 public:
-	Type4(int32* sco);
+	Type4(int32 sco);
 	~Type4();
 
 	void Update(Pac* pac, Player* player, Enemy* enemy);

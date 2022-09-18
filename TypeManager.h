@@ -15,8 +15,8 @@ class TypeManager
 {
 private:
 	static BaseType* m_pType;
-	int32 PreScore;
-	int32 Score;
+	static int32 PreScore;
+	static int32 Score;
 	static Pac* insP;
 	static Player* player_m;
 	static Enemy* enemy_m;
@@ -31,7 +31,7 @@ public:
 	};
 
 	TypeManager(int32 ScoreInit);
-
+	~TypeManager();
 	static void ChangeType(int32 type);
 
 	static int32 GetNowType();
