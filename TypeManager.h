@@ -32,8 +32,10 @@ public:
 
 	TypeManager(int32 ScoreInit);
 	~TypeManager();
+
 	static void ChangeType(int32 type);
 
+	static int32 GetScore();
 	static int32 GetNowType();
 
 	static void Retry();

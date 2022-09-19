@@ -125,7 +125,7 @@ void Type4::Update(Pac* pac, Player* player, Enemy* enemy)
 			TypeChange = true; type++;
 		}
 		ball1->IntersectsPac(pac, 0.3);
-		ball2->IntersectsPac(pac);
+		ball2->IntersectsPac(pac,&m_score);
 		break;
 	case 1:
 		if (FirstGene)
@@ -159,7 +159,7 @@ void Type4::Update(Pac* pac, Player* player, Enemy* enemy)
 			TypeChange = true; type++;
 		}
 		ball1->IntersectsPac(pac, 0.3);
-		ball2->IntersectsPac(pac);
+		ball2->IntersectsPac(pac,&m_score);
 		break;
 	case 2:
 		if (FirstGene)
@@ -212,7 +212,7 @@ void Type4::Update(Pac* pac, Player* player, Enemy* enemy)
 		ball3->BallMove();
 		ball4->BallMove();
 		ball3->IntersectsPac(pac, 0.4);
-		ball4->IntersectsPac(pac);
+		ball4->IntersectsPac(pac,&m_score);
 		ball3->RemoveOutBall(table);
 		ball4->RemoveOutBall(table);
 		break;

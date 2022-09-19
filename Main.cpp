@@ -58,10 +58,11 @@ class Game : public App::Scene
 {
 private:
 	int32 Score;
-	int32 ScoreInit = 0;
+	int32 ScoreInit = 0;//ゼロで固定。最初からにしたとき、必ずゼロで始まる（typemanagerデストラクタでm_scoreを0にしている）から
 	TypeManager* t_manager = NULL;
 	Font font{ 60 };
 	bool oneTime = true;
+	Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
 public:
 	
 	Game(const InitData& init)
@@ -92,10 +93,12 @@ public:
 				
 		if (BackChangeSc)
 		{
+			delete t_manager;
 			changeScene(State::Title);
 		}
 		if (changeSc)
 		{
+			delete t_manager;
 			changeScene(State::GameClear);
 		}
 
@@ -141,6 +144,7 @@ public:
 			font(U"ゲームオーバー").drawAt(Scene::Center(), Palette::Darkred);
 			b_manager.Draw();
 		}
+		textureTsAnnna.draw(0, 70);
 	}
 };
 

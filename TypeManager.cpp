@@ -118,6 +118,11 @@ void TypeManager::ChangeType(int32 type)
 	}
 }
 
+int32 TypeManager::GetScore()
+{
+	return m_pType->Getm_score();
+}
+
 int32 TypeManager::GetNowType()
 {
 	return nowtype;

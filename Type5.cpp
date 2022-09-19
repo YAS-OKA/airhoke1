@@ -225,7 +225,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			NeutronStar->SwingingSIN(3.14 / 8, 0, t, jiku);
 			//intersects
 			ball7->RayIntersectsPlayer(player);
-			ball6->IntersectsPac(pac);
+			ball6->IntersectsPac(pac,&m_score);
 			ball6->BallDecelerate();
 			ball6->BallMove(50);
 			ball6->BallRemove_if(Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 17);
@@ -248,7 +248,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			NeutronStar->SwingingSIN(3.14 / 8, 0, t, jiku);
 			//intersects
 			ball7->RayIntersectsPlayer(player);
-			ball6->IntersectsPac(pac);
+			ball6->IntersectsPac(pac,&m_score);
 			ball6->BallDecelerate();
 			ball6->BallMove(60);
 			ball6->BallRemove_if(Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 17);
@@ -454,7 +454,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			ball2->BallMove(50);
 
 			ball4->IntersectsPac(pac, 2.0);
-			ball1->IntersectsPac(pac);
+			ball1->IntersectsPac(pac, &m_score);
 
 			if (ball1->IntersectsPlayer(player))
 				ball1->BallAllExtingish();

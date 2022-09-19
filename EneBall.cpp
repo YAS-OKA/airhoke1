@@ -7,7 +7,7 @@ EneBall::EneBall(int32 BallR, int32 BallVR) :r(BallR), vr(BallVR)
 
 EneBall:: ~EneBall() {};
 
-void EneBall::IntersectsPac(Pac* p)//, int32* score)
+void EneBall::IntersectsPac(Pac* p, int32* score)
 {
 	for (auto itEneButs = Balls.begin(); itEneButs != Balls.end();)
 	{
@@ -16,7 +16,7 @@ void EneBall::IntersectsPac(Pac* p)//, int32* score)
 
 		if (enemyCircle.intersects(p->GetPac()))
 		{
-			//*score += damage;
+			*score += damage;
 			//消滅エフェクト
 			effect.add([pos = itEneButs->pos](double t)
 			{

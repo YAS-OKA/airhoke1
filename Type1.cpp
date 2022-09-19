@@ -121,7 +121,7 @@ void Type1::Update(Pac* pac, Player* player, Enemy* enemy)
 	default:
 		break;
 	}
-	ball1->IntersectsPac(pac);
+	ball1->IntersectsPac(pac,&m_score);
 	ball1->RemoveOutBall(table);
 	if (ball1->IntersectsPlayer(player))
 	{
@@ -132,6 +132,7 @@ void Type1::Update(Pac* pac, Player* player, Enemy* enemy)
 
 void Type1::Draw()
 {
+	Print << m_score;
 	ball1->Ball_1_draw();
 	bullet1->bulletDraw();
 }

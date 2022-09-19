@@ -98,7 +98,7 @@ void Type2::Update(Pac* pac, Player* player, Enemy* enemy)
 	default:
 		break;
 	}
-	ball1->IntersectsPac(pac);
+	ball1->IntersectsPac(pac,&m_score);
 	ball1->RemoveOutBall(table);
 	if (ball1->IntersectsPlayer(player))
 	{
