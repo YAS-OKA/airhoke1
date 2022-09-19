@@ -13,7 +13,18 @@
 const int32 WindowWide = 1200;
 const int32 WindowHight = 800;
 
+
 ButtonManager b_manager;
+
+Array<Texture> Characters;
+
+void SetTextureCharacters()
+{
+	const Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
+	const Texture textureAttackedTsAnnna{ U"Images/AttackedTableSideAnnna.png" };
+	Characters << textureTsAnnna;
+	Characters << textureAttackedTsAnnna;
+}
 
 class Title : public App::Scene
 {
@@ -62,13 +73,13 @@ private:
 	TypeManager* t_manager = NULL;
 	Font font{ 60 };
 	bool oneTime = true;
-	Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
+	
 public:
 	
 	Game(const InitData& init)
 		:IScene(init),Score(0)
 	{
-		
+		SetTextureCharacters();
 		t_manager = new TypeManager(ScoreInit);
 		changeSc = false;
 		t_manager->ChangeType(0);
@@ -130,8 +141,8 @@ public:
 
 	void draw() const override
 	{
-		if(!changeSc)
-			t_manager->Draw();
+		if (!changeSc)
+			t_manager->Draw(Characters);
 		if (pause)
 		{
 			Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(Palette::Black, 0.7));
@@ -144,7 +155,7 @@ public:
 			font(U"ゲームオーバー").drawAt(Scene::Center(), Palette::Darkred);
 			b_manager.Draw();
 		}
-		textureTsAnnna.draw(0, 70);
+	
 	}
 };
 

@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "TypeManager.h"
+#include"Common.h"
 
 const double PacHighSpeed = 450;		//パックの最高速度
 const Vec2 PacVelocity = { 0,150 };	//パックの初速度	
@@ -47,6 +48,8 @@ bool rebegin = false;
 bool pause = false;
 bool gameover = false;
 
+double itagaruLimit = 1.5;
+
 BaseType* TypeManager::m_pType = NULL;
 
 Player* TypeManager::player_m = 0;
@@ -59,6 +62,10 @@ int32 nowtype = 0;
 
 int32 TypeManager::PreScore = 0;
 int32 TypeManager::Score = 0;
+
+ChackDuaChange TypeManager::ChackHitMan = { DuaInit,DuaInit };
+
+double TypeManager::itagaruTimer = 0;
 
 TypeManager::TypeManager(int32 ScoreInit)
 {
@@ -73,6 +80,7 @@ TypeManager::TypeManager(int32 ScoreInit)
 	insP = new Pac(WindowWide / 2, WindowHight / 2, Pr, PacVelocity, tableLeft, tableUpper, WindowWide, WindowHight, PacHighSpeed);
 	player_m = new Player(WindowWide / 2, WindowHight - tableUpper - Mr, em, Mr, highSpeed, rowSpeed, MalletSpeed, tableLeft, tableUpper, WindowWide, WindowHight, gr,playerlife);
 	enemy_m = new Enemy(WindowWide / 2, tableUpper + Mr, eme, Mr, highSpeed, rowSpeed, MalletSpeed, tableLeft, tableUpper, WindowWide, WindowHight, gr, enemylife);
+	
 }
 
 TypeManager::~TypeManager()
@@ -204,9 +212,8 @@ void TypeManager::Update()
 	player_m->ResetKey(); enemy_m->ResetKey();
 }
 
-void TypeManager::Draw()
+void TypeManager::Draw(Array<Texture> characters)
 {
-//	Print << Score;
 	Scene::SetBackground(Palette::Black);
 
 	pgoal.drawFrame(0, 8, ColorF(Palette::Yellow));
@@ -229,4 +236,31 @@ void TypeManager::Draw()
 
 	m_pType->Draw();
 	insP->GetPac().draw(ColorF(Palette::Whitesmoke));
+
+	if (ChackHitMan.nowDuability < ChackHitMan.preDuability||itagaruTimer>0)
+	{
+		//攻撃を食らっていた場合。
+		if (itagaruTimer < 0.3)
+		{
+			characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75 + 10 * Periodic::Triangle0_1(0.08), ColorF(1.0, 0.4, 0.4));
+		}
+		else
+		{
+			characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75);
+		}
+		itagaruTimer += Scene::DeltaTime();
+		if (itagaruTimer > itagaruLimit)
+			itagaruTimer = 0;
+	}
+	else
+	{
+		if (player_m->GetBreak())
+		{
+			characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75, ColorF(1.0, 0.5));
+		}
+		else
+			characters[int32(CharactersState::TsAnnna)].draw(0, 75);
+	}
+	ChackHitMan.preDuability = ChackHitMan.nowDuability;
+	ChackHitMan.nowDuability = player_m->GetDua();
 }

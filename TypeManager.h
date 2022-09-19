@@ -11,6 +11,18 @@
 #include"Enemy.h"
 #include"myfunction.h"
 
+enum class CharactersState
+{
+	TsAnnna,
+	AttackedTsAnnna,
+};
+
+static struct ChackDuaChange
+{
+	double nowDuability;
+	double preDuability;
+};
+
 class TypeManager
 {
 private:
@@ -20,6 +32,9 @@ private:
 	static Pac* insP;
 	static Player* player_m;
 	static Enemy* enemy_m;
+
+	static ChackDuaChange ChackHitMan;
+	static double itagaruTimer;
 public:
 	enum TYPE {
 		TYPE1,
@@ -42,7 +57,7 @@ public:
 
 	static void Update();
 
-	static void Draw();
+	static void Draw(Array<Texture> characters);
 
 };
 

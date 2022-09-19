@@ -122,7 +122,7 @@ bool Mallet::GetRevivaled()
 {
 	return Revivaled;
 }
-
+//壊れているかどうか
 bool Mallet::GetBreak()
 {
 	return Break;
