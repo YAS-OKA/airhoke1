@@ -72,7 +72,8 @@ private:
 	int32 ScoreInit = 0;//ゼロで固定。最初からにしたとき、必ずゼロで始まる（typemanagerデストラクタでm_scoreを0にしている）から
 	TypeManager* t_manager = NULL;
 	Font font{ 60 };
-	Font Scorefont{ 50 };
+	Font Scorefont1{ 30 };
+	Font Scorefont2{ 22 };
 	bool oneTime = true;
 	
 public:
@@ -156,7 +157,8 @@ public:
 			font(U"ゲームオーバー").drawAt(Scene::Center(), Palette::Darkred);
 			b_manager.Draw();
 		}
-	
+		Scorefont1(U"スコア").draw(WindowWide - tableLeft + 10, WindowHight - 40, ColorF(Palette::Yellow));
+		Scorefont2(t_manager->GetNowScore()).draw(WindowWide - tableLeft + 110, WindowHight - 32, ColorF(Palette::White));
 	}
 };
 
