@@ -240,7 +240,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	if (ChackHitMan.nowDuability < ChackHitMan.preDuability||itagaruTimer>0)
 	{
 		//攻撃を食らっていた場合。
-		if (itagaruTimer < 0.3)
+		if (itagaruTimer < 0.3 && not(pause || gameover))
 		{
 			characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75 + 10 * Periodic::Triangle0_1(0.08), ColorF(1.0, 0.4, 0.4));
 		}
@@ -248,19 +248,19 @@ void TypeManager::Draw(Array<Texture> characters)
 		{
 			characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75);
 		}
-		itagaruTimer += Scene::DeltaTime();
+		if (not(pause || gameover))
+			itagaruTimer += Scene::DeltaTime();
+
 		if (itagaruTimer > itagaruLimit)
 			itagaruTimer = 0;
 	}
-	else
+	else if (player_m->GetBreak())
 	{
-		if (player_m->GetBreak())
-		{
-			characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75, ColorF(1.0, 0.5));
-		}
-		else
-			characters[int32(CharactersState::TsAnnna)].draw(0, 75);
+		characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75, ColorF(1.0, 0.5));
 	}
+	else
+		characters[int32(CharactersState::TsAnnna)].draw(0, 75);
+
 	ChackHitMan.preDuability = ChackHitMan.nowDuability;
 	ChackHitMan.nowDuability = player_m->GetDua();
 }

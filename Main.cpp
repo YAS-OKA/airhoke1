@@ -72,6 +72,7 @@ private:
 	int32 ScoreInit = 0;//ゼロで固定。最初からにしたとき、必ずゼロで始まる（typemanagerデストラクタでm_scoreを0にしている）から
 	TypeManager* t_manager = NULL;
 	Font font{ 60 };
+	Font Scorefont{ 50 };
 	bool oneTime = true;
 	
 public:
