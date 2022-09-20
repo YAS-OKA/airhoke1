@@ -111,6 +111,7 @@ public:
 		}
 		if (changeSc)
 		{
+			Score = t_manager->GetScore();
 			delete t_manager;
 			changeScene(State::GameClear);
 		}
@@ -144,21 +145,24 @@ public:
 	void draw() const override
 	{
 		if (!changeSc)
-			t_manager->Draw(Characters);
-		if (pause)
 		{
-			Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(Palette::Black, 0.7));
-			font(U"ポーズ").drawAt(Scene::Center(), Palette::White);
-			b_manager.Draw();
+			if (!changeSc)
+				t_manager->Draw(Characters);
+			if (pause)
+			{
+				Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(Palette::Black, 0.7));
+				font(U"ポーズ").drawAt(Scene::Center(), Palette::White);
+				b_manager.Draw();
+			}
+			if (gameover)
+			{
+				Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(Palette::Black, 0.7));
+				font(U"ゲームオーバー").drawAt(Scene::Center(), Palette::Darkred);
+				b_manager.Draw();
+			}
+			Scorefont1(U"スコア").draw(WindowWide - tableLeft + 10, WindowHight - 40, ColorF(Palette::Yellow));
+			Scorefont2(t_manager->GetNowScore()).draw(WindowWide - tableLeft + 110, WindowHight - 32, ColorF(Palette::White));
 		}
-		if (gameover)
-		{
-			Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(Palette::Black, 0.7));
-			font(U"ゲームオーバー").drawAt(Scene::Center(), Palette::Darkred);
-			b_manager.Draw();
-		}
-		Scorefont1(U"スコア").draw(WindowWide - tableLeft + 10, WindowHight - 40, ColorF(Palette::Yellow));
-		Scorefont2(t_manager->GetNowScore()).draw(WindowWide - tableLeft + 110, WindowHight - 32, ColorF(Palette::White));
 	}
 };
 
@@ -177,7 +181,7 @@ public:
 		b_manager.Update();
 		if (BackChangeSc)
 		{
-			changeScene(State::GameClear);
+			changeScene(State::Title);
 		}
 	}
 

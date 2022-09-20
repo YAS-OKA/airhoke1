@@ -51,6 +51,7 @@ public:
 	static void ChangeType(int32 type);
 
 	static int32 GetNowScore();
+	static int32 GetScore();
 	static int32 GetNowType();
 
 	static void Retry();

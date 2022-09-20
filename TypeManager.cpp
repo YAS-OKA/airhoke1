@@ -85,12 +85,16 @@ TypeManager::TypeManager(int32 ScoreInit)
 
 TypeManager::~TypeManager()
 {
-	//最初からを選択したとき
-	m_pType->Setm_score(0);
+	if (nowtype != Clear)
+	{	//最初からを選択したとき
+		m_pType->Setm_score(0);
+	}
+	
 }
 
 void TypeManager::ChangeType(int32 type)
 {
+	m_pType = new Type1(Score);
 	if (m_pType != NULL)
 	{
 		Score = m_pType->Getm_score();
@@ -119,6 +123,7 @@ void TypeManager::ChangeType(int32 type)
 		nowtype = TYPE5;
 		break;
 	case Clear:
+		nowtype = Clear;
 		changeSc = true;
 		break;
 	default:
@@ -129,6 +134,11 @@ void TypeManager::ChangeType(int32 type)
 int32 TypeManager::GetNowScore()
 {
 	return m_pType->Getm_score();
+}
+
+int32 TypeManager::GetScore()
+{
+	return Score;
 }
 
 int32 TypeManager::GetNowType()
@@ -176,6 +186,7 @@ void TypeManager::Update()
 	insP->reflect(ew);
 	insP->intersects(enemy_m);
 	//ここから上の行程は固定
+	
 	m_pType->Update(insP, player_m, enemy_m);
 
 	if (player_m->GetDua() < 0 || player_m->GetBreak())
@@ -256,7 +267,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	}
 	else if (player_m->GetBreak())
 	{
-		characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75, ColorF(1.0, 0.5));
+		characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75);
 	}
 	else
 		characters[int32(CharactersState::TsAnnna)].draw(0, 75);

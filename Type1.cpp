@@ -132,7 +132,6 @@ void Type1::Update(Pac* pac, Player* player, Enemy* enemy)
 
 void Type1::Draw()
 {
-	Print << m_score;
 	ball1->Ball_1_draw();
 	bullet1->bulletDraw();
 }
