@@ -37,6 +37,10 @@ void ButtonManager::SetButton(String name, Vec2 pos, int32 hight, int32 wideth, 
 		state[BACK_TO_TITLE] = true;
 		b[BACK_TO_TITLE] = m_Button(name, pos, hight, wideth, c);
 		break;
+	case FLAG:
+		state[FLAG] = true;
+		b[FLAG] = m_Button(name, pos, hight, wideth, c);
+		break;
 	case QUIT:
 		state[QUIT] = true;
 		b[QUIT] = m_Button(name, pos, hight, wideth, c);
@@ -72,6 +76,10 @@ void ButtonManager::RemoveButton(int32 bt)
 		if (state[BACK_TO_TITLE])
 			state[BACK_TO_TITLE] = false;
 		break;
+	case FLAG:
+		if (state[FLAG])
+			state[FLAG] = false;
+		break;
 	case QUIT:
 		if (state[QUIT])
 			state[QUIT] = false;
@@ -92,6 +100,16 @@ void ButtonManager::RemoveAllButton()
 	}
 	num_button = 0;
 	nowButton = 0;
+}
+
+bool ButtonManager::GetFlag()
+{
+	return m_pButton->Getflag();
+}
+
+void ButtonManager::SetFlag(bool ft)
+{
+	m_pButton->Setflag(ft);
 }
 
 void ButtonManager::Change(int32 button)
@@ -142,6 +160,15 @@ void ButtonManager::Change(int32 button)
 		if (count == (button+num_button) % num_button)
 		{
 			m_pButton = new BackToTitle(b[BACK_TO_TITLE]);
+			nowButton = count;
+		}
+		count++;
+	}
+	if (state[FLAG])
+	{
+		if (count == (button + num_button) % num_button)
+		{
+			m_pButton = new Flag(b[FLAG]);
 			nowButton = count;
 		}
 		count++;
@@ -233,6 +260,10 @@ void ButtonManager::Draw()
 	if (state[BACK_TO_TITLE])
 	{
 		SimpleGUI::Button(b[BACK_TO_TITLE].name, b[BACK_TO_TITLE].pos, b[BACK_TO_TITLE].wideth);
+	}
+	if (state[FLAG])
+	{
+		SimpleGUI::Button(b[FLAG].name, b[FLAG].pos, b[FLAG].wideth);
 	}
 	//最後尾
 	if (state[QUIT])

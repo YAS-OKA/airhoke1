@@ -84,7 +84,7 @@ public:
 		SetTextureCharacters();
 		t_manager = new TypeManager(ScoreInit);
 		changeSc = false;
-		t_manager->ChangeType(0);
+		t_manager->ChangeType(4);
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"再開", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RESTART);
 		b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);
@@ -113,7 +113,9 @@ public:
 		{
 			Score = t_manager->GetScore();
 			delete t_manager;
-			changeScene(State::GameClear);
+			getData().lastGameScore = Score;
+			changeScene(State::Ranking);
+
 		}
 
 		if (gameover&&oneTime)
@@ -166,6 +168,92 @@ public:
 	}
 };
 
+class Ranking :public App::Scene
+{
+public:
+	Ranking(const InitData& init) :IScene(init)
+	{
+		b_manager.RemoveAllButton();
+		b_manager.SetButton(U"はい", Vec2(WindowWide / 2 - 110, WindowHight - 100), 30, 60, Palette::White, FLAG);
+		b_manager.SetButton(U"いいえ", Vec2(WindowWide / 2 + 50, WindowHight - 100), 30, 60, Palette::White, START);
+
+		auto& data = getData();
+		kariHighScores = data.highScores;
+
+		if (data.lastGameScore)
+		{
+			const int32 lastScore = *data.lastGameScore;
+
+			// ランキングを再構成
+			kariHighScores << lastScore;
+			kariHighScores.rsort();
+		    kariHighScores.resize(RankingCount);
+
+			// ランクインしていたら m_rank に順位をセット
+			for (int32 i = 0; i < RankingCount; ++i)
+			{
+				if (kariHighScores[i] == lastScore)
+				{
+					m_rank = i;
+					break;
+				}
+			}
+			data.lastGameScore.reset();
+
+		}
+	}
+	void update() override
+	{
+		if (b_manager.GetFlag())
+		{
+			getData().highScores = kariHighScores;
+		}
+		else
+		{
+			b_manager.Update();
+		}
+	}
+	void draw() const override
+	{
+		if (not b_manager.GetFlag())
+		{
+			FontAsset(U"Ranking")(U"スコアを保存しますか？").drawAt(WindowWide / 2, WindowHight - 200, ColorF(Palette::Black));
+			b_manager.Draw();
+		}
+		else
+		{
+
+		}
+		Scene::SetBackground(ColorF{ 0.4, 0.6, 0.9 });
+
+		FontAsset(U"Ranking")(U"RANKING").drawAt(WindowWide/2, 60);
+
+		// ランキングを表示
+		for (auto i : step(RankingCount))
+		{
+			const RectF rect{ WindowWide/2-300, 120 + i * 80, 600, 80 };
+
+			rect.draw(ColorF{ 1.0, 1.0 - i * 0.2 });
+
+			FontAsset(U"Ranking")(kariHighScores[i]).drawAt(rect.center(), ColorF{ 0.25 });
+
+			// ランクインしていたら
+			if (i == m_rank)
+			{
+				rect.stretched(Periodic::Triangle0_1(0.5s) * 10).drawFrame(10, ColorF{ 0.8, 0.6, 0.4 });
+			}
+		}
+	}
+private:
+	static constexpr int32 RankingCount = 5;
+
+	bool hozonn = false;
+
+	int32 m_rank = -1;
+
+	Array<int32> kariHighScores;
+};
+
 class GameClear : public App::Scene
 {
 public:
@@ -200,12 +288,15 @@ void Main()
 	Window::Resize(WindowWide, WindowHight);
 
 	FontAsset::Register(U"Titlefont", 60, Typeface::Heavy);
+	FontAsset::Register(U"Ranking", 40, Typeface::Heavy);
 
 	App manager;
 
 	manager.add<Title>(State::Title);
 
 	manager.add<Game>(State::Game);
+
+	manager.add<Ranking>(State::Ranking);
 
 	manager.add<GameClear>(State::GameClear);
 	

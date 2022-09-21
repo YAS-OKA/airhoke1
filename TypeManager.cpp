@@ -94,7 +94,6 @@ TypeManager::~TypeManager()
 
 void TypeManager::ChangeType(int32 type)
 {
-	m_pType = new Type1(Score);
 	if (m_pType != NULL)
 	{
 		Score = m_pType->Getm_score();

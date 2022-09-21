@@ -81,6 +81,21 @@ public:
 	void Update();
 	void Draw();
 };
+
+// 選択するとフラグが立つ（押したことによって起きるアクションは自由に決めれる）
+class Flag :public BaseButton
+{
+private:
+	m_Button b;
+public:
+	Flag();
+	Flag(m_Button b);
+	~Flag();
+	void Registation(String name, Vec2 pos, int32 hight, int32 wideth, Color c, bool state, int32 Cnum);
+	m_Button GetButton();
+	void Update();
+	void Draw();
+};
 //ゲームを終了
 class Quit :public BaseButton
 {

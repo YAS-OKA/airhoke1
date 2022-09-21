@@ -8,6 +8,7 @@ enum ButtonType {//表示されるのはこの順番
 	RESTART,
 	REBEGIN,
 	BACK_TO_TITLE,
+	FLAG,
 	QUIT//これをButtonTypeの最後尾にする(stateの初期化でQUITを最後尾として扱っている)
 };
 
@@ -33,6 +34,9 @@ public:
 	void Change(int32 button);
 
 	void Update();
+
+	bool GetFlag();
+	void SetFlag(bool ft);
 
 	void Draw();
 };
