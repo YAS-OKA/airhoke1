@@ -24,6 +24,7 @@ private:
 public:
 	nameBoard(Font f,Vec2 v,int32 Limitlen = 3);//文字数制限
 	bool isEnter();
+	void SetEnter(bool ft);
 	void Update();
 	void Draw();
 	String GetName();

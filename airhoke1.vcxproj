@@ -119,6 +119,7 @@
     <ClCompile Include="ChildBullet.cpp" />
     <ClCompile Include="Hanabi.cpp" />
     <ClCompile Include="myButton.cpp" />
+    <ClCompile Include="nameBoard.cpp" />
     <ClCompile Include="RainShot.cpp" />
     <ClCompile Include="EneBall.cpp" />
     <ClCompile Include="EneBullet.cpp" />
@@ -342,6 +343,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Hanabi.h" />
     <ClInclude Include="myButton.h" />
+    <ClInclude Include="nameBoard.h" />
     <ClInclude Include="RainShot.h" />
     <ClInclude Include="EneBall.h" />
     <ClInclude Include="EneBullet.h" />

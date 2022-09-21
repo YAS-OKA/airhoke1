@@ -69,6 +69,7 @@ double TypeManager::itagaruTimer = 0;
 
 TypeManager::TypeManager(int32 ScoreInit)
 {
+	m_pType = NULL; player_m = 0; insP = 0; enemy_m = 0; PreScore = 0; Score = 0; ChackHitMan = { (double)DuaInit,(double)DuaInit }; itagaruTimer = 0;
 	PreScore = Score = ScoreInit;
 	int32 lifeX = WindowWide - tableLeft + 120;
 	int32 lifeY = WindowHight - 80;
@@ -85,11 +86,13 @@ TypeManager::TypeManager(int32 ScoreInit)
 
 TypeManager::~TypeManager()
 {
+	
 	if (nowtype != Clear)
 	{	//最初からを選択したとき
 		m_pType->Setm_score(0);
 	}
-	
+	else
+		m_pType = NULL;
 }
 
 void TypeManager::ChangeType(int32 type)

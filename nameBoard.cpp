@@ -11,6 +11,11 @@ bool nameBoard::isEnter()
 	return Enter;
 }
 
+void nameBoard::SetEnter(bool ft)
+{
+	Enter = ft;
+}
+
 void nameBoard::Update()
 {
 	if (KeyUp.down())

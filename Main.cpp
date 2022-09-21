@@ -7,6 +7,7 @@
 #include"ButtonManager.h"
 #include"TypeManager.h"
 #include"Common.h"
+#include"nameBoard.h"
 
 ///自分が死んだとき、玉の消滅にエフェクトをつけたい
 
@@ -173,26 +174,42 @@ class Ranking :public App::Scene
 public:
 	Ranking(const InitData& init) :IScene(init)
 	{
+		board = new nameBoard(fontBoard, Vec2(WindowWide/2-fontBoard.fontSize() * 7.5, WindowHight - 160), 10);
+		changeSc = false;
 		b_manager.RemoveAllButton();
-		b_manager.SetButton(U"はい", Vec2(WindowWide / 2 - 110, WindowHight - 100), 30, 60, Palette::White, FLAG);
-		b_manager.SetButton(U"いいえ", Vec2(WindowWide / 2 + 50, WindowHight - 100), 30, 60, Palette::White, START);
+		b_manager.SetButton(U"はい", Vec2(WindowWide / 2 - 110, WindowHight - 150), 30, 60, Palette::White, FLAG);
+		b_manager.SetButton(U"いいえ", Vec2(WindowWide / 2 + 50, WindowHight - 150), 30, 60, Palette::White, START);
 
 		auto& data = getData();
-		kariHighScores = data.highScores;
+		kariHighScores = data.HighScores;
 
 		if (data.lastGameScore)
 		{
 			const int32 lastScore = *data.lastGameScore;
 
 			// ランキングを再構成
-			kariHighScores << lastScore;
-			kariHighScores.rsort();
-		    kariHighScores.resize(RankingCount);
-
+			const Date date = Date::Today();
+			
+			Scores last = { lastScore , U"",date.year,date.month,date.day };
+			
+			kariHighScores << last;
+			//スコアソート
+			for (int32 i = 0; i < RankingCount; i++)
+				for (int32 j = RankingCount; j - 1 >= i; j--)
+				{
+					if (kariHighScores[j].highScore > kariHighScores[j - 1].highScore);
+					{
+						Scores z;
+						z = kariHighScores[j];
+						kariHighScores[j] = kariHighScores[j - 1];
+						kariHighScores[j - 1] = z;
+					}
+				}
+			kariHighScores.resize(RankingCount);
 			// ランクインしていたら m_rank に順位をセット
 			for (int32 i = 0; i < RankingCount; ++i)
 			{
-				if (kariHighScores[i] == lastScore)
+				if (kariHighScores[i].highScore == last.highScore)
 				{
 					m_rank = i;
 					break;
@@ -204,54 +221,106 @@ public:
 	}
 	void update() override
 	{
-		if (b_manager.GetFlag())
+		if (changeSc)
+			changeScene(State::GameClear);
+
+		if (board->isEnter()&&not board->GetName().isEmpty())
 		{
-			getData().highScores = kariHighScores;
+			kariHighScores[m_rank].name = board->GetName();
+			getData().HighScores = kariHighScores;
+			FlashTimer += Scene::DeltaTime();
+			Timer += Scene::DeltaTime();
+
+			if (FlashTimer > FlashInterval * 2)
+				FlashTimer = 0;
 		}
 		else
 		{
-			b_manager.Update();
+			board->SetEnter(false);
+			if (b_manager.GetFlag())
+			{
+				board->Update();
+			}
+			else
+			{
+				b_manager.Update();
+			}
 		}
+
+		if (Timer > TimeOfBeginingSceneChange)
+			changeSc = true;
 	}
 	void draw() const override
 	{
 		if (not b_manager.GetFlag())
 		{
-			FontAsset(U"Ranking")(U"スコアを保存しますか？").drawAt(WindowWide / 2, WindowHight - 200, ColorF(Palette::Black));
+			fontBoard(U"スコアを保存しますか？").drawAt(WindowWide / 2, WindowHight - 200, ColorF(Palette::Black));
 			b_manager.Draw();
 		}
 		else
 		{
+			//入力ボードを表示
+			board->Draw();
+			fontBoard(board->GetName()).draw(WindowWide / 2 - fontBoard.fontSize() * 3, WindowHight - 200, ColorF(Palette::Black));
+			fontBoard(U"名前を入力してください。").draw(WindowWide / 2 - fontBoard.fontSize() * 6, WindowHight - 250, ColorF(Palette::Black));
+			}
 
-		}
 		Scene::SetBackground(ColorF{ 0.4, 0.6, 0.9 });
 
-		FontAsset(U"Ranking")(U"RANKING").drawAt(WindowWide/2, 60);
+		FontAsset(U"Ranking")(U"HIGH SCORE RANKING").drawAt(WindowWide/2, 60);
 
 		// ランキングを表示
 		for (auto i : step(RankingCount))
 		{
-			const RectF rect{ WindowWide/2-300, 120 + i * 80, 600, 80 };
+			const RectF rect{ WindowWide / 2 - 200, 120 + i * 50, 400, 50 };
 
-			rect.draw(ColorF{ 1.0, 1.0 - i * 0.2 });
-
-			FontAsset(U"Ranking")(kariHighScores[i]).drawAt(rect.center(), ColorF{ 0.25 });
+			rect.draw(ColorF{ 1.0, 0 });
+			//スコア
+			FontAsset(U"Ranking")(kariHighScores[i].highScore).drawAt(rect.center(), ColorF{ 0.25 });
+			//名前
+			
+			if (FlashTimer < FlashInterval && board->isEnter() && i == m_rank)
+			{
+				//何も表示しない
+			}
+			else
+			{
+			FontAsset(U"Ranking")(kariHighScores[i].name).draw(WindowWide / 2 - 250 - fontBoard.fontSize() * 10, 120 + i * 50, ColorF{ Palette::Black });
+			}
+			//日付
+			if (kariHighScores[i].y == 0)
+				FontAsset(U"Ranking")(U"----/--/--").draw(WindowWide / 2 + 250, 120 + i * 50, ColorF{ 0.25 });
+			else
+			{
+				String d = Format(kariHighScores[i].y);
+				d << U'/'; d += Format(kariHighScores[i].m); d << U'/'; d += Format(kariHighScores[i].d);
+				FontAsset(U"Ranking")(d).draw(WindowWide / 2 + 250, 120 + i * 50, ColorF{ 0.25 });
+			}
 
 			// ランクインしていたら
 			if (i == m_rank)
 			{
-				rect.stretched(Periodic::Triangle0_1(0.5s) * 10).drawFrame(10, ColorF{ 0.8, 0.6, 0.4 });
+				rect.stretched(Periodic::Triangle0_1(0.5s) * 10).drawFrame(5, ColorF{ 0.8, 0.6, 0.4 });
 			}
 		}
 	}
 private:
-	static constexpr int32 RankingCount = 5;
+	nameBoard *board;
+
+	Font fontBoard{ 26 };
+
+	static constexpr int32 RankingCount = 8;
 
 	bool hozonn = false;
 
 	int32 m_rank = -1;
 
-	Array<int32> kariHighScores;
+	Array<Scores> kariHighScores;
+
+	double FlashTimer=0;
+	double FlashInterval = 0.1;
+	double Timer = 0;
+	double TimeOfBeginingSceneChange = 1;
 };
 
 class GameClear : public App::Scene
