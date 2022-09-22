@@ -28,17 +28,7 @@ struct GameData
 	// 直前のゲームのスコア
 	Optional<int32> lastGameScore;
 
-	Array<Scores>HighScores =
-	{
-		{0,U"__________",0,0,0},
-		{0,U"__________",0,0,0},
-		{0,U"__________",0,0,0},
-		{0,U"__________",0,0,0},
-		{0,U"__________",0,0,0},
-		{0,U"__________",0,0,0},
-		{0,U"__________",0,0,0},
-		{0,U"__________",0,0,0},
-	};
+	Array<Scores>HighScores;
 };
 
 using App = SceneManager<State, GameData>;

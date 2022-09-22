@@ -108,7 +108,7 @@ public:
 		if (BackChangeSc)
 		{
 			delete t_manager;
-			changeScene(State::Title);
+			changeScene(State::Ranking);
 		}
 		if (changeSc)
 		{
@@ -174,6 +174,7 @@ class Ranking :public App::Scene
 public:
 	Ranking(const InitData& init) :IScene(init)
 	{
+
 		board = new nameBoard(fontBoard, Vec2(WindowWide/2-fontBoard.fontSize() * 7.5, WindowHight - 160), 10);
 		changeSc = false;
 		b_manager.RemoveAllButton();
@@ -181,6 +182,23 @@ public:
 		b_manager.SetButton(U"いいえ", Vec2(WindowWide / 2 + 50, WindowHight - 150), 30, 60, Palette::White, START);
 
 		auto& data = getData();
+
+		TextReader reader{ U"score.txt" };
+
+		String line;
+
+		int32 i = 0;
+		while (reader.readLine(line))
+		{
+			Scores s;
+			s.name = line.split(',')[0];
+			s.highScore = Parse<int32>(line.split(',')[1]);
+			s.y = Parse<int32>(line.split(',')[2]);
+			s.m = Parse<int32>(line.split(',')[3]);
+			s.d = Parse<int32>(line.split(',')[4]);
+			data.HighScores << s;		//これちゃんとHighScoresに追加されてる？
+		}
+
 		kariHighScores = data.HighScores;
 
 		if (data.lastGameScore)
@@ -221,13 +239,17 @@ public:
 	}
 	void update() override
 	{
-		if (changeSc)
-			changeScene(State::GameClear);
+		if (changeSc && BackChangeSc)
+			changeScene(State::Title);//タイトルに戻るを選択してランキングシーンに飛んだ場合
+		else
+			changeScene(State::GameClear);//ゲームをクリアしてからランキングシーンに飛んだ場合
 
 		if (board->isEnter()&&not board->GetName().isEmpty())
 		{
+			//決定が押されたとき
 			kariHighScores[m_rank].name = board->GetName();
 			getData().HighScores = kariHighScores;
+
 			FlashTimer += Scene::DeltaTime();
 			Timer += Scene::DeltaTime();
 
@@ -246,9 +268,23 @@ public:
 				b_manager.Update();
 			}
 		}
+		
 
 		if (Timer > TimeOfBeginingSceneChange)
+		{
+			//スコアを記録
+			TextWriter writer(U"score.txt");
+
+			for (auto i : step(8))
+			{
+				writer << getData().HighScores[i].name << U','
+					<< getData().HighScores[i].highScore << U','
+					<< getData().HighScores[i].y << U','
+					<< getData().HighScores[i].m << U','
+					<< getData().HighScores[i].d;
+			}
 			changeSc = true;
+		}
 	}
 	void draw() const override
 	{
