@@ -60,7 +60,7 @@ public:
 
 		Scene::SetBackground(ColorF(0.3, 0.4, 0.5));
 
-		FontAsset(U"Titlefont")(U"弾幕エアホッケー").drawAt(600, 100);
+		FontAsset(U"Titlefont")(U"エアホッケー").drawAt(600, 100);
 
 		font(U"z...決定").draw(10, WindowHight - 50);
 	}
@@ -116,7 +116,6 @@ public:
 			delete t_manager;
 			getData().lastGameScore = Score;
 			changeScene(State::Ranking);
-
 		}
 
 		if (gameover&&oneTime)
@@ -174,7 +173,6 @@ class Ranking :public App::Scene
 public:
 	Ranking(const InitData& init) :IScene(init)
 	{
-
 		board = new nameBoard(fontBoard, Vec2(WindowWide/2-fontBoard.fontSize() * 7.5, WindowHight - 160), 10);
 		changeSc = false;
 		b_manager.RemoveAllButton();
@@ -182,6 +180,8 @@ public:
 		b_manager.SetButton(U"いいえ", Vec2(WindowWide / 2 + 50, WindowHight - 150), 30, 60, Palette::White, START);
 
 		auto& data = getData();
+
+		data.HighScores.clear();
 
 		TextReader reader{ U"score.txt" };
 
@@ -196,11 +196,10 @@ public:
 			s.y = Parse<int32>(line.split(',')[2]);
 			s.m = Parse<int32>(line.split(',')[3]);
 			s.d = Parse<int32>(line.split(',')[4]);
-			data.HighScores << s;		//これちゃんとHighScoresに追加されてる？
+			
+			data.HighScores << s;
 		}
-
-		kariHighScores = data.HighScores;
-
+		
 		if (data.lastGameScore)
 		{
 			const int32 lastScore = *data.lastGameScore;
@@ -210,24 +209,30 @@ public:
 			
 			Scores last = { lastScore , U"",date.year,date.month,date.day };
 			
-			kariHighScores << last;
-			//スコアソート
-			for (int32 i = 0; i < RankingCount; i++)
-				for (int32 j = RankingCount; j - 1 >= i; j--)
+			data.HighScores << last;
+			//ソート
+			//Print << data.HighScores[8].highScore;
+			
+			for (auto i : step(RankingCount))
+			{
+				if (data.HighScores[RankingCount-i-1].highScore >= data.HighScores[RankingCount].highScore)
 				{
-					if (kariHighScores[j].highScore > kariHighScores[j - 1].highScore);
+					for (auto j : step(i))
 					{
-						Scores z;
-						z = kariHighScores[j];
-						kariHighScores[j] = kariHighScores[j - 1];
-						kariHighScores[j - 1] = z;
+						Scores z = data.HighScores[RankingCount - j];
+						data.HighScores[RankingCount - j] = data.HighScores[RankingCount - j - 1];
+						data.HighScores[RankingCount - j - 1] = z;
 					}
+					break;
 				}
-			kariHighScores.resize(RankingCount);
+			}
+			//for (auto i : step(9))
+				//Print << data.HighScores[i].highScore;
+			data.HighScores.resize(RankingCount);
 			// ランクインしていたら m_rank に順位をセット
 			for (int32 i = 0; i < RankingCount; ++i)
 			{
-				if (kariHighScores[i].highScore == last.highScore)
+				if (data.HighScores[i].highScore == last.highScore)
 				{
 					m_rank = i;
 					break;
@@ -239,16 +244,17 @@ public:
 	}
 	void update() override
 	{
+		auto& data = getData();
+
 		if (changeSc && BackChangeSc)
 			changeScene(State::Title);//タイトルに戻るを選択してランキングシーンに飛んだ場合
-		else
+		else if(changeSc)
 			changeScene(State::GameClear);//ゲームをクリアしてからランキングシーンに飛んだ場合
 
 		if (board->isEnter()&&not board->GetName().isEmpty())
 		{
 			//決定が押されたとき
-			kariHighScores[m_rank].name = board->GetName();
-			getData().HighScores = kariHighScores;
+			data.HighScores[m_rank].name = board->GetName();
 
 			FlashTimer += Scene::DeltaTime();
 			Timer += Scene::DeltaTime();
@@ -312,7 +318,7 @@ public:
 
 			rect.draw(ColorF{ 1.0, 0 });
 			//スコア
-			FontAsset(U"Ranking")(kariHighScores[i].highScore).drawAt(rect.center(), ColorF{ 0.25 });
+			FontAsset(U"Ranking")(getData().HighScores[i].highScore).drawAt(rect.center(), ColorF{ 0.25 });
 			//名前
 			
 			if (FlashTimer < FlashInterval && board->isEnter() && i == m_rank)
@@ -321,15 +327,15 @@ public:
 			}
 			else
 			{
-			FontAsset(U"Ranking")(kariHighScores[i].name).draw(WindowWide / 2 - 250 - fontBoard.fontSize() * 10, 120 + i * 50, ColorF{ Palette::Black });
+				FontAsset(U"Ranking")(getData().HighScores[i].name).draw(WindowWide / 2 - 250 - fontBoard.fontSize() * 10, 120 + i * 50, ColorF{ Palette::Black });
 			}
 			//日付
-			if (kariHighScores[i].y == 0)
+			if (getData().HighScores[i].y == 0)
 				FontAsset(U"Ranking")(U"----/--/--").draw(WindowWide / 2 + 250, 120 + i * 50, ColorF{ 0.25 });
 			else
 			{
-				String d = Format(kariHighScores[i].y);
-				d << U'/'; d += Format(kariHighScores[i].m); d << U'/'; d += Format(kariHighScores[i].d);
+				String d = Format(getData().HighScores[i].y);
+				d << U'/'; d += Format(getData().HighScores[i].m); d << U'/'; d += Format(getData().HighScores[i].d);
 				FontAsset(U"Ranking")(d).draw(WindowWide / 2 + 250, 120 + i * 50, ColorF{ 0.25 });
 			}
 
@@ -351,7 +357,7 @@ private:
 
 	int32 m_rank = -1;
 
-	Array<Scores> kariHighScores;
+	//Array<Scores> kariHighScores;
 
 	double FlashTimer=0;
 	double FlashInterval = 0.1;

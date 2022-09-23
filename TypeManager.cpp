@@ -249,7 +249,7 @@ void TypeManager::Draw(Array<Texture> characters)
 
 	m_pType->Draw();
 	insP->GetPac().draw(ColorF(Palette::Whitesmoke));
-
+/*
 	if (ChackHitMan.nowDuability < ChackHitMan.preDuability||itagaruTimer>0)
 	{
 		//攻撃を食らっていた場合。
@@ -273,7 +273,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	}
 	else
 		characters[int32(CharactersState::TsAnnna)].draw(0, 75);
-
+	*/
 	ChackHitMan.preDuability = ChackHitMan.nowDuability;
 	ChackHitMan.nowDuability = player_m->GetDua();
 }

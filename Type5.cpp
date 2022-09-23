@@ -185,7 +185,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			FirstGene = true;
 			break;
 		case 3:
-			Edamage = 2;//0.12;///////////////////////////////////////////////////////デバッグ
+			Edamage = 4;//0.12;///////////////////////////////////////////////////////デバッグ
 			ball1->BallAllExtingish();
 			ball2->BallAllExtingish();
 			ball3->BallAllExtingish();
