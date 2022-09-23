@@ -1,4 +1,5 @@
 ﻿#include <Siv3D.hpp>
+#include<HamFramework.hpp>
 #include"data.h"
 #include"Mallet.h"
 #include"Player.h"
@@ -410,6 +411,7 @@ public:
 	}
 };
 
+
 void Main()
 {
 	//ResetRanking();//ハイスコアランキングをリセットしたいときはここのコメントを外す
@@ -417,6 +419,8 @@ void Main()
 	System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 
 	Window::Resize(WindowWide, WindowHight);
+
+	Camera2D camera{ Scene::Center(), 1.0 };
 
 	FontAsset::Register(U"Titlefont", 60, Typeface::Heavy);
 	FontAsset::Register(U"Ranking", 40, Typeface::Heavy);
@@ -433,11 +437,18 @@ void Main()
 	
 	while (System::Update())
 	{
+		const double p1 = Periodic::Triangle0_1(0.01s);
 
-		
+		// 2D カメラを更新
+		camera.update();
+
+		const auto t = camera.createTransformer();
+
 		if (!manager.update())
 		{
 			break;
 		}
+
+		camera.jumpTo(Scene::Center() + Vec2(10 * p1, 0), 1.0);
 	}
 }
