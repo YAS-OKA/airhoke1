@@ -215,7 +215,7 @@ public:
 			
 			for (auto i : step(RankingCount))
 			{
-				if (data.HighScores[RankingCount-i-1].highScore >= data.HighScores[RankingCount].highScore)
+				if (data.HighScores[RankingCount-i-1].highScore > data.HighScores[RankingCount].highScore)
 				{
 					for (auto j : step(i))
 					{
@@ -223,6 +223,7 @@ public:
 						data.HighScores[RankingCount - j] = data.HighScores[RankingCount - j - 1];
 						data.HighScores[RankingCount - j - 1] = z;
 					}
+					
 					break;
 				}
 			}
