@@ -85,7 +85,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			if (taikyuuTime <= 120)
 			{
 				if(pac->GetPacXY().y<=130+tableUpper)
-					pac->SetVelocity(150 * Vec2(Cos(CalDir(pac->GetPacXY(), Vec2(WindowWide / 2, WindowHight - tableUpper))), Sin(CalDir(pac->GetPacXY(), Vec2(WindowWide / 2, WindowHight - tableUpper)))));
+					pac->SetVelocity(400 * Vec2(Cos(CalDir(pac->GetPacXY(), Vec2(WindowWide / 2, WindowHight - tableUpper))), Sin(CalDir(pac->GetPacXY(), Vec2(WindowWide / 2, WindowHight - tableUpper)))));
 			}
 			else
 			{
@@ -185,12 +185,12 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			FirstGene = true;
 			break;
 		case 3:
-			Edamage = 4;//0.12;///////////////////////////////////////////////////////デバッグ
+			Edamage = 2;//0.12;///////////////////////////////////////////////////////デバッグ
 			ball1->BallAllExtingish();
 			ball2->BallAllExtingish();
 			ball3->BallAllExtingish();
 			ball4->BallAllExtingish();
-			taikyuuTime = 120;//0;/////////////////////////////////////////////////////デバッグ
+			taikyuuTime = 0;//0;/////////////////////////////////////////////////////デバッグ
 			nokogiri_down->ColumnSetX(nokointerval, tableLeft+20, WindowHight - tableUpper, 3.14 * 3 / 2);
 			nokogiri_upper->ColumnSetX(nokointerval, tableLeft+ 20, tableUpper + tableHight * 2 / 3, 3.14 * 3 / 2);
 			nokogiri_mid->ColumnSetX(nokointerval, tableLeft+ 20, tableUpper + tableHight * 5 / 6, 3.14 * 3 / 2);
@@ -302,131 +302,6 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 		}
 		break;
 	case 3:
-		if (taikyuuTime < 3)
-		{
-			if (FirstGene)
-			{
-				nokogiri_down->GeneBullet_1(0.5);
-				nokogiri_mid->GeneBullet_1(0.5);
-				nokogiri_upper->GeneBullet_1(0.5);
-				if (nokogiri_down->TimerNotCount())
-				{
-					FirstGene = false;
-				}
-			}
-			nokogiri_down->NobiShotRay(ball1, tableHight / 6, 4, Palette::Deepskyblue, 8);
-			nokogiri_mid->NobiShotRay(ball2, tableHight / 6, 4, Palette::Deepskyblue, 8);
-			nokogiri_upper->NobiShotRay(ball3, tableHight / 6, 4, Palette::Deepskyblue, 8);
-		}
-		else
-		{
-			
-			if (taikyuuTime <= 5)
-			{
-				nokogiri_down->ColumnSetV(Vec2(-70 * (taikyuuTime - 3), 0));
-				nokogiri_upper->ColumnSetV(Vec2(-70 * (taikyuuTime - 3), 0));
-				nokogiri_mid->ColumnSetV(Vec2(70 * (taikyuuTime - 3), 0));
-			}
-			else
-			{
-				nokogiri_down->ColumnSetV(Vec2(-140, 0));
-				nokogiri_upper->ColumnSetV(Vec2(-140, 0));
-				nokogiri_mid->ColumnSetV(Vec2(140, 0)); 
-			}
-
-			if (taikyuuTime < 8)
-				stopwatch.restart();
-
-			if (taikyuuTime >= 8 && i < size(to) && taikyuuTime < 43)
-			{
-				const double t = Min(stopwatch.sF()/time[i/2], 1.0);
-				if (stopwatch.sF() < time[i/2]+2) {
-					const Vec2 pos = from[i].lerp(to[i], t);
-					const Vec2 pos2 = from[i+1].lerp(to[i+1], t);
-					RectLaser->RectArea(ball4, pos, pos2, 12, Palette::Gold);
-				}
-				else
-				{
-					stopwatch.restart();
-					from << to[i];
-					from << to[i + 1];
-					i += 2;
-				}
-			}
-			if (taikyuuTime >= 43 && taikyuuTime < 44)
-			{
-				ball4->RayAllExtingish();
-				FirstGene = true;
-			}
-			if (taikyuuTime >= 44&&taikyuuTime<75)
-			{
-				if (FirstGene)
-				{
-					jikinerai->GeneBullet_1(0.5);
-					michi->GeneBullet_1(6);
-					if (michi->TimerNotCount())
-					{
-						FirstGene = false;
-					}
-						
-				}
-				jikinerai->AimShot(player, ball3, BallSpeed*1.6, 0, 0.6);
-				michi->Shotball(ball5, BallSpeed * 0.7,40, 0.07);
-				michi->SwingingSIN(3.14 / 6+0.2, 0, 11, jikuDir);
-			}
-			if (taikyuuTime >= 75 && taikyuuTime < 76)
-			{
-				jikinerai->deleteEneAll(); michi->deleteEneAll();
-				FirstGene = true;
-			}
-			if (taikyuuTime >= 76 && taikyuuTime < 119)
-			{
-				if (FirstGene)
-				{
-					hunsui_t3->GeneBullet_1(0.5);
-					if (hunsui_t3->TimerNotCount())
-					{						
-						FirstGene = false;
-					}
-				}
-				hunsui_t3->HunsuiShot(ball4, BallSpeed, BallSpeed *2/ 3, 0.1, 3.14 / 24, 210);
-				if (taikyuuTime >= 82&&taikyuuTime<93)
-				{
-					if (taikyuuTime < 82 + 3.14 * 7 / 3 + 1);
-						HunsuiDir = (taikyuuTime - 82)/7 + 3.14 / 2;
-				}
-				if (taikyuuTime >= 93&&taikyuuTime<98)
-				{
-					if (taikyuuTime < 93 + 3.14 * 2 / 12)
-						HunsuiDir = -(taikyuuTime - 93) / 2 + 3.14 / 2 + 3.14 / 7 + 1;
-				}
-				if (taikyuuTime >= 98&&taikyuuTime<108)
-				{
-					if (taikyuuTime < 98 + 3.14 * 3 * 4 / 4 + 1)
-						HunsuiDir = -(taikyuuTime - 98) / 4 + 3.14 / 2 + 3.14 / 7 + 1 - 3.14 / 12;
-				}
-				if (taikyuuTime >= 113)
-				{
-					if (taikyuuTime < 113 + 3.14 * 2 / 2 - 0.247 * 2)
-						HunsuiDir = (taikyuuTime - 113) / 2 + 0.247;
-				}
-				hunsui_t3->SetKabeHaritsuki_kai(Vec2(WindowWide / 2, WindowHight / 2), 5, CalDir(Vec2(WindowWide / 2, WindowHight / 2), Vec2(tableLeft, WindowHight - tableUpper)) - CalDir(Vec2(WindowWide / 2, WindowHight / 2), Vec2(WindowWide - tableLeft, WindowHight - tableUpper)) - 0.25, HunsuiDir);
-			}
-			if (taikyuuTime >= 119&&taikyuuTime<120)
-			{
-				hunsui_t3->HunsuiShot(ball4, BallSpeed, BallSpeed * 2 / 3, 0.1, 3.14 / 64, 210 - 70*(taikyuuTime-119));
-				
-				FirstGene = true;
-			}
-			
-			nokogiri_down->ShotRay(ball1, 8, Palette::Deepskyblue, tableHight / 6);
-			nokogiri_mid->ShotRay(ball2, 8, Palette::Deepskyblue, tableHight / 6);
-			nokogiri_upper->ShotRay(ball3, 8, Palette::Deepskyblue, tableHight / 6);
-
-			nokogiri_down->ColumnMove(nokointerval, WindowHight - tableUpper);
-			nokogiri_mid->ColumnMove(nokointerval, tableUpper + tableHight * 5 / 6);
-			nokogiri_upper->ColumnMove(nokointerval, tableUpper + tableHight * 2 / 3);
-		}
 		if (taikyuuTime >= 120)
 		{
 			if (FirstGene)
@@ -461,6 +336,133 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 		}
 		else
 		{
+			pac->AcceleratedMotion_Up(100);
+			if (taikyuuTime < 3)
+			{
+				if (FirstGene)
+				{
+					nokogiri_down->GeneBullet_1(0.5);
+					nokogiri_mid->GeneBullet_1(0.5);
+					nokogiri_upper->GeneBullet_1(0.5);
+					if (nokogiri_down->TimerNotCount())
+					{
+						FirstGene = false;
+					}
+				}
+				nokogiri_down->NobiShotRay(ball1, tableHight / 6, 4, Palette::Deepskyblue, 8);
+				nokogiri_mid->NobiShotRay(ball2, tableHight / 6, 4, Palette::Deepskyblue, 8);
+				nokogiri_upper->NobiShotRay(ball3, tableHight / 6, 4, Palette::Deepskyblue, 8);
+			}
+			else
+			{
+
+				if (taikyuuTime <= 5)
+				{
+					nokogiri_down->ColumnSetV(Vec2(-70 * (taikyuuTime - 3), 0));
+					nokogiri_upper->ColumnSetV(Vec2(-70 * (taikyuuTime - 3), 0));
+					nokogiri_mid->ColumnSetV(Vec2(70 * (taikyuuTime - 3), 0));
+				}
+				else
+				{
+					nokogiri_down->ColumnSetV(Vec2(-140, 0));
+					nokogiri_upper->ColumnSetV(Vec2(-140, 0));
+					nokogiri_mid->ColumnSetV(Vec2(140, 0));
+				}
+
+				if (taikyuuTime < 8)
+					stopwatch.restart();
+
+				if (taikyuuTime >= 8 && i < size(to) && taikyuuTime < 43)
+				{
+					const double t = Min(stopwatch.sF() / time[i / 2], 1.0);
+					if (stopwatch.sF() < time[i / 2] + 2) {
+						const Vec2 pos = from[i].lerp(to[i], t);
+						const Vec2 pos2 = from[i + 1].lerp(to[i + 1], t);
+						RectLaser->RectArea(ball4, pos, pos2, 12, Palette::Gold);
+					}
+					else
+					{
+						stopwatch.restart();
+						from << to[i];
+						from << to[i + 1];
+						i += 2;
+					}
+				}
+				if (taikyuuTime >= 43 && taikyuuTime < 44)
+				{
+					ball4->RayAllExtingish();
+					FirstGene = true;
+				}
+				if (taikyuuTime >= 44 && taikyuuTime < 75)
+				{
+					if (FirstGene)
+					{
+						jikinerai->GeneBullet_1(0.5);
+						michi->GeneBullet_1(6);
+						if (michi->TimerNotCount())
+						{
+							FirstGene = false;
+						}
+
+					}
+					jikinerai->AimShot(player, ball3, BallSpeed * 1.6, 0, 0.6);
+					michi->Shotball(ball5, BallSpeed * 0.7, 40, 0.07);
+					michi->SwingingSIN(3.14 / 6 + 0.2, 0, 11, jikuDir);
+				}
+				if (taikyuuTime >= 75 && taikyuuTime < 76)
+				{
+					jikinerai->deleteEneAll(); michi->deleteEneAll();
+					FirstGene = true;
+				}
+				if (taikyuuTime >= 76 && taikyuuTime < 119)
+				{
+					if (FirstGene)
+					{
+						hunsui_t3->GeneBullet_1(0.5);
+						if (hunsui_t3->TimerNotCount())
+						{
+							FirstGene = false;
+						}
+					}
+					hunsui_t3->HunsuiShot(ball4, BallSpeed, BallSpeed * 2 / 3, 0.1, 3.14 / 24, 210);
+					if (taikyuuTime >= 82 && taikyuuTime < 93)
+					{
+						if (taikyuuTime < 82 + 3.14 * 7 / 3 + 1);
+						HunsuiDir = (taikyuuTime - 82) / 7 + 3.14 / 2;
+					}
+					if (taikyuuTime >= 93 && taikyuuTime < 98)
+					{
+						if (taikyuuTime < 93 + 3.14 * 2 / 12)
+							HunsuiDir = -(taikyuuTime - 93) / 2 + 3.14 / 2 + 3.14 / 7 + 1;
+					}
+					if (taikyuuTime >= 98 && taikyuuTime < 108)
+					{
+						if (taikyuuTime < 98 + 3.14 * 3 * 4 / 4 + 1)
+							HunsuiDir = -(taikyuuTime - 98) / 4 + 3.14 / 2 + 3.14 / 7 + 1 - 3.14 / 12;
+					}
+					if (taikyuuTime >= 113)
+					{
+						if (taikyuuTime < 113 + 3.14 * 2 / 2 - 0.247 * 2)
+							HunsuiDir = (taikyuuTime - 113) / 2 + 0.247;
+					}
+					hunsui_t3->SetKabeHaritsuki_kai(Vec2(WindowWide / 2, WindowHight / 2), 5, CalDir(Vec2(WindowWide / 2, WindowHight / 2), Vec2(tableLeft, WindowHight - tableUpper)) - CalDir(Vec2(WindowWide / 2, WindowHight / 2), Vec2(WindowWide - tableLeft, WindowHight - tableUpper)) - 0.25, HunsuiDir);
+				}
+				if (taikyuuTime >= 119 && taikyuuTime < 120)
+				{
+					hunsui_t3->HunsuiShot(ball4, BallSpeed, BallSpeed * 2 / 3, 0.1, 3.14 / 64, 210 - 70 * (taikyuuTime - 119));
+
+					FirstGene = true;
+				}
+
+				nokogiri_down->ShotRay(ball1, 8, Palette::Deepskyblue, tableHight / 6);
+				nokogiri_mid->ShotRay(ball2, 8, Palette::Deepskyblue, tableHight / 6);
+				nokogiri_upper->ShotRay(ball3, 8, Palette::Deepskyblue, tableHight / 6);
+
+				nokogiri_down->ColumnMove(nokointerval, WindowHight - tableUpper);
+				nokogiri_mid->ColumnMove(nokointerval, tableUpper + tableHight * 5 / 6);
+				nokogiri_upper->ColumnMove(nokointerval, tableUpper + tableHight * 2 / 3);
+			}
+
 			if (pac->GetPacXY().y < tableUpper + 130&& !player->GetBreak())
 				pac->SetVelocity(Vec2(0, 0));
 		}

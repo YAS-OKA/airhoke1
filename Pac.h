@@ -44,6 +44,8 @@ public:
 
 	void Decelerate(double flaction);
 
+	void AcceleratedMotion_Up(double a);//上方向に加速度aを生成(毎秒a加速)
+
 	void Pacmove();
 
 	void RayPacmove(Vec2 start,double dir);

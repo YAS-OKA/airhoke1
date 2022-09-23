@@ -14,10 +14,23 @@
 const int32 WindowWide = 1200;
 const int32 WindowHight = 800;
 
-
 ButtonManager b_manager;
 
 Array<Texture> Characters;
+
+void ResetRanking()
+{
+	TextWriter writer(U"score.txt");
+
+	for (auto i : step(8))
+	{
+		writer << U"__________" << U','
+			<< 0 << U','
+			<< 0 << U','
+			<< 0 << U','
+			<< 0;
+	}
+}
 
 void SetTextureCharacters()
 {
@@ -107,7 +120,9 @@ public:
 				
 		if (BackChangeSc)
 		{
+			Score = t_manager->GetNowScore();
 			delete t_manager;
+			getData().lastGameScore = Score;
 			changeScene(State::Ranking);
 		}
 		if (changeSc)
@@ -173,7 +188,7 @@ class Ranking :public App::Scene
 public:
 	Ranking(const InitData& init) :IScene(init)
 	{
-		board = new nameBoard(fontBoard, Vec2(WindowWide/2-fontBoard.fontSize() * 7.5, WindowHight - 160), 10);
+		board = new nameBoard(fontBoard, Vec2(WindowWide / 2 - fontBoard.fontSize() * 7.5, WindowHight - 160), 10);
 		changeSc = false;
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"はい", Vec2(WindowWide / 2 - 110, WindowHight - 150), 30, 60, Palette::White, FLAG);
@@ -196,53 +211,51 @@ public:
 			s.y = Parse<int32>(line.split(',')[2]);
 			s.m = Parse<int32>(line.split(',')[3]);
 			s.d = Parse<int32>(line.split(',')[4]);
-			
+
 			data.HighScores << s;
 		}
-		
-		if (data.lastGameScore)
+
+
+		const int32 lastScore = *data.lastGameScore;
+
+		// ランキングを再構成
+		const Date date = Date::Today();
+
+		Scores last = { lastScore , U"",date.year,date.month,date.day };
+
+		data.HighScores << last;
+		//ソート
+		//Print << data.HighScores[8].highScore;
+
+		for (auto i : step(RankingCount))
 		{
-			const int32 lastScore = *data.lastGameScore;
-
-			// ランキングを再構成
-			const Date date = Date::Today();
-			
-			Scores last = { lastScore , U"",date.year,date.month,date.day };
-			
-			data.HighScores << last;
-			//ソート
-			//Print << data.HighScores[8].highScore;
-			
-			for (auto i : step(RankingCount))
+			if (data.HighScores[RankingCount - i - 1].highScore > data.HighScores[RankingCount].highScore)
 			{
-				if (data.HighScores[RankingCount-i-1].highScore > data.HighScores[RankingCount].highScore)
+				for (auto j : step(i))
 				{
-					for (auto j : step(i))
-					{
-						Scores z = data.HighScores[RankingCount - j];
-						data.HighScores[RankingCount - j] = data.HighScores[RankingCount - j - 1];
-						data.HighScores[RankingCount - j - 1] = z;
-					}
-					
-					break;
+					Scores z = data.HighScores[RankingCount - j];
+					data.HighScores[RankingCount - j] = data.HighScores[RankingCount - j - 1];
+					data.HighScores[RankingCount - j - 1] = z;
 				}
-			}
-			//for (auto i : step(9))
-				//Print << data.HighScores[i].highScore;
-			data.HighScores.resize(RankingCount);
-			// ランクインしていたら m_rank に順位をセット
-			for (int32 i = 0; i < RankingCount; ++i)
-			{
-				if (data.HighScores[i].highScore == last.highScore)
-				{
-					m_rank = i;
-					break;
-				}
-			}
-			data.lastGameScore.reset();
 
+				break;
+			}
 		}
+		//for (auto i : step(9))
+			//Print << data.HighScores[i].highScore;
+		data.HighScores.resize(RankingCount);
+		// ランクインしていたら m_rank に順位をセット
+		for (int32 i = 0; i < RankingCount; ++i)
+		{
+			if (data.HighScores[i].highScore == last.highScore)
+			{
+				m_rank = i;
+				break;
+			}
+		}
+		data.lastGameScore.reset();
 	}
+
 	void update() override
 	{
 		auto& data = getData();
@@ -251,63 +264,67 @@ public:
 			changeScene(State::Title);//タイトルに戻るを選択してランキングシーンに飛んだ場合
 		else if(changeSc)
 			changeScene(State::GameClear);//ゲームをクリアしてからランキングシーンに飛んだ場合
-
-		if (board->isEnter()&&not board->GetName().isEmpty())
-		{
-			//決定が押されたとき
-			data.HighScores[m_rank].name = board->GetName();
-
-			FlashTimer += Scene::DeltaTime();
-			Timer += Scene::DeltaTime();
-
-			if (FlashTimer > FlashInterval * 2)
-				FlashTimer = 0;
-		}
-		else
-		{
-			board->SetEnter(false);
-			if (b_manager.GetFlag())
+		if (m_rank != -1) {
+			if (board->isEnter() && not board->GetName().isEmpty())
 			{
-				board->Update();
+				//決定が押されたとき
+				data.HighScores[m_rank].name = board->GetName();
+
+				FlashTimer += Scene::DeltaTime();
+				Timer += Scene::DeltaTime();
+
+				if (FlashTimer > FlashInterval * 2)
+					FlashTimer = 0;
 			}
 			else
 			{
-				b_manager.Update();
+				board->SetEnter(false);
+				if (b_manager.GetFlag())
+				{
+					board->Update();
+				}
+				else
+				{
+					b_manager.Update();
+				}
 			}
-		}
-		
 
-		if (Timer > TimeOfBeginingSceneChange)
-		{
-			//スコアを記録
-			TextWriter writer(U"score.txt");
-
-			for (auto i : step(8))
+			if (Timer > TimeOfBeginingSceneChange)
 			{
-				writer << getData().HighScores[i].name << U','
-					<< getData().HighScores[i].highScore << U','
-					<< getData().HighScores[i].y << U','
-					<< getData().HighScores[i].m << U','
-					<< getData().HighScores[i].d;
+				//スコアを記録
+				TextWriter writer(U"score.txt");
+
+				for (auto i : step(8))
+				{
+					writer << getData().HighScores[i].name << U','
+						<< getData().HighScores[i].highScore << U','
+						<< getData().HighScores[i].y << U','
+						<< getData().HighScores[i].m << U','
+						<< getData().HighScores[i].d;
+				}
+				changeSc = true;
 			}
-			changeSc = true;
 		}
+		else if (KeyZ.down())
+			changeSc = true;
 	}
 	void draw() const override
 	{
-		if (not b_manager.GetFlag())
+		if (m_rank != -1)
 		{
-			fontBoard(U"スコアを保存しますか？").drawAt(WindowWide / 2, WindowHight - 200, ColorF(Palette::Black));
-			b_manager.Draw();
-		}
-		else
-		{
-			//入力ボードを表示
-			board->Draw();
-			fontBoard(board->GetName()).draw(WindowWide / 2 - fontBoard.fontSize() * 3, WindowHight - 200, ColorF(Palette::Black));
-			fontBoard(U"名前を入力してください。").draw(WindowWide / 2 - fontBoard.fontSize() * 6, WindowHight - 250, ColorF(Palette::Black));
+			if (not b_manager.GetFlag())
+			{
+				fontBoard(U"スコアを保存しますか？").drawAt(WindowWide / 2, WindowHight - 200, ColorF(Palette::Black));
+				b_manager.Draw();
 			}
-
+			else
+			{
+				//入力ボードを表示
+				board->Draw();
+				fontBoard(board->GetName()).draw(WindowWide / 2 - fontBoard.fontSize() * 3, WindowHight - 200, ColorF(Palette::Black));
+				fontBoard(U"名前を入力してください。").draw(WindowWide / 2 - fontBoard.fontSize() * 6, WindowHight - 250, ColorF(Palette::Black));
+			}
+		}
 		Scene::SetBackground(ColorF{ 0.4, 0.6, 0.9 });
 
 		FontAsset(U"Ranking")(U"HIGH SCORE RANKING").drawAt(WindowWide/2, 60);
@@ -395,6 +412,8 @@ public:
 
 void Main()
 {
+	//ResetRanking();//ハイスコアランキングをリセットしたいときはここのコメントを外す
+
 	System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 
 	Window::Resize(WindowWide, WindowHight);

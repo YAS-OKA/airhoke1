@@ -260,6 +260,11 @@ void Pac::Decelerate(double fl)
 		PacVelocity.y -= PacVelocity.y * fl;
 }
 
+void Pac::AcceleratedMotion_Up(double a)
+{
+	PacVelocity.y -= a * Scene::DeltaTime();
+}
+
 void Pac::Pacmove()
 {
 	if (pacMoveType)
