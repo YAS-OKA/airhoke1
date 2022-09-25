@@ -437,21 +437,27 @@ void Main()
 	manager.add<Ranking>(State::Ranking);
 
 	manager.add<GameClear>(State::GameClear);
-	
+
+
 	while (System::Update())
 	{
-		//const double p1 = Periodic::Triangle0_1(0.01s);
+		/*
+		if (ColTim && BombBibTimer < 1)
+		{			
+			// 2D カメラを更新
+			camera.jumpTo(Scene::Center() + Vec2(10 * p1, 0), 1.0);
+			BombBibTimer += Scene::DeltaTime();
 
-		// 2D カメラを更新
-		//camera.update();
-
-		//const auto t = camera.createTransformer();
-
+		}
+		else
+		{
+			BombBibTimer = 0;
+			ColTim = false;
+		}*/
 		if (!manager.update())
 		{
 			break;
 		}
 
-		//camera.jumpTo(Scene::Center() + Vec2(10 * p1, 0), 1.0);
 	}
 }

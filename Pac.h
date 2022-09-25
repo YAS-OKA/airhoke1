@@ -5,7 +5,7 @@
 #include"Mallet.h"
 #include"Enemy.h"
 
-class Pac 
+class Pac
 {
 private:
 	Circle pac;
@@ -27,7 +27,7 @@ private:
 	int32 k = 6;//RayPacmoveでパックの最低速度がv/kになる
 public:
 	Pac(double x, double y, double p_r, Vec2 Velo, double tableleft, double tableupper,
-		double windowwide, double windowhight,double pacMaxSpeed);
+		double windowwide, double windowhight, double pacMaxSpeed);
 
 	virtual ~Pac();
 
@@ -36,6 +36,8 @@ public:
 	void SetVelocity(Vec2 xy);
 
 	void pacSpeedRestrict();
+
+	bool intersectsTim(Enemy* e);
 
 	void intersects(Mallet* m);	
 	bool intersects(Enemy* e);

@@ -43,6 +43,9 @@ private:
 	static double ExploTimer;//ボムの経過時間
 	static double Timerinterval;//intervalBatより大きくなると0になる
 	static double intervalBat;//蝙蝠が出てくる間隔
+
+	static double BombBibTimer;//ボムによって揺れるじかん
+
 public:
 	enum TYPE {
 		TYPE1,

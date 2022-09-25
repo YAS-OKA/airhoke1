@@ -36,6 +36,8 @@ int32 DuaBarLen = 300;
 int32 DuaInit = 2800;	//耐久値バーのデフォルト長さ
 double Edamage = 0.2;
 
+double TimDamage = 250;//tim君が与えるダメージ
+
 int32 damage = DuaInit/4;	//被弾したときのダメージ
 int32 Raydamage = DuaInit * 1.1;
 int32 RepairTime = 6;		//プレイヤーが復帰するまでの時間
@@ -51,6 +53,8 @@ bool gameover = false;
 double itagaruLimit = 1.5;
 
 double TimeOfBomb = 6;
+
+bool ColTim = false;
 
 BaseType* TypeManager::m_pType = NULL;
 
@@ -71,6 +75,8 @@ bool TypeManager::Explo = false;
 double TypeManager::ExploTimer = 0;
 double TypeManager::Timerinterval = 0;
 double TypeManager::intervalBat = 0.02;
+
+double TypeManager::BombBibTimer = 0;
 
 ChackDuaChange TypeManager::ChackHitMan = { DuaInit,DuaInit };
 
@@ -204,7 +210,12 @@ void TypeManager::Update()
 	
 	insP->Pacmove();
 	insP->reflect(ew);
-	insP->intersects(enemy_m);
+	if (Explo) {
+		if (insP->intersectsTim(enemy_m))
+			ColTim = true;
+	}
+	else
+		insP->intersects(enemy_m);
 
 	bat->IntersectsBat(insP, 0.05);
 
@@ -273,7 +284,18 @@ void TypeManager::Draw(Array<Texture> characters)
 	pgoal.drawFrame(0, 8, ColorF(Palette::Yellow));
 	egoal.drawFrame(0, 8, ColorF(Palette::Yellow));
 
-	table.draw(ColorF(Palette::Forestgreen));
+	if (ColTim && BombBibTimer < 0.5)
+	{
+		const double p1 = Periodic::Triangle0_1(0.01s);
+		Rect{ int32(tableLeft + p1 * 10),tableUpper,tableWide,tableHight }.draw(ColorF(Palette::Forestgreen));
+		BombBibTimer += Scene::DeltaTime();
+	}
+	else
+	{
+		table.draw(ColorF(Palette::Forestgreen));
+		BombBibTimer = 0;
+		ColTim = false;
+	}
 
 	if(!enemy_m->GetBreak())
 		Line{ Vec2(tableLeft,tableUpper + tableHight / 2),Vec2(WindowWide - tableLeft,tableUpper + tableHight / 2) }.draw(centerlineWide,Palette::Blue);

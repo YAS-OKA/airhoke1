@@ -23,6 +23,11 @@ void Enemy::CollidePac(Vec2 v,double damage)
 	duability -= sqrt(v.x * v.x + v.y * v.y) * damage;
 }
 
+void Enemy::ColideTim()
+{
+	duability -= TimDamage;
+}
+
 int32 Enemy::GetDua()
 {
 	return duability;

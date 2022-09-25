@@ -18,6 +18,8 @@ public:
 
 	void CollidePac(Vec2 velocity,double damage);//パックに当たった時、耐久値を減らす
 
+	void ColideTim();//tim君に当たった時
+
 	int32 GetDua();
 
 	void SetDua(int32 d);

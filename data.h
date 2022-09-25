@@ -39,7 +39,7 @@ extern int32 DuaBarLen;//耐久値バーの長さ
 extern int32 DuaInit;	//耐久値の初期値
 
 extern double Edamage;//敵の耐久値を削る度合い。Edamageに比例して敵に与えるダメージが大きくなる。
-//Edamageにタイプ2で値を代入した
+extern double TimDamage;//ボム中のダメージ
 
 extern int32 damage;	//被弾したときのダメージ
 extern int32 Raydamage; //光線にあたった時の連続的ダメージ(1秒間にRaydamage減る)
@@ -60,3 +60,5 @@ extern double itagaruLimit;//攻撃を食らったとき、痛がる秒数。
 extern int32 LostScore;//プレイヤーが死んだときに失うスコア
 
 extern double TimeOfBomb;//必殺技の時間
+
+extern bool ColTim;//ティム君が衝突したかどうか。メイン関数内で画面を揺らすかどうか。
