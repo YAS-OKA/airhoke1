@@ -189,7 +189,6 @@ void TypeManager::Update()
 	{
 		if (player_m->GetBombNum() > 0&&not Explo)
 		{
-			Edamage *= 3;
 			Explo = true;
 		}
 	}
@@ -214,7 +213,6 @@ void TypeManager::Update()
 	{		
 		if (ExploTimer > TimeOfBomb)
 		{
-			Edamage /= 3;
 			Timerinterval = 0;
 			ExploTimer = 0;
 			Explo = false;
