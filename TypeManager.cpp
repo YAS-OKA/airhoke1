@@ -50,11 +50,14 @@ bool gameover = false;
 
 double itagaruLimit = 1.5;
 
+double TimeOfBomb = 6;
+
 BaseType* TypeManager::m_pType = NULL;
 
 Player* TypeManager::player_m = 0;
 Pac* TypeManager::insP = 0;
 Enemy* TypeManager::enemy_m = 0;
+
 
 Array<Vec2> GorlSide{ {(WindowWide - goalWide) / 2,tableUpper},{(WindowWide + goalWide) / 2,tableUpper }, {(WindowWide - goalWide) / 2,WindowHight - tableUpper},{(WindowWide + goalWide) / 2,WindowHight - tableUpper} };
 
@@ -63,12 +66,19 @@ int32 nowtype = 0;
 int32 TypeManager::PreScore = 0;
 int32 TypeManager::Score = 0;
 
+Ball_1* TypeManager::bat = NULL;
+bool TypeManager::Explo = false;
+double TypeManager::ExploTimer = 0;
+double TypeManager::Timerinterval = 0;
+double TypeManager::intervalBat = 0.02;
+
 ChackDuaChange TypeManager::ChackHitMan = { DuaInit,DuaInit };
 
 double TypeManager::itagaruTimer = 0;
 
 TypeManager::TypeManager(int32 ScoreInit)
 {
+	bat = new Ball_1(1, 8);
 	m_pType = NULL; player_m = 0; insP = 0; enemy_m = 0; PreScore = 0; Score = 0; ChackHitMan = { (double)DuaInit,(double)DuaInit }; itagaruTimer = 0;
 	PreScore = Score = ScoreInit;
 	int32 lifeX = WindowWide - tableLeft + 120;
@@ -175,6 +185,15 @@ void TypeManager::Update()
 		return;
 	}
 
+	if (KeyX.down())
+	{
+		if (player_m->GetBombNum() > 0&&not Explo)
+		{
+			Edamage *= 3;
+			Explo = true;
+		}
+	}
+
 	player_m->ChangeSpeed();
 
 	player_m->keymove(enemy_m->GetBreak());
@@ -187,8 +206,32 @@ void TypeManager::Update()
 	insP->Pacmove();
 	insP->reflect(ew);
 	insP->intersects(enemy_m);
-	//ここから上の行程は固定
-	
+
+	bat->IntersectsBat(insP, 0.05);
+
+	//ボム
+	if (Explo)
+	{		
+		if (ExploTimer > TimeOfBomb)
+		{
+			Edamage /= 3;
+			Timerinterval = 0;
+			ExploTimer = 0;
+			Explo = false;
+		}
+		if (intervalBat < Timerinterval)
+		{
+			for (auto i : step(6))
+				bat->shot(player_m->GetXY(), Random(3.14*2/3, 6.28+3.14/3), Random(50, 300), 0, 0);
+			Timerinterval = 0;
+		}
+		ExploTimer += Scene::DeltaTime();
+		Timerinterval += Scene::DeltaTime();
+	}
+	bat->Fall(Vec2(0, -1), 600);
+	bat->BallMoveMax(500);
+	bat->RemoveOutBall(table);
+
 	m_pType->Update(insP, player_m, enemy_m);
 
 	if (player_m->GetDua() < 0 || player_m->GetBreak())
@@ -248,8 +291,15 @@ void TypeManager::Draw(Array<Texture> characters)
 	enemy_m->GetGrip().drawFrame(1,ColorF(Palette::Gray));
 
 	m_pType->Draw();
+
+	bat->Draw(Palette::Dimgray);
+
 	insP->GetPac().draw(ColorF(Palette::Whitesmoke));
 
+	//エイリアンちゃん描写
+	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-35);
+
+	//アンナちゃん描写
 	if (ChackHitMan.nowDuability < ChackHitMan.preDuability||itagaruTimer>0)
 	{
 		//攻撃を食らっていた場合。

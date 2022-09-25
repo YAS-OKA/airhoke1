@@ -6,6 +6,7 @@ class BaseType
 {
 protected:
 	int32 m_score;
+	
 public:
 	BaseType(int32 scor);
 	int32 Getm_score();

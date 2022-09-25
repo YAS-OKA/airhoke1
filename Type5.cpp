@@ -3,7 +3,6 @@
 
 Type5::Type5(int32 sco) :FirstGene(true), TypeChange(true), BaseType(sco)
 {
-	type = 3;
 	Edamage = 0.16;
 	bullet = { {{tableLeft + tableWide / 2,tableUpper + tableHight * 2/ 5},3.14 / 2}};
 	ball1 = new Ball_1(2, 4);
@@ -185,12 +184,12 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			FirstGene = true;
 			break;
 		case 3:
-			Edamage = 2;//0.12;///////////////////////////////////////////////////////デバッグ
+			Edamage = 0.12;
 			ball1->BallAllExtingish();
 			ball2->BallAllExtingish();
 			ball3->BallAllExtingish();
 			ball4->BallAllExtingish();
-			taikyuuTime = 0;//0;/////////////////////////////////////////////////////デバッグ
+			taikyuuTime = 0;
 			nokogiri_down->ColumnSetX(nokointerval, tableLeft+20, WindowHight - tableUpper, 3.14 * 3 / 2);
 			nokogiri_upper->ColumnSetX(nokointerval, tableLeft+ 20, tableUpper + tableHight * 2 / 3, 3.14 * 3 / 2);
 			nokogiri_mid->ColumnSetX(nokointerval, tableLeft+ 20, tableUpper + tableHight * 5 / 6, 3.14 * 3 / 2);
@@ -328,7 +327,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			ball1->BallMove(10);
 			ball2->BallMove(50);
 
-			ball4->IntersectsPac(pac, 2.0);
+			ball4->IntersectsPac(pac, 2.0, &m_score);
 			ball1->IntersectsPac(pac, &m_score);
 
 			if (ball1->IntersectsPlayer(player))

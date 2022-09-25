@@ -36,7 +36,7 @@ void EneBall::IntersectsPac(Pac* p, int32* score)
 	}
 }
 
-void EneBall::IntersectsPac(Pac* p,double iryoku)
+void EneBall::IntersectsBat(Pac* p, double iryoku)
 {
 	for (auto itEneButs = Balls.begin(); itEneButs != Balls.end();)
 	{
@@ -45,6 +45,40 @@ void EneBall::IntersectsPac(Pac* p,double iryoku)
 
 		if (enemyCircle.intersects(p->GetPac()))
 		{
+			
+
+			Vec2 ballvelo{ itEneButs->Speed * cos(itEneButs->dir), itEneButs->Speed * sin(itEneButs->dir) };
+			p->SetVelocity(p->GetPacVelocity() + ballvelo * iryoku);
+			//消滅エフェクト
+			effect.add([pos = itEneButs->pos](double t)
+			{
+				const double t2 = t / 2;    //円の外枠の太さが増加する速さ
+				Circle{ pos,t * 20 }.drawFrame(t2 * 20, AlphaF(1 - t));
+				return(t < 1);
+			});
+			itEneButs = Balls.erase(itEneButs);
+			skip = true;
+		}
+
+		if (skip)
+		{
+			continue;
+		}
+		++itEneButs;
+	}
+}
+
+void EneBall::IntersectsPac(Pac* p,double iryoku, int32* score)
+{
+	for (auto itEneButs = Balls.begin(); itEneButs != Balls.end();)
+	{
+		const Circle enemyCircle{ itEneButs->pos,r };
+		bool skip = false;
+
+		if (enemyCircle.intersects(p->GetPac()))
+		{
+			*score += damage;
+
 			Vec2 ballvelo{ itEneButs->Speed * cos(itEneButs->dir), itEneButs->Speed * sin(itEneButs->dir) };
 			p->SetVelocity(p->GetPacVelocity() + ballvelo * iryoku);
 			//消滅エフェクト

@@ -145,6 +145,16 @@ void Ball_1::BallFall()
 	}
 }
 
+void Ball_1::Fall(Vec2 dir, double g)
+{
+	double ds = Scene::DeltaTime();
+	for (auto& ball : Balls)
+	{
+		ball.dir = CalDir(Vec2(0, 0), Vec2(Cos(ball.dir), Sin(ball.dir)) * ball.Speed + g * ds * dir);
+		ball.Speed = Vec2(Vec2(Cos(ball.dir), Sin(ball.dir)) * ball.Speed + g * ds * dir).length();
+	}
+}
+
 //deceを引力定数にすれば玉ごとに引きよせ易さを変えることができる
 void Ball_1::BallFall(Vec2 p)
 {

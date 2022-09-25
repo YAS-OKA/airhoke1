@@ -124,7 +124,7 @@ void Type4::Update(Pac* pac, Player* player, Enemy* enemy)
 		if (enemy->GetDua() < DuaInit * 2 / 3) {
 			TypeChange = true; type++;
 		}
-		ball1->IntersectsPac(pac, 0.3);
+		ball1->IntersectsPac(pac, 0.3,&m_score);
 		ball2->IntersectsPac(pac,&m_score);
 		break;
 	case 1:
@@ -158,7 +158,7 @@ void Type4::Update(Pac* pac, Player* player, Enemy* enemy)
 		if (enemy->GetDua() < DuaInit / 3) {
 			TypeChange = true; type++;
 		}
-		ball1->IntersectsPac(pac, 0.3);
+		ball1->IntersectsPac(pac, 0.3,&m_score);
 		ball2->IntersectsPac(pac,&m_score);
 		break;
 	case 2:
@@ -211,7 +211,7 @@ void Type4::Update(Pac* pac, Player* player, Enemy* enemy)
 		}
 		ball3->BallMove();
 		ball4->BallMove();
-		ball3->IntersectsPac(pac, 0.4);
+		ball3->IntersectsPac(pac, 0.4, &m_score);
 		ball4->IntersectsPac(pac,&m_score);
 		ball3->RemoveOutBall(table);
 		ball4->RemoveOutBall(table);

@@ -37,8 +37,11 @@ void SetTextureCharacters()
 {
 	const Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
 	const Texture textureAttackedTsAnnna{ U"Images/AttackedTableSideAnnna.png" };
+	const Texture textureTsAlien{ U"Images/TableSideAlien.png" };
+
 	Characters << textureTsAnnna;
 	Characters << textureAttackedTsAnnna;
+	Characters << textureTsAlien;
 }
 
 class Title : public App::Scene
@@ -99,7 +102,7 @@ public:
 		SetTextureCharacters();
 		t_manager = new TypeManager(ScoreInit);
 		changeSc = false;
-		t_manager->ChangeType(4);
+		t_manager->ChangeType(0);
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"再開", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RESTART);
 		b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);
@@ -437,18 +440,18 @@ void Main()
 	
 	while (System::Update())
 	{
-		const double p1 = Periodic::Triangle0_1(0.01s);
+		//const double p1 = Periodic::Triangle0_1(0.01s);
 
 		// 2D カメラを更新
-		camera.update();
+		//camera.update();
 
-		const auto t = camera.createTransformer();
+		//const auto t = camera.createTransformer();
 
 		if (!manager.update())
 		{
 			break;
 		}
 
-		camera.jumpTo(Scene::Center() + Vec2(10 * p1, 0), 1.0);
+		//camera.jumpTo(Scene::Center() + Vec2(10 * p1, 0), 1.0);
 	}
 }

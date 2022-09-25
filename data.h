@@ -58,3 +58,5 @@ extern bool gameover;
 extern double itagaruLimit;//攻撃を食らったとき、痛がる秒数。
 
 extern int32 LostScore;//プレイヤーが死んだときに失うスコア
+
+extern double TimeOfBomb;//必殺技の時間

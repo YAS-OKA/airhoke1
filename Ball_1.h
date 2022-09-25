@@ -35,6 +35,8 @@ public:
 
 	void BallFall();//下に向かって自由落下
 
+	void Fall(Vec2 dir, double g);//dirの方向に落下。」gを引力係数に組み込む
+
 	void BallFall(Vec2 p);//pに向かって自由落下する,減速度を引力係数に組み込んでいる
 
 	void BallFall(Vec2 p,double g);//pに向かって自由落下する,gを引力係数に組み込んでいる

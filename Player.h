@@ -2,6 +2,7 @@
 #define _PLAYER_H_
 #include"Mallet.h"
 #include"Pac.h"
+//#include "Ball_1.h"
 
 
 class Player: public Mallet
@@ -9,6 +10,9 @@ class Player: public Mallet
 private:
 	double delta;
 	double duability;
+	int32 BombNum=3;
+	//Ball_1 Bat;
+
 public:
 	Player(double x, double y, double em, double m_r, double h_s, double r_s, double m_s, double tableleft, double tableupper,
 		double windowwide, double windowhight, double g_r,Array<Vec2> life);
@@ -19,6 +23,10 @@ public:
 	void Move(Vec2 houkou, bool enemyBreak);
 
 	void ChangeSpeed();
+
+	void SetBombNum(int32 n) {	BombNum = n; };
+
+	int32 GetBombNum() { return BombNum; };
 
 	void duabilityDown();
 
