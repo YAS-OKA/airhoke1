@@ -230,10 +230,22 @@ public:
 		data.HighScores << last;
 		//ソート
 		//Print << data.HighScores[8].highScore;
-
-		for (auto i : step(RankingCount))
+		
+		for (auto i : step(RankingCount+1))
 		{
-			if (data.HighScores[RankingCount - i - 1].highScore > data.HighScores[RankingCount].highScore)
+			m_rank = RankingCount - i;
+
+			if (i == RankingCount)//スコアが1位の時
+			{
+				for (auto j : step(i))
+				{
+					Scores z = data.HighScores[RankingCount - j];
+					data.HighScores[RankingCount - j] = data.HighScores[RankingCount - j - 1];
+					data.HighScores[RankingCount - j - 1] = z;
+				}
+				break;
+			}
+			if (data.HighScores[RankingCount - i-1].highScore > data.HighScores[RankingCount].highScore)
 			{
 				for (auto j : step(i))
 				{
@@ -244,19 +256,22 @@ public:
 
 				break;
 			}
+			
 		}
+		
 		//for (auto i : step(9))
 			//Print << data.HighScores[i].highScore;
 		data.HighScores.resize(RankingCount);
 		// ランクインしていたら m_rank に順位をセット
-		for (int32 i = 0; i < RankingCount; ++i)
+		
+		/*for (int32 i = 0; i < RankingCount; ++i)
 		{
 			if (data.HighScores[i].highScore == last.highScore)
 			{
 				m_rank = i;
 				break;
 			}
-		}
+		}*/
 		data.lastGameScore.reset();
 	}
 
