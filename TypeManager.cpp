@@ -97,7 +97,8 @@ TypeManager::TypeManager(int32 ScoreInit)
 	insP = new Pac(WindowWide / 2, WindowHight / 2, Pr, PacVelocity, tableLeft, tableUpper, WindowWide, WindowHight, PacHighSpeed);
 	player_m = new Player(WindowWide / 2, WindowHight - tableUpper - Mr, em, Mr, highSpeed, rowSpeed, MalletSpeed, tableLeft, tableUpper, WindowWide, WindowHight, gr,playerlife);
 	enemy_m = new Enemy(WindowWide / 2, tableUpper + Mr, eme, Mr, highSpeed, rowSpeed, MalletSpeed, tableLeft, tableUpper, WindowWide, WindowHight, gr, enemylife);
-	
+
+	Explo = false; ExploTimer = 0; Timerinterval = 0; BombBibTimer = 0;
 }
 
 TypeManager::~TypeManager()
@@ -283,20 +284,25 @@ void TypeManager::Draw(Array<Texture> characters)
 
 	pgoal.drawFrame(0, 8, ColorF(Palette::Yellow));
 	egoal.drawFrame(0, 8, ColorF(Palette::Yellow));
-
-	if (ColTim && BombBibTimer < 0.5)
+	if (pause || gameover)
 	{
-		const double p1 = Periodic::Triangle0_1(0.01s);
-		Rect{ int32(tableLeft + p1 * 10),tableUpper,tableWide,tableHight }.draw(ColorF(Palette::Forestgreen));
-		BombBibTimer += Scene::DeltaTime();
+		table.draw(ColorF(Palette::Forestgreen));
 	}
 	else
 	{
-		table.draw(ColorF(Palette::Forestgreen));
-		BombBibTimer = 0;
-		ColTim = false;
+		if (ColTim && BombBibTimer < 0.5)
+		{
+			const double p1 = Periodic::Triangle0_1(0.01s);
+			Rect{ int32(tableLeft + p1 * 10),tableUpper,tableWide,tableHight }.draw(ColorF(Palette::Forestgreen));
+			BombBibTimer += Scene::DeltaTime();
+		}
+		else
+		{
+			table.draw(ColorF(Palette::Forestgreen));
+			BombBibTimer = 0;
+			ColTim = false;
+		}
 	}
-
 	if(!enemy_m->GetBreak())
 		Line{ Vec2(tableLeft,tableUpper + tableHight / 2),Vec2(WindowWide - tableLeft,tableUpper + tableHight / 2) }.draw(centerlineWide,Palette::Blue);
 
@@ -315,7 +321,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	bat->Draw(Palette::Dimgray);
 
 	insP->GetPac().draw(ColorF(Palette::Whitesmoke));
-
+	/*
 	//エイリアンちゃん描写
 	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-35);
 
@@ -343,7 +349,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	}
 	else
 		characters[int32(CharactersState::TsAnnna)].draw(0, 75);
-	
+	*/
 	ChackHitMan.preDuability = ChackHitMan.nowDuability;
 	ChackHitMan.nowDuability = player_m->GetDua();
 }
