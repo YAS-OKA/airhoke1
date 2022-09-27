@@ -273,6 +273,7 @@ void TypeManager::Update()
 			Vec2 a{ WindowWide / 2,WindowHight / 2 }, b{ 0,100 };
 			insP->SetXY(a);
 			insP->SetVelocity(b);
+			enemy_m->SetXY(a.x, tableUpper + Mr);
 		}
 	}
 	player_m->ResetKey(); enemy_m->ResetKey();
@@ -321,7 +322,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	bat->Draw(Palette::Dimgray);
 
 	insP->GetPac().draw(ColorF(Palette::Whitesmoke));
-	/*
+	
 	//エイリアンちゃん描写
 	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-35);
 
@@ -349,7 +350,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	}
 	else
 		characters[int32(CharactersState::TsAnnna)].draw(0, 75);
-	*/
+	
 	ChackHitMan.preDuability = ChackHitMan.nowDuability;
 	ChackHitMan.nowDuability = player_m->GetDua();
 }
