@@ -41,7 +41,7 @@ bool Pac::intersectsTim(Enemy* e)
 	{
 		e->ColideTim();//ティム君との衝突
 		//すべてマレットに対するパックの相対的な値
-		vx = PacVelocity.x + e->GetSpeed() * (e->GetKey()[Left] - e->GetKey()[Right]), vy = PacVelocity.y + e->GetSpeed() * (e->GetKey()[Up] - e->GetKey()[Down]);
+		vx = PacVelocity.x - e->GetVelo().x, vy = PacVelocity.y - e->GetVelo().y;
 		ConPacSpeed = sqrt(vx * vx + vy * vy);
 		disx = pac.x - e->GetMallet().x, disy = pac.y - e->GetMallet().y;
 		z = disx * vx + disy * vy;	//式を短くするため
@@ -168,8 +168,9 @@ bool Pac::intersects(Enemy* e)
 		if (pac.intersects(e->GetMallet()))
 		{
 			e->CollidePac(PacVelocity, Edamage);
+			e->HitBackPac(pac.x);
 			//すべてマレットに対するパックの相対的な値
-			vx = PacVelocity.x + e->GetSpeed() * (e->GetKey()[Left] - e->GetKey()[Right]), vy = PacVelocity.y + e->GetSpeed() * (e->GetKey()[Up] - e->GetKey()[Down]);
+			vx = PacVelocity.x - e->GetVelo().x, vy = PacVelocity.y - e->GetVelo().y;
 			ConPacSpeed = sqrt(vx * vx + vy * vy);
 			disx = pac.x - e->GetMallet().x, disy = pac.y - e->GetMallet().y;
 			z = disx * vx + disy * vy;	//式を短くするため
@@ -180,16 +181,25 @@ bool Pac::intersects(Enemy* e)
 			pac.x -= vx * (z + sqrt(z * z - ConPacSpeed * ConPacSpeed * (disx * disx + disy * disy - (pac.r + e->GetMallet().r) * (pac.r + e->GetMallet().r)))) / (ConPacSpeed * ConPacSpeed);
 			pac.y -= vy * (z + sqrt(z * z - ConPacSpeed * ConPacSpeed * (disx * disx + disy * disy - (pac.r + e->GetMallet().r) * (pac.r + e->GetMallet().r)))) / (ConPacSpeed * ConPacSpeed);
 			//ここで壁との埋まりこみを判定することで、マレットがパックを壁外に押し出すことを防ぐ
+			if (!(pac.intersects(pgoal) || pac.intersects(egoal)))
+			{
+				if (!table.contains(pac))//pac.x < tl + pac.r || pac.x > ww - tl - pac.r || pac.y < tu + pac.r || pac.y > wh - tu - pac.r)
+				{
+					pac.x = px; pac.y = py;
+					e->SetXY(e->GetPreXY().x, e->GetPreXY().y);
+				}
+			}
+			/*
 			if (pac.x < tl + pac.r || pac.x > ww - tl - pac.r || pac.y < tu + pac.r || pac.y > wh - tu - pac.r)
 			{
 				pac.x = px; pac.y = py;
 				e->SetXY(e->GetPreXY().x, e->GetPreXY().y);
-			}
+			}*/
 
 			cos = -disy / sqrt(disx * disx + disy * disy), sin = -disx / sqrt(disx * disx + disy * disy);
 			//パックの跳ね返り
-			PacVelocity.x = vx * (cos * cos - sin * sin) - vy * 2 * sin * cos + e->GetSpeed() * (e->GetKey()[Right] - e->GetKey()[Left]);
-			PacVelocity.y = -vx * 2 * sin * cos - vy * (cos * cos - sin * sin) + e->GetSpeed() * (e->GetKey()[Down] - e->GetKey()[Up]);
+			PacVelocity.x = vx * (cos * cos - sin * sin) - vy * 2 * sin * cos + e->GetVelo().x;
+			PacVelocity.y = -vx * 2 * sin * cos - vy * (cos * cos - sin * sin) + e->GetVelo().y;
 
 			//跳ね返り係数をかける
 			PacVelocity.x *= e->GetE();
@@ -200,6 +210,7 @@ bool Pac::intersects(Enemy* e)
 			return true;
 		}
 		else {
+			e->HitBackPac(pac.x);
 			return false;
 		}
 	//}

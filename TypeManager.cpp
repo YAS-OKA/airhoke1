@@ -206,7 +206,7 @@ void TypeManager::Update()
 
 	insP->intersects(player_m);
 	
-	enemy_m->emove(insP->GetPac().x);
+	enemy_m->HitBackPac(insP->GetPacXY().x);
 	insP->Decelerate(masatsu);
 	
 	insP->Pacmove();
