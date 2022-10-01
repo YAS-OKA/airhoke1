@@ -314,14 +314,21 @@ void TypeManager::Draw(Array<Texture> characters)
 	Rect{ WindowWide - 250,WindowHight - 50,(DuaBarLen / 2) * player_m->GetDua() / DuaInit,5 }.draw(ColorF(Palette::White));
 	
 	player_m->Draw();
+	//マレット上にアンナちゃん描写
+	characters[int32(CharactersState::M_Annna)].scaled(1.3).drawAt(player_m->GetXY());
+
 	enemy_m->GetMallet().draw(ColorF(Palette::Whitesmoke));
 	enemy_m->GetGrip().drawFrame(1,ColorF(Palette::Gray));
+	//マレットの上にエイリアンちゃん描写
+	characters[int32(CharactersState::M_Alien)].scaled(1.3).drawAt(enemy_m->GetXY());
+
 
 	m_pType->Draw();
 
 	bat->Draw(Palette::Dimgray);
 
 	insP->GetPac().draw(ColorF(Palette::Whitesmoke));
+
 	
 	//エイリアンちゃん描写
 	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-35);

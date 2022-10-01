@@ -33,15 +33,22 @@ void ResetRanking()
 	}
 }
 
+//描画する絵のリスト（キャラ)
 void SetTextureCharacters()
 {
 	const Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
 	const Texture textureAttackedTsAnnna{ U"Images/AttackedTableSideAnnna.png" };
 	const Texture textureTsAlien{ U"Images/TableSideAlien.png" };
 
+	const Texture textureAnnnaOnMallet{ U"Images/AnnnaOnMallet.png" };
+	const Texture textureAlienOnMallet{ U"Images/AlienOnMallet.png" };
+
+	Characters << textureAnnnaOnMallet;
+	Characters << textureAlienOnMallet;
 	Characters << textureTsAnnna;
 	Characters << textureAttackedTsAnnna;
 	Characters << textureTsAlien;
+	
 }
 
 class Title : public App::Scene

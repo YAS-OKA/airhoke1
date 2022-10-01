@@ -24,7 +24,7 @@ void Enemy::HitBackPac(double x)
 	if (HitBackTimer > 0)
 	{
 		HitBackTimer += dt;
-		if (HitBackTimer < 0.3)//打ち返す
+		if (HitBackTimer < 0.2)//打ち返す
 		{
 			SetXY(GetXY().x + rowspeed * dt * Cos(theta), GetXY().y + rowspeed * dt * Sin(theta));
 		}
@@ -39,23 +39,23 @@ void Enemy::HitBackPac(double x)
 			{
 				if (GetXY().x > x)
 				{
-					if (GetXY().x - rowspeed * dt <= x)
+					if (GetXY().x - highspeed * dt <= x)
 					{
 						SetXY(x, GetXY().y);
 						HitBackTimer = 0;						//打ち返す一連の流れが終了
 					}
 					else
-						SetXY(GetXY().x - rowspeed * dt, GetXY().y);
+						SetXY(GetXY().x - highspeed * dt, GetXY().y);
 				}
 				else
 				{
-					if (GetXY().x + rowspeed * dt >= x)
+					if (GetXY().x + highspeed * dt >= x)
 					{
 						SetXY(x, GetXY().y);
 						HitBackTimer = 0;						//打ち返す一連の流れが終了
 					}
 					else
-						SetXY(GetXY().x + rowspeed * dt, GetXY().y);
+						SetXY(GetXY().x + highspeed * dt, GetXY().y);
 				}
 			}
 		}

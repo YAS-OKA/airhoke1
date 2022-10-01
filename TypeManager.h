@@ -14,6 +14,8 @@
 
 enum class CharactersState
 {
+	M_Annna,
+	M_Alien,
 	TsAnnna,
 	AttackedTsAnnna,
 	TsAlien,
