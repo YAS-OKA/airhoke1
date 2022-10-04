@@ -52,6 +52,8 @@ bool gameover = false;
 
 double itagaruLimit = 1.5;
 
+int32 LostScore = 10000;
+
 double TimeOfBomb = 6;
 
 bool ColTim = false;
@@ -62,13 +64,13 @@ Player* TypeManager::player_m = 0;
 Pac* TypeManager::insP = 0;
 Enemy* TypeManager::enemy_m = 0;
 
-
 Array<Vec2> GorlSide{ {(WindowWide - goalWide) / 2,tableUpper},{(WindowWide + goalWide) / 2,tableUpper }, {(WindowWide - goalWide) / 2,WindowHight - tableUpper},{(WindowWide + goalWide) / 2,WindowHight - tableUpper} };
 
 int32 nowtype = 0;
 
 int32 TypeManager::PreScore = 0;
 int32 TypeManager::Score = 0;
+int32 TypeManager::sc = 0;
 
 Ball_1* TypeManager::bat = NULL;
 bool TypeManager::Explo = false;
@@ -244,8 +246,14 @@ void TypeManager::Update()
 
 	m_pType->Update(insP, player_m, enemy_m);
 
+
 	if (player_m->GetDua() < 0 || player_m->GetBreak())
-		player_m->BreakMallet();
+	{
+		sc = m_pType->Getm_score();
+		player_m->BreakMallet(&sc);
+		m_pType->Setm_score(sc);
+		sc = 0;
+	}
 	if (enemy_m->GetDua() < 0 || enemy_m->GetBreak()) 
 		enemy_m->BreakMallet();
 

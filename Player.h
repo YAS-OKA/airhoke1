@@ -36,7 +36,7 @@ public:
 
 	Circle GetAtarihantei();
 
-	void BreakMallet();
+	void BreakMallet(int32* score);
 
 	void RepairMallet();
 

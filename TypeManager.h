@@ -33,6 +33,8 @@ private:
 	static BaseType* m_pType;
 	static int32 PreScore;
 	static int32 Score;
+	static int32 sc;//malletBreakのときにnowScoreをもらう(Scoreでことたりると思ったけど、変更を加えるのが怖かった)
+
 	static Pac* insP;
 	static Player* player_m;
 	static Enemy* enemy_m;

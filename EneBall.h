@@ -44,7 +44,7 @@ public:
 	void Ball_1_draw();
 	void BallAllExtingish();
 	void BallAllExtingishWithoutRay();
-	void ExceptBall(Array<ball> bat);
+	void ExceptBall(Array<ball> bat,int32* score);
 	void RayAllExtingish();
 	void MoveAt(Vec2 dir);
 

@@ -134,10 +134,11 @@ Circle Player::GetAtarihantei()
 
 
 
-void Player::BreakMallet()
+void Player::BreakMallet(int32* score)
 {
 	if (!Break)
 	{
+		*score -= LostScore;
 		Break = true;
 		duability = 0;
 		SetXY(-1000, -1000);
