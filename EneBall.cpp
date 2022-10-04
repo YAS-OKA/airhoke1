@@ -280,6 +280,31 @@ void EneBall::BallAllExtingishWithoutRay()
 	}
 }
 
+void EneBall::ExceptBall(Array<ball> bat,int32* score)
+{
+	for (auto it = Balls.begin(); it != Balls.end();)
+	{
+		Circle c{ it->pos,r };
+		for (auto itb = bat.begin(); it != bat.end();)
+		{
+			*score += damage;
+			bool skip = false;
+			if (Circle{ itb->pos,r }.intersects(c))
+			{
+				it = Balls.erase(it);
+				skip = true;
+
+			}
+			if (skip)
+			{
+				continue;
+			}
+			++it;
+		}
+
+	}
+}
+
 void EneBall::RayAllExtingish()
 {
 	for (auto it = Ray.begin(); it != Ray.end();)

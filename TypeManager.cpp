@@ -18,7 +18,7 @@ const double MalletSpeed = 250;
 const int32 highSpeed = 250;
 const int32 rowSpeed = 90;
 const int32 Mr = 30;	//マレットの半径Mr(pixel)
-const int32 gr = 17;
+const int32 gr = 24;
 
 const int32 atarihantei = 4;//プレイヤーの当たり判定の半径
 
@@ -315,12 +315,20 @@ void TypeManager::Draw(Array<Texture> characters)
 	
 	player_m->Draw();
 	//マレット上にアンナちゃん描写
-	characters[int32(CharactersState::M_Annna)].scaled(1.3).drawAt(player_m->GetXY());
+	if (not player_m->GetBreak())
+	{
+		characters[int32(CharactersState::M_Annna)].scaled(1.3).drawAt(player_m->GetXY(), ColorF(0.9));
+	}
+	else
+	{
+		characters[int32(CharactersState::M_Annna)].scaled(1.3).drawAt(player_m->GetPreXY(),ColorF(1,1,1,0.5));
+
+	}
 
 	enemy_m->GetMallet().draw(ColorF(Palette::Whitesmoke));
 	enemy_m->GetGrip().drawFrame(1,ColorF(Palette::Gray));
 	//マレットの上にエイリアンちゃん描写
-	characters[int32(CharactersState::M_Alien)].scaled(1.3).drawAt(enemy_m->GetXY());
+	characters[int32(CharactersState::M_Alien)].scaled(1.3).drawAt(enemy_m->GetXY(),ColorF(0.9));
 
 
 	m_pType->Draw();
