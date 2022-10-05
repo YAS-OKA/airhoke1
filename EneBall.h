@@ -6,16 +6,18 @@
 //基底となる弾の構成
 //これを様々な弾に継承させる
 
+struct ball {
+	Vec2 pos;
+	double dir;		//発射方向　ラジアン
+	double Speed;
+	double deceleration;
+	double time;			//発射されてからの経過時間？
+};
+
 class EneBall
 {
 protected:
-	struct ball {
-		Vec2 pos;
-		double dir;		//発射方向　ラジアン
-		double Speed;
-		double deceleration;
-		double time;			//発射されてからの経過時間？
-	};
+
 
 	struct ray {
 		Line line;
@@ -44,7 +46,7 @@ public:
 	void Ball_1_draw();
 	void BallAllExtingish();
 	void BallAllExtingishWithoutRay();
-	void ExceptBall(Array<ball> bat,int32* score);
+	void ExceptBall(Array<ball> bat,int32* score);//コウモリにあたった弾を消す
 	void RayAllExtingish();
 	void MoveAt(Vec2 dir);
 

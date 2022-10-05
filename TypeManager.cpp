@@ -239,6 +239,7 @@ void TypeManager::Update()
 		}
 		ExploTimer += Scene::DeltaTime();
 		Timerinterval += Scene::DeltaTime();
+		m_pType->ExceptBall(bat->GetBalls());
 	}
 	bat->Fall(Vec2(0, -1), 600);
 	bat->BallMoveMax(500);
@@ -345,7 +346,7 @@ void TypeManager::Draw(Array<Texture> characters)
 
 	insP->GetPac().draw(ColorF(Palette::Whitesmoke));
 
-	
+	/*
 	//エイリアンちゃん描写
 	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-35);
 
@@ -373,7 +374,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	}
 	else
 		characters[int32(CharactersState::TsAnnna)].draw(0, 75);
-	
+	*/
 	ChackHitMan.preDuability = ChackHitMan.nowDuability;
 	ChackHitMan.nowDuability = player_m->GetDua();
 }

@@ -19,7 +19,7 @@ private:
 	
 	int32 ball_r = 5;
 	int32 ball_R = 6;
-	Ball_1* ball1 = 0;
+	//Ball_1* ball1 = 0;
 
 	int32 type = 0;			//弾幕の形態
 
@@ -32,7 +32,8 @@ private:
 public:
 	Type1(int32 sco);
 	~Type1();
-
+	Ball_1 GetBall1() { return *ball1; };
+	void SetBall1(Ball_1 ball) { *ball1 = ball; };
 	void Update(Pac* pac, Player* player, Enemy* enemy);
 	void Draw();
 };

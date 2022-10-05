@@ -284,24 +284,25 @@ void EneBall::ExceptBall(Array<ball> bat,int32* score)
 {
 	for (auto it = Balls.begin(); it != Balls.end();)
 	{
+		bool skip = false;
 		Circle c{ it->pos,r };
-		for (auto itb = bat.begin(); it != bat.end();)
+		for (auto itb = bat.begin(); itb != bat.end();)
 		{
-			*score += damage;
-			bool skip = false;
+			//*score += damage;
+			
 			if (Circle{ itb->pos,r }.intersects(c))
 			{
 				it = Balls.erase(it);
 				skip = true;
-
 			}
-			if (skip)
-			{
-				continue;
-			}
-			++it;
+			
+			++itb;
 		}
-
+		if (skip)
+		{
+			continue;
+		}
+		it++;
 	}
 }
 
@@ -339,7 +340,7 @@ bool EneBall::DistanceOver_if(Vec2 p, Vec2 b, double r)
 	}
 }
 
-Array<EneBall::ball> EneBall::GetBalls()
+Array<ball> EneBall::GetBalls()
 {
 	return Balls;
 }

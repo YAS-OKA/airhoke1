@@ -2,7 +2,7 @@
 #include "Type1.h"
 
 Type1::Type1(int32 sco)
-	:bullet1(0), ball1(0), type(0), TypeChange(true), FirstGene(true), BaseType(sco)
+	:bullet1(0),  type(0), TypeChange(true), FirstGene(true), BaseType(sco)
 {
 	bullet = { {{tableLeft, tableUpper + tableHight / 6},3.14 / 3},{{ WindowWide - tableLeft,tableUpper + tableHight / 6 },3.14 * 2 / 3} };
 
@@ -123,6 +123,7 @@ void Type1::Update(Pac* pac, Player* player, Enemy* enemy)
 	}
 	ball1->IntersectsPac(pac,&m_score);
 	ball1->RemoveOutBall(table);
+	
 	if (ball1->IntersectsPlayer(player))
 	{
 		ball1->BallAllExtingishWithoutRay();
