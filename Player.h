@@ -10,7 +10,7 @@ class Player: public Mallet
 private:
 	double delta;
 	double duability;
-	int32 BombNum=3;
+	int32 BombNum=1;
 	//Ball_1 Bat;
 
 public:

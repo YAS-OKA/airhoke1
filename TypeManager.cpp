@@ -194,7 +194,7 @@ void TypeManager::Update()
 		return;
 	}
 
-	if (KeyX.down())
+	if (KeyX.down()&& not player_m->GetBreak())
 	{
 		if (player_m->GetBombNum() > 0&&not Explo)
 		{
@@ -219,8 +219,6 @@ void TypeManager::Update()
 	}
 	else
 		insP->intersects(enemy_m);
-
-	
 
 	//ボム
 	if (Explo)
