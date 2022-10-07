@@ -282,27 +282,38 @@ void EneBall::BallAllExtingishWithoutRay()
 
 void EneBall::ExceptBall(Array<ball> bat,int32* score)
 {
-	for (auto it = Balls.begin(); it != Balls.end();)
+	if (not Balls.isEmpty())
 	{
-		bool skip = false;
-		Circle c{ it->pos,r };
-		for (auto itb = bat.begin(); itb != bat.end();)
+		for (auto it = Balls.begin(); it != Balls.end();)
 		{
-			//*score += damage;
-			
-			if (Circle{ itb->pos,r }.intersects(c))
+			bool skip = false;
+			const Circle c{ it->pos,r };
+			for (auto itb = bat.begin(); itb != bat.end();)
 			{
-				it = Balls.erase(it);
-				skip = true;
+				if (Circle{ itb->pos,r }.intersects(c))
+				{
+					*score += damage;
+
+					effect.add([pos = it->pos](double t)
+					{
+						const double t2 = t / 2;    //円の外枠の太さが増加する速さ
+						Circle{ pos,t * 20 }.drawFrame(t2 * 20, AlphaF(1 - t));
+						return(t < 1);
+					});
+					it = Balls.erase(it);
+
+					skip = true;
+					break;
+				}
+
+				++itb;
 			}
-			
-			++itb;
+			if (skip)
+			{
+				continue;
+			}
+			it++;
 		}
-		if (skip)
-		{
-			continue;
-		}
-		it++;
 	}
 }
 

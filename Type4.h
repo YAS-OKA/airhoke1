@@ -30,10 +30,6 @@ private:
 
 	int32 ball_r = 5;
 	int32 ball_R = 6;
-	Ball_1* ball1 = 0;
-	Ball_1* ball2 = 0;
-	Ball_1* ball3 = 0;
-	Ball_1* ball4 = 0;
 
 	Array< Array<bullets>> b;
 

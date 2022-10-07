@@ -2,7 +2,7 @@
 #include "Type2.h"
 
 Type2::Type2(int32 sco)
-	:bullet1(0), ball1(0), type(0), TypeChange(true), FirstGene(true), BaseType(sco)
+	:bullet1(0), type(0), TypeChange(true), FirstGene(true), BaseType(sco)
 {
 	Edamage = 0.18;
 	bullet = { {{WindowWide / 2, tableUpper + tableHight / 4} ,3.14 / 4},{{WindowWide / 2, tableUpper + tableHight / 4} ,3.14 * 3 / 4},{{WindowWide / 2, tableUpper + tableHight / 4} ,3.14 * 5 / 4},{{WindowWide / 2, tableUpper + tableHight / 4} ,3.14 * 7/ 4} };
@@ -10,7 +10,14 @@ Type2::Type2(int32 sco)
 	bullet1 = new EneBullet_1(bullet_R, bullet);
 	bullet2 = new EneBullet_1(bullet_R, bullet);
 
+
 	ball1 = new Ball_1(ball_r, ball_R);
+	ball2 = new Ball_1(ball_r, ball_R);
+	ball3 = new Ball_1(ball_r, ball_R);
+	ball4 = new Ball_1(ball_r, ball_R);
+	ball5 = new Ball_1(ball_r, ball_R);
+	ball6 = new Ball_1(ball_r, ball_R);
+	ball7 = new Ball_1(ball_r, ball_R);
 }
 
 Type2::~Type2() {}

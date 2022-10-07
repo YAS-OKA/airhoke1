@@ -2,7 +2,7 @@
 #include "Type3.h"
 
 Type3::Type3(int32 sco)
-	:bullet1(0), ball1(0), type(0), TypeChange(true), FirstGene(true), BaseType(sco)
+	:bullet1(0),  type(0), TypeChange(true), FirstGene(true), BaseType(sco)
 {
 	Edamage = 0.14;
 	for (auto i : step(5))
@@ -55,8 +55,14 @@ Type3::Type3(int32 sco)
 	bullet7 = new EneBullet_1(bullet_R, bullet);
 	bullet.clear();
 
-	ball1 = new Ball_1(ball_r, ball_R * 1.5);
+
+	ball1 = new Ball_1(ball_r, ball_R*1.5);
 	ball2 = new Ball_1(ball_r, ball_R);
+	ball3 = new Ball_1(ball_r, ball_R);
+	ball4 = new Ball_1(ball_r, ball_R);
+	ball5 = new Ball_1(ball_r, ball_R);
+	ball6 = new Ball_1(ball_r, ball_R);
+	ball7 = new Ball_1(ball_r, ball_R);
 }
 
 Type3::~Type3()

@@ -18,8 +18,6 @@ private:
 
 	int32 ball_r = 5;
 	int32 ball_R = 6;
-	Ball_1* ball1 = 0;
-	Ball_1* ball2 = 0;
 
 	int32 type = 0;			//弾幕の形態
 

@@ -2,7 +2,7 @@
 #include "Type4.h"
 
 Type4::Type4(int32 sco)
-	:bullet1(0), ball1(0), type(0), TypeChange(true), FirstGene(true), BaseType(sco)
+	:bullet1(0), type(0), TypeChange(true), FirstGene(true), BaseType(sco)
 {
 	Edamage = 0.13;
 	bullet = { {{tableLeft, WindowHight - tableUpper},0} };
@@ -11,6 +11,9 @@ Type4::Type4(int32 sco)
 	ball2 = new Ball_1(2, 4);
 	ball3 = new Ball_1(2, 4);
 	ball4 = new Ball_1(2, 4);
+	ball5 = new Ball_1(ball_r, ball_R);
+	ball6 = new Ball_1(ball_r, ball_R);
+	ball7 = new Ball_1(ball_r, ball_R);
 
 	bullet100 = new RainShot(90, 150, 50, 3.14 / 72);
 	bullet200 = new RainShot(140, 150, 50, 3.14 / 72);

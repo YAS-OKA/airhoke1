@@ -17,8 +17,6 @@ struct ball {
 class EneBall
 {
 protected:
-
-
 	struct ray {
 		Line line;
 		Color color;

@@ -47,13 +47,7 @@ private:
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
 
-	Ball_1* ball1 = 0;
-	Ball_1* ball2 = 0;
-	Ball_1* ball3 = 0;
-	Ball_1* ball4 = 0;
-	Ball_1* ball5 = 0;
-	Ball_1* ball6 = 0;
-	Ball_1* ball7 = 0;
+
 
 	Array<double>jikuDir = { 3.14 * 7 / 12 ,3.14 * 5 / 12 };
 

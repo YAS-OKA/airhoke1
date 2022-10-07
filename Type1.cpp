@@ -13,6 +13,12 @@ Type1::Type1(int32 sco)
 	Edamage = 0.22;
 
 	ball1 = new Ball_1(ball_r, ball_R);
+	ball2 = new Ball_1(ball_r, ball_R);
+	ball3 = new Ball_1(ball_r, ball_R);
+	ball4 = new Ball_1(ball_r, ball_R);
+	ball5 = new Ball_1(ball_r, ball_R);
+	ball6 = new Ball_1(ball_r, ball_R);
+	ball7 = new Ball_1(ball_r, ball_R);
 }
 
 Type1::~Type1() {}

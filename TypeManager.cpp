@@ -230,6 +230,13 @@ void TypeManager::Update()
 			Timerinterval = 0;
 			ExploTimer = 0;
 			Explo = false;
+			if (Abs(insP->GetPacVelocity().y) < 50)
+			{
+				if (insP->GetPacVelocity().y > 0)
+					insP->SetVelocity(Vec2(insP->GetPacVelocity().x, insP->GetPacVelocity().y + 100));
+				else
+					insP->SetVelocity(Vec2(insP->GetPacVelocity().x, insP->GetPacVelocity().y - 100));
+			}
 		}
 		if (intervalBat < Timerinterval)
 		{

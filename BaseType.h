@@ -9,6 +9,13 @@ protected:
 	int32 m_score;
 	bool bombflag;
 	Ball_1* ball1 = 0;
+	Ball_1* ball2 = 0;
+	Ball_1* ball3 = 0;
+	Ball_1* ball4 = 0;
+	Ball_1* ball5 = 0;
+	Ball_1* ball6 = 0;
+	Ball_1* ball7 = 0;
+
 public:
 	BaseType(int32 scor);
 	int32 Getm_score();

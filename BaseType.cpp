@@ -19,4 +19,10 @@ void BaseType::Setm_score(int32 score)
 void BaseType::ExceptBall(Array<ball> bat)
 {
 	ball1->ExceptBall(bat, &m_score);
+	ball2->ExceptBall(bat, &m_score);
+	ball3->ExceptBall(bat, &m_score);
+	ball4->ExceptBall(bat, &m_score);
+	ball5->ExceptBall(bat, &m_score);
+	ball6->ExceptBall(bat, &m_score);
+	ball7->ExceptBall(bat, &m_score);
 }
