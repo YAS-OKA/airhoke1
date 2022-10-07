@@ -333,6 +333,10 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			if (ball1->IntersectsPlayer(player))
 				ball1->BallAllExtingish();
 
+			nokogiri_down->ShotRay(ball1, 8, Palette::Deepskyblue, tableHight / 6);
+			nokogiri_mid->ShotRay(ball2, 8, Palette::Deepskyblue, tableHight / 6);
+			nokogiri_upper->ShotRay(ball3, 8, Palette::Deepskyblue, tableHight / 6);
+
 			nokogiri_down->ColumnMove(nokointerval, WindowHight - tableUpper);
 			nokogiri_mid->ColumnMove(nokointerval, tableUpper + tableHight * 5 / 6);
 			nokogiri_upper->ColumnMove(nokointerval, tableUpper + tableHight * 2 / 3);
@@ -352,6 +356,8 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 						FirstGene = false;
 					}
 				}
+				
+
 				nokogiri_down->NobiShotRay(ball1, tableHight / 6, 4, Palette::Deepskyblue, 8);
 				nokogiri_mid->NobiShotRay(ball2, tableHight / 6, 4, Palette::Deepskyblue, 8);
 				nokogiri_upper->NobiShotRay(ball3, tableHight / 6, 4, Palette::Deepskyblue, 8);

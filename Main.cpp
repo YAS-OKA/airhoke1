@@ -109,7 +109,7 @@ public:
 		SetTextureCharacters();
 		t_manager = new TypeManager(ScoreInit);
 		changeSc = false;
-		t_manager->ChangeType(0);
+		t_manager->ChangeType(4);
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"再開", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RESTART);
 		b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);
