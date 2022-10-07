@@ -220,11 +220,12 @@ void TypeManager::Update()
 	else
 		insP->intersects(enemy_m);
 
-	bat->IntersectsBat(insP, 0.05);
+	
 
 	//ボム
 	if (Explo)
-	{		
+	{
+		bat->IntersectsBat(insP, 0.05);
 		if (ExploTimer > TimeOfBomb)
 		{
 			Timerinterval = 0;

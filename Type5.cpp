@@ -332,6 +332,10 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 
 			if (ball1->IntersectsPlayer(player))
 				ball1->BallAllExtingish();
+
+			nokogiri_down->ColumnMove(nokointerval, WindowHight - tableUpper);
+			nokogiri_mid->ColumnMove(nokointerval, tableUpper + tableHight * 5 / 6);
+			nokogiri_upper->ColumnMove(nokointerval, tableUpper + tableHight * 2 / 3);
 		}
 		else
 		{
