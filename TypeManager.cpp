@@ -310,19 +310,19 @@ void TypeManager::Draw(Array<Texture> characters)
 	egoal.drawFrame(0, 8, ColorF(Palette::Yellow));
 	if (pause || gameover)//テーブルを揺らす
 	{
-		table.draw(ColorF(Palette::Forestgreen));
+		table.draw(ColorF(Palette::Seagreen));
 	}
 	else
 	{
 		if (ColTim && BombBibTimer < 0.5)
 		{
 			const double p1 = Periodic::Triangle0_1(0.01s);
-			Rect{ int32(tableLeft + p1 * 10),tableUpper,tableWide,tableHight }.draw(ColorF(Palette::Forestgreen));
+			Rect{ int32(tableLeft + p1 * 10),tableUpper,tableWide,tableHight }.draw(ColorF(Palette::Seagreen));
 			BombBibTimer += Scene::DeltaTime();
 		}
 		else
 		{
-			table.draw(ColorF(Palette::Forestgreen));
+			table.draw(ColorF(Palette::Seagreen));
 			BombBibTimer = 0;
 			ColTim = false;
 		}

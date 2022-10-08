@@ -32,16 +32,17 @@ void ResetRanking()
 	}
 }
 
-//描画する絵のアレイ（キャラ)
+//描画する絵のアレイ
 void SetTextureCharacters()
 {
+	//横の絵
 	const Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
 	const Texture textureAttackedTsAnnna{ U"Images/AttackedTableSideAnnna.png" };
 	const Texture textureTsAlien{ U"Images/TableSideAlien.png" };
-
+	//マレットドット絵
 	const Texture textureAnnnaOnMallet{ U"Images/AnnnaOnMallet.png" };
 	const Texture textureAlienOnMallet{ U"Images/AlienOnMallet.png" };
-
+	//ティム
 	const Texture textureTim1{ U"Images/Tim1.png" };
 	const Texture textureTim2{ U"Images/Tim2.png" };
 	const Texture textureTim3{ U"Images/Tim3.png" };
@@ -50,8 +51,10 @@ void SetTextureCharacters()
 	Characters << textureAnnnaOnMallet;
 	Characters << textureAlienOnMallet;
 	Characters << textureTsAnnna;
+
 	Characters << textureAttackedTsAnnna;
 	Characters << textureTsAlien;
+
 	Characters << textureTim1;
 	Characters << textureTim2;
 	Characters << textureTim3;
@@ -62,6 +65,8 @@ class Title : public App::Scene
 {
 private:
 	Font font{ 30 };
+	const Texture textureGameBack{ U"Images/game_Back.png" };
+
 public:
 	Title(const InitData& init)
 		: IScene(init)
@@ -87,11 +92,15 @@ public:
 
 	void draw()const override
 	{
+		textureGameBack.scaled(4).draw(0, 0,ColorF(0.9));
+
 		b_manager.Draw();
 
 		Scene::SetBackground(ColorF(0.3, 0.4, 0.5));
 
-		FontAsset(U"Titlefont")(U"エアホッケー").drawAt(600, 100);
+		FontAsset(U"Danmaku")(U"弾幕").draw(300, 170, ColorF(Palette::Lime));
+		FontAsset(U"Titlefont")(U"エアホッケー").draw(500, 190, ColorF(Palette::Aqua));
+
 
 		font(U"z...決定").draw(10, WindowHight - 50);
 	}
@@ -107,7 +116,8 @@ private:
 	Font Scorefont1{ 30 };
 	Font Scorefont2{ 22 };
 	bool oneTime = true;
-	
+
+	const Texture textureGameBack{ U"Images/game_Back.png" };
 public:
 	
 	Game(const InitData& init)
@@ -179,6 +189,7 @@ public:
 
 	void draw() const override
 	{
+		textureGameBack.scaled(4).draw(0, 0,ColorF(0.4));
 		if (!changeSc)
 		{
 			if (!changeSc)
@@ -454,7 +465,8 @@ void Main()
 
 	Camera2D camera{ Scene::Center(), 1.0 };
 
-	FontAsset::Register(U"Titlefont", 60, Typeface::Heavy);
+	FontAsset::Register(U"Titlefont", 80, Typeface::Heavy);
+	FontAsset::Register(U"Danmaku", 100, Typeface::Heavy);
 	FontAsset::Register(U"Ranking", 40, Typeface::Heavy);
 
 	App manager;
@@ -467,7 +479,7 @@ void Main()
 
 	manager.add<GameClear>(State::GameClear);
 
-
+	
 	while (System::Update())
 	{
 		/*
