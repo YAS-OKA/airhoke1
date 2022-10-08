@@ -79,6 +79,8 @@ double TypeManager::Timerinterval = 0;
 double TypeManager::intervalBat = 0.02;
 
 double TypeManager::BombBibTimer = 0;
+double TypeManager::TimMotionTimer = 0;
+double TypeManager::TimMotionTime = 0.6;
 
 ChackDuaChange TypeManager::ChackHitMan = { DuaInit,DuaInit };
 
@@ -182,7 +184,7 @@ void TypeManager::Update()
 {
 	if (player_m->GetLifeNum() == 0)		//ゲームオーバー
 	{
-		gameover=true;
+		gameover = true;
 	}
 
 	if (KeyEscape.down())
@@ -194,9 +196,9 @@ void TypeManager::Update()
 		return;
 	}
 
-	if (KeyX.down()&& not player_m->GetBreak())
+	if (KeyX.down() && not player_m->GetBreak())
 	{
-		if (player_m->GetBombNum() > 0&&not Explo)
+		if (player_m->GetBombNum() > 0 && not Explo)
 		{
 			Explo = true;
 		}
@@ -207,10 +209,10 @@ void TypeManager::Update()
 	player_m->keymove(enemy_m->GetBreak());
 
 	insP->intersects(player_m);
-	
+
 	enemy_m->HitBackPac(insP->GetPacXY().x);
 	insP->Decelerate(masatsu);
-	
+
 	insP->Pacmove();
 	insP->reflect(ew);
 	if (Explo) {
@@ -240,7 +242,7 @@ void TypeManager::Update()
 		if (intervalBat < Timerinterval)
 		{
 			for (auto i : step(6))
-				bat->shot(player_m->GetXY(), Random(3.14*2/3, 6.28+3.14/3), Random(50, 300), 0, 0);
+				bat->shot(player_m->GetXY(), Random(3.14 * 2 / 3, 6.28 + 3.14 / 3), Random(50, 300), 0, 0);
 			Timerinterval = 0;
 		}
 		ExploTimer += Scene::DeltaTime();
@@ -261,7 +263,7 @@ void TypeManager::Update()
 		m_pType->Setm_score(sc);
 		sc = 0;
 	}
-	if (enemy_m->GetDua() < 0 || enemy_m->GetBreak()) 
+	if (enemy_m->GetDua() < 0 || enemy_m->GetBreak())
 		enemy_m->BreakMallet();
 
 	//ゴールした時の処理
@@ -292,6 +294,12 @@ void TypeManager::Update()
 		}
 	}
 	player_m->ResetKey(); enemy_m->ResetKey();
+
+
+	if (ColTim || TimMotionTimer > 0)
+	{
+		TimMotionTimer += Scene::DeltaTime();
+	}
 }
 
 void TypeManager::Draw(Array<Texture> characters)
@@ -300,7 +308,7 @@ void TypeManager::Draw(Array<Texture> characters)
 
 	pgoal.drawFrame(0, 8, ColorF(Palette::Yellow));
 	egoal.drawFrame(0, 8, ColorF(Palette::Yellow));
-	if (pause || gameover)
+	if (pause || gameover)//テーブルを揺らす
 	{
 		table.draw(ColorF(Palette::Forestgreen));
 	}
@@ -343,7 +351,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	enemy_m->GetMallet().draw(ColorF(Palette::Whitesmoke));
 	enemy_m->GetGrip().drawFrame(1,ColorF(Palette::Gray));
 	//マレットの上にエイリアンちゃん描写
-	characters[int32(CharactersState::M_Alien)].scaled(1.3).drawAt(enemy_m->GetXY(),ColorF(0.9));
+	characters[int32(CharactersState::M_Alien)].scaled(1.3).drawAt(enemy_m->GetXY(),ColorF(1));
 
 
 	m_pType->Draw();
@@ -352,7 +360,39 @@ void TypeManager::Draw(Array<Texture> characters)
 
 	insP->GetPac().draw(ColorF(Palette::Whitesmoke));
 
-	/*
+	if (Explo) {
+		if (TimMotionTimer == 0)
+		{
+			//通常
+			characters[int32(CharactersState::Tim1)].scaled(2).drawAt(insP->GetPacXY(), ColorF(1));
+		}
+		else if (TimMotionTimer < 0.2)
+		{
+			//振り上げ
+			characters[int32(CharactersState::Tim2)].scaled(2).drawAt(insP->GetPacXY(), ColorF(1));
+		}
+		else if (TimMotionTimer < 0.4)
+		{
+			//ばんざい
+			characters[int32(CharactersState::Tim3)].scaled(2).drawAt(insP->GetPacXY(), ColorF(1));
+
+		}
+		else if (TimMotionTimer < TimMotionTime)
+		{
+			//振り下ろし
+			characters[int32(CharactersState::Tim4)].scaled(2).drawAt(insP->GetPacXY(), ColorF(1));
+		}
+		else
+		{
+			TimMotionTimer = 0;
+			characters[int32(CharactersState::Tim1)].scaled(2).drawAt(insP->GetPacXY(), ColorF(1));
+		}
+	}
+	else
+	{
+		TimMotionTimer = 0;
+	}
+
 	//エイリアンちゃん描写
 	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-35);
 
@@ -380,7 +420,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	}
 	else
 		characters[int32(CharactersState::TsAnnna)].draw(0, 75);
-	*/
+	
 	ChackHitMan.preDuability = ChackHitMan.nowDuability;
 	ChackHitMan.nowDuability = player_m->GetDua();
 }

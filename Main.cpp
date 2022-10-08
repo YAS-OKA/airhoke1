@@ -10,7 +10,6 @@
 #include"Common.h"
 #include"nameBoard.h"
 
-///自分が死んだとき、玉の消滅にエフェクトをつけたい
 
 const int32 WindowWide = 1200;
 const int32 WindowHight = 800;
@@ -33,7 +32,7 @@ void ResetRanking()
 	}
 }
 
-//描画する絵のリスト（キャラ)
+//描画する絵のアレイ（キャラ)
 void SetTextureCharacters()
 {
 	const Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
@@ -43,12 +42,20 @@ void SetTextureCharacters()
 	const Texture textureAnnnaOnMallet{ U"Images/AnnnaOnMallet.png" };
 	const Texture textureAlienOnMallet{ U"Images/AlienOnMallet.png" };
 
+	const Texture textureTim1{ U"Images/Tim1.png" };
+	const Texture textureTim2{ U"Images/Tim2.png" };
+	const Texture textureTim3{ U"Images/Tim3.png" };
+	const Texture textureTim4{ U"Images/Tim4.png" };
+
 	Characters << textureAnnnaOnMallet;
 	Characters << textureAlienOnMallet;
 	Characters << textureTsAnnna;
 	Characters << textureAttackedTsAnnna;
 	Characters << textureTsAlien;
-	
+	Characters << textureTim1;
+	Characters << textureTim2;
+	Characters << textureTim3;
+	Characters << textureTim4;
 }
 
 class Title : public App::Scene
@@ -109,7 +116,7 @@ public:
 		SetTextureCharacters();
 		t_manager = new TypeManager(ScoreInit);
 		changeSc = false;
-		t_manager->ChangeType(4);
+		t_manager->ChangeType(0);
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"再開", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RESTART);
 		b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);

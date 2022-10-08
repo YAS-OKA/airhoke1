@@ -19,6 +19,10 @@ enum class CharactersState
 	TsAnnna,
 	AttackedTsAnnna,
 	TsAlien,
+	Tim1,
+	Tim2,
+	Tim3,
+	Tim4,
 };
 
 static struct ChackDuaChange
@@ -49,6 +53,8 @@ private:
 	static double intervalBat;//蝙蝠が出てくる間隔
 
 	static double BombBibTimer;//ボムによって揺れるじかん
+	static double TimMotionTimer;//ティム君の動きのハンドルに使うタイマー
+	static double TimMotionTime;//ティム君の一連の動きに要する時間
 
 public:
 	enum TYPE {
