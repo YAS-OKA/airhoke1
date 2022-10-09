@@ -20,8 +20,9 @@ void Enemy::emove(double x)
 
 void Enemy::HitBackPac(double x)
 {
+	
 	double dt = Scene::DeltaTime();
-	if (HitBackTimer > 0)
+	if (HitBackTimer > 0 && not CantHitBack)
 	{
 		HitBackTimer += dt;
 		if (HitBackTimer < 0.2)//打ち返す

@@ -12,6 +12,8 @@ private:
 	double theta=3.14/2;
 	double Maxt=3.14*2/3, mint=3.14/3;
 	double thetaRange = Maxt - mint;
+
+	bool CantHitBack = false;
 public:
 	Enemy(double x, double y, double e, double m_r, double h_s, double r_s, double m_s, double tableleft, double tableupper,
 		double windowwide, double windowhight, double g_r,Array<Vec2> life);
@@ -19,6 +21,8 @@ public:
 	~Enemy();
 
 	void emove(double x);
+
+	void SetCantHitBack(bool tf) { CantHitBack = tf; };
 
 	void HitBackPac(double pacx);//パックのｘ座標が引数
 

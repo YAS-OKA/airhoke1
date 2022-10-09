@@ -3,7 +3,7 @@
 
 Type5::Type5(int32 sco) :FirstGene(true), TypeChange(true), BaseType(sco)
 {
-	Edamage = 0.16;
+	Edamage = 0.13;
 	bullet = { {{tableLeft + tableWide / 2,tableUpper + tableHight * 2/ 5},3.14 / 2}};
 	ball1 = new Ball_1(2, 4);
 	ball2 = new Ball_1(2, 4);
@@ -164,9 +164,10 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 		switch (type)
 		{
 		case 0:
-
+			enemy->SetCantHitBack(true);
 			break;
 		case 1:
+			enemy->SetCantHitBack(true);
 			ball7->BallAllExtingish();
 			ball6->BallAllExtingish();
 			delete NeutronStar;
@@ -176,6 +177,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			FirstGene = true;
 			break;
 		case 2:
+			enemy->SetCantHitBack(false);
 			Edamage = 0.017;
 			ball1->BallAllExtingish();
 			ball2->BallAllExtingish();
@@ -184,6 +186,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			FirstGene = true;
 			break;
 		case 3:
+			enemy->SetCantHitBack(false);
 			Edamage = 0.12;
 			ball1->BallAllExtingish();
 			ball2->BallAllExtingish();

@@ -10,6 +10,7 @@ class Pac
 private:
 	Circle pac;
 	Vec2 PacVelocity;
+	Vec2 PreXY;
 
 	double pacMaxSpeed;
 	double tl;	//tableleft
@@ -57,6 +58,7 @@ public:
 	Vec2 GetPacVelocity();
 
 	Vec2 GetPacXY();
+	Vec2 GetPreXY() { return PreXY; };
 
 	void AddScore(int32* score);
 };

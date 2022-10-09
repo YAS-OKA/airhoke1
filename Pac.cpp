@@ -123,7 +123,7 @@ void Pac::intersects(Mallet* m)
 		}
 		else
 		{
-			Vec2 PacV = PacVelocity / k;
+			Vec2 PacV = (GetPacXY() - GetPreXY())/Scene::DeltaTime();//PacVelocity / k;
 			//すべてマレットに対するパックの相対的な値
 			vx = PacV.x + m->GetSpeed() * (m->GetKey()[Left] - m->GetKey()[Right]), vy = PacV.y + m->GetSpeed() * (m->GetKey()[Up] - m->GetKey()[Down]);
 			ConPacSpeed = sqrt(vx * vx + vy * vy);
@@ -163,52 +163,44 @@ void Pac::intersects(Mallet* m)
 
 bool Pac::intersects(Enemy* e)
 {
-	//if (PacVelocity != Vec2(0, 0))
-	//{
-		if (pac.intersects(e->GetMallet()))
+	if (pac.intersects(e->GetMallet()))
+	{
+		e->CollidePac(PacVelocity, Edamage);
+		e->HitBackPac(pac.x);
+		//すべてマレットに対するパックの相対的な値
+		vx = PacVelocity.x - e->GetVelo().x, vy = PacVelocity.y - e->GetVelo().y;
+		ConPacSpeed = sqrt(vx * vx + vy * vy);
+		disx = pac.x - e->GetMallet().x, disy = pac.y - e->GetMallet().y;
+		z = disx * vx + disy * vy;	//式を短くするため
+		px = pac.x, py = pac.y; //パックの座標を保持
+		//パックとマレットの埋まり込みをなくす
+		pac.x -= vx * (z + sqrt(z * z - ConPacSpeed * ConPacSpeed * (disx * disx + disy * disy - (pac.r + e->GetMallet().r) * (pac.r + e->GetMallet().r)))) / (ConPacSpeed * ConPacSpeed);
+		pac.y -= vy * (z + sqrt(z * z - ConPacSpeed * ConPacSpeed * (disx * disx + disy * disy - (pac.r + e->GetMallet().r) * (pac.r + e->GetMallet().r)))) / (ConPacSpeed * ConPacSpeed);
+		//ここで壁との埋まりこみを判定することで、マレットがパックを壁外に押し出すことを防ぐ
+		if (!(pac.intersects(pgoal) || pac.intersects(egoal)))
 		{
-			e->CollidePac(PacVelocity, Edamage);
-			e->HitBackPac(pac.x);
-			//すべてマレットに対するパックの相対的な値
-			vx = PacVelocity.x - e->GetVelo().x, vy = PacVelocity.y - e->GetVelo().y;
-			ConPacSpeed = sqrt(vx * vx + vy * vy);
-			disx = pac.x - e->GetMallet().x, disy = pac.y - e->GetMallet().y;
-			z = disx * vx + disy * vy;	//式を短くするため
-
-			px = pac.x, py = pac.y; //パックの座標を保持
-
-			//パックとマレットの埋まり込みをなくす
-			pac.x -= vx * (z + sqrt(z * z - ConPacSpeed * ConPacSpeed * (disx * disx + disy * disy - (pac.r + e->GetMallet().r) * (pac.r + e->GetMallet().r)))) / (ConPacSpeed * ConPacSpeed);
-			pac.y -= vy * (z + sqrt(z * z - ConPacSpeed * ConPacSpeed * (disx * disx + disy * disy - (pac.r + e->GetMallet().r) * (pac.r + e->GetMallet().r)))) / (ConPacSpeed * ConPacSpeed);
-			//ここで壁との埋まりこみを判定することで、マレットがパックを壁外に押し出すことを防ぐ
-			if (!(pac.intersects(pgoal) || pac.intersects(egoal)))
-			{
-				if (!table.contains(pac))//pac.x < tl + pac.r || pac.x > ww - tl - pac.r || pac.y < tu + pac.r || pac.y > wh - tu - pac.r)
-				{
-					pac.x = px; pac.y = py;
-					e->SetXY(e->GetPreXY().x, e->GetPreXY().y);
-				}
-			}
-			/*
-			if (pac.x < tl + pac.r || pac.x > ww - tl - pac.r || pac.y < tu + pac.r || pac.y > wh - tu - pac.r)
+			if (!table.contains(pac))
 			{
 				pac.x = px; pac.y = py;
 				e->SetXY(e->GetPreXY().x, e->GetPreXY().y);
-			}*/
-
-			cos = -disy / sqrt(disx * disx + disy * disy), sin = -disx / sqrt(disx * disx + disy * disy);
-			//パックの跳ね返り
-			PacVelocity.x = vx * (cos * cos - sin * sin) - vy * 2 * sin * cos + e->GetVelo().x;
-			PacVelocity.y = -vx * 2 * sin * cos - vy * (cos * cos - sin * sin) + e->GetVelo().y;
-
-			//跳ね返り係数をかける
-			PacVelocity.x *= e->GetE();
-			PacVelocity.y *= e->GetE();
-
-			pacSpeedRestrict();
-
-			return true;
+			}
 		}
+		/*
+		if (pac.x < tl + pac.r || pac.x > ww - tl - pac.r || pac.y < tu + pac.r || pac.y > wh - tu - pac.r)
+		{
+			pac.x = px; pac.y = py;
+			e->SetXY(e->GetPreXY().x, e->GetPreXY().y);
+		}*/
+			cos = -disy / sqrt(disx * disx + disy * disy), sin = -disx / sqrt(disx * disx + disy * disy);
+		//パックの跳ね返り
+		PacVelocity.x = vx * (cos * cos - sin * sin) - vy * 2 * sin * cos + e->GetVelo().x;
+		PacVelocity.y = -vx * 2 * sin * cos - vy * (cos * cos - sin * sin) + e->GetVelo().y;
+		//跳ね返り係数をかける
+		PacVelocity.x *= e->GetE();
+		PacVelocity.y *= e->GetE();
+		pacSpeedRestrict();
+		return true;
+	}
 		else {
 			e->HitBackPac(pac.x);
 			return false;
@@ -306,8 +298,10 @@ void Pac::reflect(double e)
 
 void Pac::RayPacmove(Vec2 start, double dir)
 {
-	double d = Abs(Sin(dir) * pac.x - Cos(dir) * pac.y + Cos(dir) * start.y - Sin(dir) * start.x);
-	
+	double d = Abs(Sin(dir) * pac.x - Cos(dir) * pac.y + Cos(dir) * start.y - Sin(dir) * start.x);//レーザーからパックの中心までの距離？
+
+	PreXY = GetPacXY();
+
 	pac.moveBy(PacVelocity * Scene::DeltaTime() * ((k - 1) * d / pac.r + 1) / k);
 	pacMoveType = false;
 }
@@ -329,6 +323,7 @@ void Pac::Pacmove()
 {
 	if (pacMoveType)
 	{
+		PreXY = GetPacXY();
 		pac.moveBy(PacVelocity * Scene::DeltaTime());
 	}
 	pacMoveType = true;
