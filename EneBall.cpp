@@ -100,13 +100,14 @@ void EneBall::IntersectsPac(Pac* p,double iryoku, int32* score)
 	}
 }
 
-Array<bool> EneBall::IntersectsPac(Pac* pac, Vec2 start)
+Array<bool> EneBall::IntersectsPac(Pac* pac, Vec2 start,int32 *score)
 {
 	Array<bool> intersects;
 	for (auto it = Ray.begin(); it != Ray.end();)
 	{
 		if (const auto points = it->line.intersectsAt(pac->GetPac()))
 		{
+			*score += 7000 * Scene::DeltaTime();
 			double dis = it->line.length();
 			Vec2 p;
 			for (const auto& point : *points)

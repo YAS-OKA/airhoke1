@@ -219,7 +219,10 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 		}
 		else
 		{
-			NeutronStar->NeutronStarRay(ball7, hutosa, Palette::Skyblue, pac);
+			int32 S = Getm_score();//一時的にスコアをもらう
+			NeutronStar->NeutronStarRay(ball7, hutosa, Palette::Skyblue, pac,&S);
+			Setm_score(S);
+
 			uzu->uzukaiten(ball6, 3.14 / 17, 1.7, 110, Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 12, &BaseDir);
 			if (enemy->GetDua() < DuaInit * 4 / 5) {
 				TypeChange = true; type++;
@@ -242,7 +245,10 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 		}
 		else
 		{
-			NeutronStar->NeutronStarRay(ball7, hutosa, Palette::Skyblue, pac);
+			int32 S = Getm_score();//一時的にスコアをもらう
+			NeutronStar->NeutronStarRay(ball7, hutosa, Palette::Skyblue, pac, &S);
+			Setm_score(S);
+
 			uzu->uzukaiten(ball6, 3.14 / 10, 0.9, 140, Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 12, &BaseDir);
 			if (enemy->GetDua() < DuaInit * 3 / 5) {
 				TypeChange = true; type++;

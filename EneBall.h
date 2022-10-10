@@ -34,7 +34,7 @@ public:
 	void IntersectsPac(Pac* pac, int32* score);			//パックと衝突したとき、スコアの加算も兼ねる
 	void IntersectsBat(Pac* pac,double iryoku);//コウモリとパックの衝突　スコアが加算されない　パックを押し返す
 	void IntersectsPac(Pac* pac,double iryoku, int32* score);//雨とパックの衝突
-	Array<bool> IntersectsPac(Pac* pac, Vec2 start);//レーザーとパックの衝突、startはレーザーの起点
+	Array<bool> IntersectsPac(Pac* pac, Vec2 start,int32 *score);//レーザーとパックの衝突、startはレーザーの起点
 	void IntersectsHunsui(Pac* pac, double iryoku);//レーザーとの衝突、上方向に加速iryokuは噴水の押し返す力
 	void IntersectsifUe(Pac* pac, double iryoku);//パックが上に進んでいれば速度.yを加速
 	void IntersectsJun(Pac* pac, double iryoku);//パックの順方向に加速

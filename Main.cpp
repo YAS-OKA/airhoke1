@@ -38,7 +38,7 @@ void SetTextureCharacters()
 	//横の絵
 	const Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
 	const Texture textureAttackedTsAnnna{ U"Images/AttackedTableSideAnnna.png" };
-	const Texture textureTsAlien{ U"Images/TableSideAlien.png" };
+	const Texture textureTsAlien{ U"Images/TableSideAlien2.png" };
 	//マレットドット絵
 	const Texture textureAnnnaOnMallet{ U"Images/AnnnaOnMallet.png" };
 	const Texture textureAlienOnMallet{ U"Images/AlienOnMallet.png" };
@@ -47,6 +47,8 @@ void SetTextureCharacters()
 	const Texture textureTim2{ U"Images/Tim2.png" };
 	const Texture textureTim3{ U"Images/Tim3.png" };
 	const Texture textureTim4{ U"Images/Tim4.png" };
+	//ボムゲージ
+	const Texture textureBombGage{ U"Images/BombMark.png" };
 
 	Characters << textureAnnnaOnMallet;
 	Characters << textureAlienOnMallet;
@@ -59,6 +61,8 @@ void SetTextureCharacters()
 	Characters << textureTim2;
 	Characters << textureTim3;
 	Characters << textureTim4;
+
+	Characters << textureBombGage;
 }
 
 class Title : public App::Scene
@@ -115,6 +119,7 @@ private:
 	Font font{ 60 };
 	Font Scorefont1{ 30 };
 	Font Scorefont2{ 22 };
+	Font Sp{ 37 };
 	bool oneTime = true;
 
 	const Texture textureGameBack{ U"Images/game_Back.png" };
@@ -208,6 +213,7 @@ public:
 			}
 			Scorefont1(U"スコア").draw(WindowWide - tableLeft + 10, WindowHight - 40, ColorF(Palette::Yellow));
 			Scorefont2(t_manager->GetNowScore()).draw(WindowWide - tableLeft + 110, WindowHight - 32, ColorF(Palette::White));
+			Sp(U"必殺技").draw(WindowWide - tableLeft + 10, WindowHight - tableUpper - 100-27);
 		}
 	}
 };

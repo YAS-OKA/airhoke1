@@ -23,6 +23,7 @@ enum class CharactersState
 	Tim2,
 	Tim3,
 	Tim4,
+	BombGage,
 };
 
 static struct ChackDuaChange
@@ -55,6 +56,8 @@ private:
 	static double BombBibTimer;//ボムによって揺れるじかん
 	static double TimMotionTimer;//ティム君の動きのハンドルに使うタイマー
 	static double TimMotionTime;//ティム君の一連の動きに要する時間
+
+	static int32 ShowBombGage;
 
 public:
 	enum TYPE {

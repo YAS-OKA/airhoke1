@@ -100,6 +100,7 @@ void Enemy::SetDua(int32 d)
 
 void Enemy::BreakMallet()
 {
+
 	SetXY(-1000, -1000);
 	duability = 0;
 	Break = true;
@@ -107,6 +108,7 @@ void Enemy::BreakMallet()
 
 void Enemy::RepairMallet()
 {
+
 	duability = DuaInit;
 	Break = false;
 }

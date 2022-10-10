@@ -62,3 +62,5 @@ extern int32 LostScore;//プレイヤーが死んだときに失うスコア
 extern double TimeOfBomb;//必殺技の時間
 
 extern bool ColTim;//ティム君が衝突したかどうか。メイン関数内で画面を揺らすかどうか。
+
+extern int32 BombGage;//ボムを吐いてから次のボムが復活するまでに必要なスコア

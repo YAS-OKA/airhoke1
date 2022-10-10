@@ -154,12 +154,12 @@ void EneBullet_1::RandomShotball(Ball_1* ball, double MinSpeed, double MaxSpeed,
 	}
 }
 
-void EneBullet_1::ShotRay(Ball_1* ball ,int32 hutosa, Color c,Pac *p)
+void EneBullet_1::ShotRay(Ball_1* ball ,int32 hutosa, Color c,Pac *p,int32 *score)
 {
 	for (auto& bullet : enebullets)
 	{
 		ball->ShotRay(bullet.pos, bullet.dir, hutosa, c);
-		ball->IntersectsPac(p, bullet.pos);
+		ball->IntersectsPac(p, bullet.pos, score);
 	}
 }
 
@@ -188,14 +188,14 @@ void EneBullet_1::HunsuiShot(Ball_1* ball, double maxs, double mins, double ct, 
 	ball->BallFall();
 }
 
-void EneBullet_1::NeutronStarRay(Ball_1* ball, int32 hutosa, Color c, Pac* p)
+void EneBullet_1::NeutronStarRay(Ball_1* ball, int32 hutosa, Color c, Pac* p, int32* score)
 {
 	ball->RayAllExtingish();
 	for (auto& bullet : enebullets)
 	{
 		ball->ShotRay(bullet.pos, bullet.dir, hutosa, c);
 		ball->ShotRay(bullet.pos, bullet.dir+3.14, hutosa, c);
-		Array<bool> i = ball->IntersectsPac(p, bullet.pos);
+		Array<bool> i = ball->IntersectsPac(p, bullet.pos, score);
 		if (i[0]||i[1])
 		{
 			p->RayPacmove(bullet.pos, bullet.dir);

@@ -6,10 +6,34 @@ Player::Player(double x, double y, double em, double m_r, double h_s, double r_s
 	:Mallet(x, y, em, m_r, h_s, r_s, m_s, tableleft, tableupper, windowwide, windowhight, g_r,life), delta(0), duability(DuaInit)
 {
 	Revivaled = false;
+	HaveBomb = true;
+	PiggyBomb = 0;
+	CountBombExplo = 0;
 }
 Player::~Player()
 {
 
+}
+
+int32 Player::AccumulateBomb(int32 nowscore)
+{
+	if (not HaveBomb)//もしボムがなければ
+	{
+		if (nowscore - PiggyBomb > BombGage)
+		{
+			HaveBomb = true;
+		}
+		else if (nowscore < PiggyBomb)
+		{
+			PiggyBomb = nowscore;
+			return 0;
+		}	
+	}
+	else
+	{
+		PiggyBomb = nowscore;
+	}
+	return nowscore - PiggyBomb;
 }
 
 void Player::keymove(bool enemyBreak)
@@ -138,10 +162,17 @@ void Player::BreakMallet(int32* score)
 {
 	if (!Break)
 	{
+		
 		*score -= LostScore;
+		if (*score < 0)
+		{
+			*score = 0;
+		}
+
 		Break = true;
 		duability = 0;
 		SetXY(-1000, -1000);
+
 	}
 	RepairMallet();
 }

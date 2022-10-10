@@ -41,13 +41,13 @@ public:
 
 	void RandomShotball(Ball_1* ball, double MinSpeed, double MaxSpeed, Array<double> dir, double baratsuki, double MinD, double MaxD);//type4のrainshotで主に使う
 
-	void ShotRay(Ball_1* ball, int32 hutosa, Color c, Pac* pac);
+	void ShotRay(Ball_1* ball, int32 hutosa, Color c, Pac* pac, int32* score);
 
 	void ShotRay(Ball_1* ball, int32 hutosa, Color c, double len);
 
 	void HunsuiShot(Ball_1* ball, double MaxSpeed, double MinSpeed,double ct, double zurasu, double grab);//噴水
 
-	void NeutronStarRay(Ball_1* ball, int32 hutosa, Color c, Pac* pac);//中性子星のガンマ線バースト、パックが光線に当たった時の処理も書いてる
+	void NeutronStarRay(Ball_1* ball, int32 hutosa, Color c, Pac* pac,int32 *score);//中性子星のガンマ線バースト、パックが光線に当たった時の処理も書いてる
 
     Array<Vec2> SetBulSurr(Vec2 center,double BaseDir, int32 k);//centerを中心にステージをk等分し、centerをとりかこむようにbulletを設置
 

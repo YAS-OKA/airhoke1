@@ -52,11 +52,13 @@ bool gameover = false;
 
 double itagaruLimit = 1.5;
 
-int32 LostScore = 10000;
+int32 LostScore = 250000;
 
 double TimeOfBomb = 6;
 
 bool ColTim = false;
+
+int32 BombGage = 500000;
 
 BaseType* TypeManager::m_pType = NULL;
 
@@ -85,6 +87,8 @@ double TypeManager::TimMotionTime = 0.6;
 ChackDuaChange TypeManager::ChackHitMan = { DuaInit,DuaInit };
 
 double TypeManager::itagaruTimer = 0;
+
+int32 TypeManager::ShowBombGage = 0;
 
 TypeManager::TypeManager(int32 ScoreInit)
 {
@@ -198,7 +202,7 @@ void TypeManager::Update()
 
 	if (KeyX.down() && not player_m->GetBreak())
 	{
-		if (player_m->GetBombNum() > 0 && not Explo)
+		if (player_m->GetBombNum() > 0 && not Explo && player_m->GetHaveBomb())
 		{
 			Explo = true;
 		}
@@ -215,6 +219,7 @@ void TypeManager::Update()
 
 	insP->Pacmove();
 	insP->reflect(ew);
+
 	if (Explo) {
 		if (insP->intersectsTim(enemy_m))
 			ColTim = true;
@@ -231,6 +236,7 @@ void TypeManager::Update()
 			Timerinterval = 0;
 			ExploTimer = 0;
 			Explo = false;
+			player_m->SetHaveBomb(false);
 			if (Abs(insP->GetPacVelocity().y) < 50)
 			{
 				if (insP->GetPacVelocity().y > 0)
@@ -253,6 +259,8 @@ void TypeManager::Update()
 	bat->BallMoveMax(500);
 	bat->RemoveOutBall(table);
 
+	ShowBombGage=player_m->AccumulateBomb(m_pType->Getm_score());
+
 	m_pType->Update(insP, player_m, enemy_m);
 
 
@@ -274,6 +282,7 @@ void TypeManager::Update()
 			//敵のゴール
 			player_m->LostLifes();
 			player_m->Repaired();
+			player_m->SetHaveBomb(true);
 			Vec2 a{ WindowWide / 2,WindowHight / 2 }, b{ 0,100 };
 			insP->SetXY(a);
 			insP->SetVelocity(b);
@@ -394,7 +403,7 @@ void TypeManager::Draw(Array<Texture> characters)
 	}
 
 	//エイリアンちゃん描写
-	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-35);
+	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-50);//35
 
 	//アンナちゃん描写
 	if (ChackHitMan.nowDuability < ChackHitMan.preDuability||itagaruTimer>0)
@@ -420,6 +429,11 @@ void TypeManager::Draw(Array<Texture> characters)
 	}
 	else
 		characters[int32(CharactersState::TsAnnna)].draw(0, 75);
+
+	characters[int32(CharactersState::BombGage)].scaled(1.7).drawAt(WindowWide - tableLeft*3/8-40, WindowHight - tableUpper - 100);
+
+	if (not player_m->GetHaveBomb())
+		Circle{ WindowWide - tableLeft * 3 / 8 - 40, WindowHight - tableUpper - 100 ,27.5 }.drawPie(0_deg, Math::Pi * 2 * (BombGage-ShowBombGage) / BombGage, ColorF(Palette::Black, 0.4));
 	
 	ChackHitMan.preDuability = ChackHitMan.nowDuability;
 	ChackHitMan.nowDuability = player_m->GetDua();
