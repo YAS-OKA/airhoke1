@@ -3,7 +3,7 @@
 
 Type5::Type5(int32 sco) :FirstGene(true), TypeChange(true), BaseType(sco)
 {
-	Edamage = 0.13;
+	Edamage = 0.12;
 	bullet = { {{tableLeft + tableWide / 2,tableUpper + tableHight * 2/ 5},3.14 / 2}};
 	ball1 = new Ball_1(2, 4);
 	ball2 = new Ball_1(2, 4);
@@ -183,6 +183,9 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			ball2->BallAllExtingish();
 			ball3->BallAllExtingish();
 			ball4->BallAllExtingish();
+			ball5->BallAllExtingish();
+			ball6->BallAllExtingish();
+			ball7->BallAllExtingish();
 			FirstGene = true;
 			break;
 		case 3:
@@ -302,7 +305,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			ball1->IntersectsHunsui(pac, Scene::DeltaTime()*1000);
 			ball2->IntersectsifUe(pac, Scene::DeltaTime() * 500);
 			ball3->IntersectsJun(pac, Scene::DeltaTime() * 100);
-			ball1->RayIntersectsPlayer(player);
+			ball1->RayIntersectsPlayer(player);//ここらへんが怪しいかな
 			ball2->RayIntersectsPlayer(player);
 			ball3->RayIntersectsPlayer(player);
 			ball4->RayIntersectsPlayer(player);

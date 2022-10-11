@@ -403,7 +403,7 @@ void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat)
 	}
 
 	bat->DrawBat(Bat, 1);
-	/*
+	
 	//エイリアンちゃん描写
 	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-50);//35
 
@@ -433,7 +433,7 @@ void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat)
 		characters[int32(CharactersState::TsAnnna)].draw(0, 75);
 
 	characters[int32(CharactersState::BombGage)].scaled(1.7).drawAt(WindowWide - tableLeft*3/8-40, WindowHight - tableUpper - 100);
-	*/
+	
 	if (not player_m->GetHaveBomb())
 		Circle{ WindowWide - tableLeft * 3 / 8 - 40, WindowHight - tableUpper - 100 ,27.5 }.drawPie(0_deg, Math::Pi * 2 * (BombGage-ShowBombGage) / BombGage, ColorF(Palette::Black, 0.4));
 	
