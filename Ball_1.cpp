@@ -132,6 +132,8 @@ void Ball_1::BallMoveMax(double max)
 
 		Ball.pos.x += (Scene::DeltaTime() * cos(Ball.dir) * Ball.Speed);
 		Ball.pos.y += (Scene::DeltaTime() * sin(Ball.dir) * Ball.Speed);
+
+		Ball.time += Scene::DeltaTime();
 	}
 }
 

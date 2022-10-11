@@ -17,6 +17,7 @@ const int32 WindowHight = 800;
 ButtonManager b_manager;
 
 Array<Texture> Characters;
+Array<Texture> Bat;
 
 void ResetRanking()
 {
@@ -50,6 +51,11 @@ void SetTextureCharacters()
 	//ボムゲージ
 	const Texture textureBombGage{ U"Images/BombMark.png" };
 
+	//コウモリの絵
+	const Texture textureBat1{ U"images/Bat1.png" };
+	const Texture textureBat2{ U"images/Bat2.png" };
+	const Texture textureBat3{ U"images/Bat3.png" };
+
 	Characters << textureAnnnaOnMallet;
 	Characters << textureAlienOnMallet;
 	Characters << textureTsAnnna;
@@ -63,6 +69,10 @@ void SetTextureCharacters()
 	Characters << textureTim4;
 
 	Characters << textureBombGage;
+
+	Bat << textureBat1;
+	Bat << textureBat2;
+	Bat << textureBat3;
 }
 
 class Title : public App::Scene
@@ -131,7 +141,7 @@ public:
 		SetTextureCharacters();
 		t_manager = new TypeManager(ScoreInit);
 		changeSc = false;
-		t_manager->ChangeType(4);
+		t_manager->ChangeType(0);
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"再開", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RESTART);
 		b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);
@@ -198,7 +208,7 @@ public:
 		if (!changeSc)
 		{
 			if (!changeSc)
-				t_manager->Draw(Characters);
+				t_manager->Draw(Characters, Bat);
 			if (pause)
 			{
 				Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(Palette::Black, 0.7));

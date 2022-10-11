@@ -61,6 +61,10 @@ public:
 
 	void Draw(Color c);
 
+	void Draw(Texture pic,double scale);//すべての弾にpicを乗せる
+
+	void DrawBat(Array<Texture> pic, double scale);
+
 	void DrawA(Color c, double t);
 };
 

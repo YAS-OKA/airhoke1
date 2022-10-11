@@ -407,3 +407,30 @@ void EneBall::DrawA(Color c,double t)
 		it++;
 	}
 }
+/*
+void EneBall::Draw(Texture pic, double scale)
+{
+}*/
+void EneBall::DrawBat(Array<Texture> pic, double scale)
+{
+	for (auto it = Balls.begin(); it != Balls.end();)
+	{
+		if (it->time < 0.2)
+		{
+			pic[0].scaled(scale).drawAt(it->pos);
+		}
+		else if (it->time < 0.3)
+		{
+			pic[1].scaled(scale).drawAt(it->pos);		//真ん中
+		}
+		else if (it->time<0.5)
+		{
+			pic[2].scaled(scale).drawAt(it->pos);
+		}
+		else
+		{
+			it->time = 0;
+		}
+		it++;
+	}
+}

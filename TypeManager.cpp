@@ -248,7 +248,7 @@ void TypeManager::Update()
 		if (intervalBat < Timerinterval)
 		{
 			for (auto i : step(6))
-				bat->shot(player_m->GetXY(), Random(3.14 * 2 / 3, 6.28 + 3.14 / 3), Random(50, 300), 0, 0);
+				bat->shot(player_m->GetXY(), Random(3.14 * 2 / 3, 6.28 + 3.14 / 3), Random(50, 300), 0, Random(0.0,0.5));
 			Timerinterval = 0;
 		}
 		ExploTimer += Scene::DeltaTime();
@@ -311,7 +311,7 @@ void TypeManager::Update()
 	}
 }
 
-void TypeManager::Draw(Array<Texture> characters)
+void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat)
 {
 	Scene::SetBackground(Palette::Black);
 
@@ -373,28 +373,28 @@ void TypeManager::Draw(Array<Texture> characters)
 		if (TimMotionTimer == 0)
 		{
 			//通常
-			characters[int32(CharactersState::Tim1)].scaled(2).drawAt(insP->GetPacXY(), ColorF(1));
+			characters[int32(CharactersState::Tim1)].scaled(2.5).drawAt(insP->GetPacXY(), ColorF(1));
 		}
 		else if (TimMotionTimer < 0.2)
 		{
 			//振り上げ
-			characters[int32(CharactersState::Tim2)].scaled(2).drawAt(insP->GetPacXY(), ColorF(1));
+			characters[int32(CharactersState::Tim2)].scaled(2.5).drawAt(insP->GetPacXY(), ColorF(1));
 		}
 		else if (TimMotionTimer < 0.4)
 		{
 			//ばんざい
-			characters[int32(CharactersState::Tim3)].scaled(2).drawAt(insP->GetPacXY(), ColorF(1));
+			characters[int32(CharactersState::Tim3)].scaled(2.5).drawAt(insP->GetPacXY(), ColorF(1));
 
 		}
 		else if (TimMotionTimer < TimMotionTime)
 		{
 			//振り下ろし
-			characters[int32(CharactersState::Tim4)].scaled(2).drawAt(insP->GetPacXY(), ColorF(1));
+			characters[int32(CharactersState::Tim4)].scaled(2.5).drawAt(insP->GetPacXY(), ColorF(1));
 		}
 		else
 		{
 			TimMotionTimer = 0;
-			characters[int32(CharactersState::Tim1)].scaled(2).drawAt(insP->GetPacXY(), ColorF(1));
+			characters[int32(CharactersState::Tim1)].scaled(2.5).drawAt(insP->GetPacXY(), ColorF(1));
 		}
 	}
 	else
@@ -402,6 +402,8 @@ void TypeManager::Draw(Array<Texture> characters)
 		TimMotionTimer = 0;
 	}
 
+	bat->DrawBat(Bat, 1);
+	/*
 	//エイリアンちゃん描写
 	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-50);//35
 
@@ -431,7 +433,7 @@ void TypeManager::Draw(Array<Texture> characters)
 		characters[int32(CharactersState::TsAnnna)].draw(0, 75);
 
 	characters[int32(CharactersState::BombGage)].scaled(1.7).drawAt(WindowWide - tableLeft*3/8-40, WindowHight - tableUpper - 100);
-
+	*/
 	if (not player_m->GetHaveBomb())
 		Circle{ WindowWide - tableLeft * 3 / 8 - 40, WindowHight - tableUpper - 100 ,27.5 }.drawPie(0_deg, Math::Pi * 2 * (BombGage-ShowBombGage) / BombGage, ColorF(Palette::Black, 0.4));
 	

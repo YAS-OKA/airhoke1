@@ -82,7 +82,7 @@ public:
 
 	static void Update();
 
-	static void Draw(Array<Texture> characters);
+	static void Draw(Array<Texture> characters, Array<Texture>Bat);
 
 };
 
