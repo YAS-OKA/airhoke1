@@ -37,6 +37,10 @@ void ButtonManager::SetButton(String name, Vec2 pos, int32 hight, int32 wideth, 
 		state[BACK_TO_TITLE] = true;
 		b[BACK_TO_TITLE] = m_Button(name, pos, hight, wideth, c);
 		break;
+	case STORY:
+		state[STORY] = true;
+		b[STORY] = m_Button(name, pos, hight, wideth, c);
+		break;
 	case FLAG:
 		state[FLAG] = true;
 		b[FLAG] = m_Button(name, pos, hight, wideth, c);
@@ -164,6 +168,15 @@ void ButtonManager::Change(int32 button)
 		}
 		count++;
 	}
+	if (state[STORY])
+	{
+		if (count == (button + num_button) % num_button)
+		{
+			m_pButton = new ExStory(b[STORY]);
+			nowButton = count;
+		}
+		count++;
+	}
 	if (state[FLAG])
 	{
 		if (count == (button + num_button) % num_button)
@@ -260,6 +273,10 @@ void ButtonManager::Draw()
 	if (state[BACK_TO_TITLE])
 	{
 		SimpleGUI::Button(b[BACK_TO_TITLE].name, b[BACK_TO_TITLE].pos, b[BACK_TO_TITLE].wideth);
+	}
+	if (state[STORY])
+	{
+		SimpleGUI::Button(b[STORY].name, b[STORY].pos, b[STORY].wideth);
 	}
 	if (state[FLAG])
 	{

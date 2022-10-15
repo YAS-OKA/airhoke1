@@ -45,7 +45,9 @@ private:
 	static Enemy* enemy_m;
 
 	static ChackDuaChange ChackHitMan;
+	static ChackDuaChange ChackHitMan1;
 	static double itagaruTimer;
+	static double itagaruTimer1;
 
 	static Ball_1* bat;
 	static bool Explo;//ボムが発動中ならtrue

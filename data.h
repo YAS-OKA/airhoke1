@@ -49,6 +49,7 @@ extern Array<Vec2> GorlSide;
 
 extern bool changeSc;
 extern bool BackChangeSc;
+extern bool changeExst;
 extern bool retry;
 extern bool rebegin;
 

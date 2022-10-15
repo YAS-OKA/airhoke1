@@ -218,7 +218,7 @@ bool EneBall::RayIntersectsPlayer(Player* player)
 			if (rayRect.rotated(theta).intersects(player->GetAtarihantei()))
 			{
 				player->duabilityDownContinuous();
-				Print << 1;
+				
 				return true;
 			}
 		}

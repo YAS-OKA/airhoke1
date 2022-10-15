@@ -356,6 +356,75 @@ void BackToTitle::Draw()
 	}
 }
 
+ExStory::ExStory()
+{
+
+}
+
+ExStory::ExStory(m_Button button) :b(button)
+{
+
+}
+
+ExStory::~ExStory() {}
+
+void ExStory::Registation(String name, Vec2 pos, int32 hight, int32 wideth, Color c, bool state, int32 Cnum)
+{
+
+}
+
+m_Button ExStory::GetButton()
+{
+	return b;
+}
+
+void ExStory::Update()
+{
+	if (KeyZ.down())
+	{
+		isZpushed = true;
+	}
+	if (isZpushed)
+	{
+		PushedCounter += Scene::DeltaTime();
+	}
+	if (PushedCounter > ActButtonTime)
+	{
+		changeExst = true;
+		isZpushed = false;
+		PushedCounter = 0;
+	}
+}
+
+void ExStory::Draw()
+{
+	if (isZpushed)
+	{
+		FlashTimer += Scene::DeltaTime();
+
+		if (FlashTimer > FlashInterval * 2)
+		{
+			FlashTimer = 0;
+		}
+		else
+		{
+			if (FlashTimer < FlashInterval)
+			{
+				//何も表示しない
+			}
+			else
+			{
+				Rect{ int32(b.pos.x),int32(b.pos.y),b.wideth,b.hight }.draw(ColorF(Palette::Black, 0.2));
+			}
+		}
+	}
+	else
+	{
+		//ｚボタンが押されてなければ
+		Rect{ int32(b.pos.x),int32(b.pos.y),b.wideth,b.hight }.draw(ColorF(Palette::Black, 0.2));
+	}
+}
+
 //選択するとフラグが立つ（押したことによって起きるアクションは自由に決めれる）
 Flag::Flag()
 {

@@ -89,9 +89,11 @@ public:
 		gameover = false;
 		BackChangeSc = false;
 		changeSc = false;
+		changeExst = false;
 		b_manager.RemoveAllButton();
-		b_manager.SetButton(U"スタート", Vec2(WindowWide / 2-60, WindowHight / 2), 30, 120, Palette::White, START);
-		b_manager.SetButton(U"終了", Vec2(WindowWide / 2-60, WindowHight / 2 + 50), 30, 120, Palette::White, QUIT);
+		b_manager.SetButton(U"スタート", Vec2(WindowWide / 2-70, WindowHight / 2), 30, 140, Palette::White, START);
+		b_manager.SetButton(U"状況・設定など", Vec2(WindowWide / 2 - 70, WindowHight / 2 + 50), 30, 140, Palette::White, STORY);
+		b_manager.SetButton(U"終了", Vec2(WindowWide / 2-70, WindowHight / 2 + 100), 30, 140, Palette::White, QUIT);
 	}
 
 	void update() override
@@ -101,6 +103,10 @@ public:
 		if (changeSc)
 		{
 			changeScene(State::Game);
+		}
+		if (changeExst)
+		{
+			changeScene(State::Story);
 		}
 	}
 
@@ -118,6 +124,56 @@ public:
 
 		font(U"z...決定").draw(10, WindowHight - 50);
 	}
+};
+
+class Story : public App::Scene
+{
+public:
+	Story(const InitData& init) :IScene(init)
+	{
+		text << reader1.readAll();
+		text << reader2.readAll();
+		b_manager.RemoveAllButton();
+		b_manager.SetButton(U"タイトルへ", Vec2(WindowWide - tableLeft + 220, WindowHight-tableUpper-100), 30, 110, Palette::White, BACK_TO_TITLE);
+		b_manager.SetButton(U"次のページ", Vec2(WindowWide-tableLeft+220, tableUpper), 30, 110, Palette::White, START);
+		b_manager.SetButton(U"前のページ", Vec2(tableLeft-330, tableUpper), 30, 110, Palette::White, FLAG);
+	}
+	void update() override
+	{
+		b_manager.Update();
+		if (changeSc)
+		{
+			NowPage++;
+			changeSc = false;
+		}
+		if (BackChangeSc)
+		{
+			BackChangeSc = false;
+			changeScene(State::Title);
+		}
+		if (b_manager.GetFlag())
+		{
+			if (NowPage > 0)
+				NowPage--;
+			b_manager.SetFlag(false);
+			
+		}
+	}
+	void draw() const override
+	{
+		textureGameBack.scaled(4).draw();
+		TextWindow.draw(ColorF(Palette::Black, 0.8));
+		font(text[NowPage]).draw(tableLeft - 200, 10);
+		b_manager.Draw();
+	}
+private:
+	int32 NowPage = 0;
+	const Texture textureGameBack{ U"Images/game_Back.png" };
+	Font font{ 25 };
+	Array<String> text;
+	Rect TextWindow{ tableLeft - 210,0,tableWide + 420,WindowHight };
+	TextReader reader1{ U"story1.txt" };
+	TextReader reader2{ U"story2.txt" };
 };
 
 class Game : public App::Scene
@@ -141,7 +197,7 @@ public:
 		SetTextureCharacters();
 		t_manager = new TypeManager(ScoreInit);
 		changeSc = false;
-		t_manager->ChangeType(4);
+		t_manager->ChangeType(0);
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"再開", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RESTART);
 		b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);
@@ -207,8 +263,8 @@ public:
 		textureGameBack.scaled(4).draw(0, 0,ColorF(0.4));
 		if (!changeSc)
 		{
-			if (!changeSc)
-				t_manager->Draw(Characters, Bat);
+			Sp(U"必殺技").draw(WindowWide - tableLeft + 10, WindowHight - tableUpper - 100 - 27);
+			t_manager->Draw(Characters, Bat);
 			if (pause)
 			{
 				Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(Palette::Black, 0.7));
@@ -223,7 +279,6 @@ public:
 			}
 			Scorefont1(U"スコア").draw(WindowWide - tableLeft + 10, WindowHight - 40, ColorF(Palette::Yellow));
 			Scorefont2(t_manager->GetNowScore()).draw(WindowWide - tableLeft + 110, WindowHight - 32, ColorF(Palette::White));
-			Sp(U"必殺技").draw(WindowWide - tableLeft + 10, WindowHight - tableUpper - 100-27);
 		}
 	}
 };
@@ -300,19 +355,8 @@ public:
 			
 		}
 		
-		//for (auto i : step(9))
-			//Print << data.HighScores[i].highScore;
 		data.HighScores.resize(RankingCount);
-		// ランクインしていたら m_rank に順位をセット
 		
-		/*for (int32 i = 0; i < RankingCount; ++i)
-		{
-			if (data.HighScores[i].highScore == last.highScore)
-			{
-				m_rank = i;
-				break;
-			}
-		}*/
 		data.lastGameScore.reset();
 	}
 
@@ -473,7 +517,7 @@ public:
 
 void Main()
 {
-	//ResetRanking();//ハイスコアランキングをリセットしたいときはここのコメントを外す
+	ResetRanking();//ハイスコアランキングをリセットしたいときはここのコメントを外す
 
 	System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 
@@ -489,6 +533,8 @@ void Main()
 
 	manager.add<Title>(State::Title);
 
+	manager.add<Story>(State::Story);
+
 	manager.add<Game>(State::Game);
 
 	manager.add<Ranking>(State::Ranking);
@@ -496,21 +542,10 @@ void Main()
 	manager.add<GameClear>(State::GameClear);
 
 	
+
 	while (System::Update())
 	{
-		/*
-		if (ColTim && BombBibTimer < 1)
-		{			
-			// 2D カメラを更新
-			camera.jumpTo(Scene::Center() + Vec2(10 * p1, 0), 1.0);
-			BombBibTimer += Scene::DeltaTime();
-
-		}
-		else
-		{
-			BombBibTimer = 0;
-			ColTim = false;
-		}*/
+		
 		if (!manager.update())
 		{
 			break;

@@ -36,7 +36,7 @@ int32 DuaBarLen = 300;
 int32 DuaInit = 2800;	//耐久値バーのデフォルト長さ
 double Edamage = 0.2;
 
-double TimDamage = 250;//tim君が与えるダメージ
+double TimDamage = 400;//tim君が与えるダメージ
 
 int32 damage = DuaInit/4;	//被弾したときのダメージ
 int32 Raydamage = DuaInit * 1.1;
@@ -44,6 +44,7 @@ int32 RepairTime = 6;		//プレイヤーが復帰するまでの時間
 
 bool changeSc = false;
 bool BackChangeSc = false;
+bool changeExst = false;
 bool retry = false;
 bool rebegin = false;
 
@@ -52,13 +53,14 @@ bool gameover = false;
 
 double itagaruLimit = 1.5;
 
-int32 LostScore = 250000;
+
+int32 LostScore = 150000;
 
 double TimeOfBomb = 6;
 
 bool ColTim = false;
 
-int32 BombGage = 500000;
+int32 BombGage = 370000;
 
 BaseType* TypeManager::m_pType = NULL;
 
@@ -85,8 +87,10 @@ double TypeManager::TimMotionTimer = 0;
 double TypeManager::TimMotionTime = 0.6;
 
 ChackDuaChange TypeManager::ChackHitMan = { DuaInit,DuaInit };
+ChackDuaChange TypeManager::ChackHitMan1 = { DuaInit,DuaInit };
 
 double TypeManager::itagaruTimer = 0;
+double TypeManager::itagaruTimer1 = 0;
 
 int32 TypeManager::ShowBombGage = 0;
 
@@ -247,15 +251,15 @@ void TypeManager::Update()
 		}
 		if (intervalBat < Timerinterval)
 		{
-			for (auto i : step(6))
-				bat->shot(player_m->GetXY(), Random(3.14 * 2 / 3, 6.28 + 3.14 / 3), Random(50, 300), 0, Random(0.0,0.5));
+			for (auto i : step(4))
+				bat->shot(player_m->GetXY(), Random(3.14 * 2 / 3, 6.28 + 3.14 / 3), Random(50, 240), 0, Random(0.0,0.5));
 			Timerinterval = 0;
 		}
 		ExploTimer += Scene::DeltaTime();
 		Timerinterval += Scene::DeltaTime();
 		m_pType->ExceptBall(bat->GetBalls());
 	}
-	bat->Fall(Vec2(0, -1), 600);
+	bat->Fall(Vec2(0, -1), 500);
 	bat->BallMoveMax(500);
 	bat->RemoveOutBall(table);
 
@@ -405,7 +409,29 @@ void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat)
 	bat->DrawBat(Bat, 1);
 	
 	//エイリアンちゃん描写
-	characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper-50);//35
+	if (ChackHitMan1.nowDuability < ChackHitMan1.preDuability || itagaruTimer1>0)
+	{
+		//攻撃を食らっていた場合。
+		if (itagaruTimer1 < 0.3 && not(pause || gameover))
+		{
+			characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper - 50 + 10 * Periodic::Triangle0_1(0.08), ColorF(1.0, 0.7, 0.7));
+		}
+		else
+		{
+			characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper - 50);
+		}
+		if (not(pause || gameover))
+			itagaruTimer1 += Scene::DeltaTime();
+
+		if (itagaruTimer1 > itagaruLimit)
+			itagaruTimer1 = 0;
+	}
+	else if (player_m->GetBreak())
+	{
+		characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper - 50);///itagaru
+	}
+	else
+		characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper - 50);
 
 	//アンナちゃん描写
 	if (ChackHitMan.nowDuability < ChackHitMan.preDuability||itagaruTimer>0)
@@ -413,7 +439,7 @@ void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat)
 		//攻撃を食らっていた場合。
 		if (itagaruTimer < 0.3 && not(pause || gameover))
 		{
-			characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75 + 10 * Periodic::Triangle0_1(0.08), ColorF(1.0, 0.4, 0.4));
+			characters[int32(CharactersState::AttackedTsAnnna)].draw(0, 75 + 10 * Periodic::Triangle0_1(0.08), ColorF(1.0, 0.7, 0.7));
 		}
 		else
 		{
@@ -439,4 +465,6 @@ void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat)
 	
 	ChackHitMan.preDuability = ChackHitMan.nowDuability;
 	ChackHitMan.nowDuability = player_m->GetDua();
+	ChackHitMan1.preDuability = ChackHitMan1.nowDuability;
+	ChackHitMan1.nowDuability = enemy_m->GetDua();
 }

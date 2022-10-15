@@ -305,7 +305,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			ball1->IntersectsHunsui(pac, Scene::DeltaTime()*1000);
 			ball2->IntersectsifUe(pac, Scene::DeltaTime() * 500);
 			ball3->IntersectsJun(pac, Scene::DeltaTime() * 100);
-			ball1->RayIntersectsPlayer(player);//ここらへんが怪しいかな
+			ball1->RayIntersectsPlayer(player);
 			ball2->RayIntersectsPlayer(player);
 			ball3->RayIntersectsPlayer(player);
 			ball4->RayIntersectsPlayer(player);

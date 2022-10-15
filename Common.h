@@ -4,6 +4,7 @@
 enum class State
 {
 	Title,
+	Story,
 	Game,
 	Ranking,
 	GameClear,

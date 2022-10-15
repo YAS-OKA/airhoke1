@@ -82,6 +82,20 @@ public:
 	void Draw();
 };
 
+class ExStory :public BaseButton
+{
+private:
+	m_Button b;
+public:
+	ExStory();
+	ExStory(m_Button b);
+	~ExStory();
+	void Registation(String name, Vec2 pos, int32 hight, int32 wideth, Color c, bool state, int32 Cnum);
+	m_Button GetButton();
+	void Update();
+	void Draw();
+};
+
 // 選択するとフラグが立つ（押したことによって起きるアクションは自由に決めれる）
 class Flag :public BaseButton
 {
