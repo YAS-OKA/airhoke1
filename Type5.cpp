@@ -190,7 +190,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			break;
 		case 3:
 			enemy->SetCantHitBack(false);
-			Edamage = 0.12;
+			Edamage = 0.09;
 			ball1->BallAllExtingish();
 			ball2->BallAllExtingish();
 			ball3->BallAllExtingish();

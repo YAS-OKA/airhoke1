@@ -184,8 +184,10 @@ void TypeManager::Retry()
 	int32 lifeY = WindowHight - 80;
 	Array<Vec2> playerlife = { {lifeX,lifeY},{lifeX + 25,lifeY},{lifeX + 50,lifeY},{lifeX + 75,lifeY},{lifeX + 100,lifeY} };
 	player_m = new Player(WindowWide / 2, WindowHight - tableUpper - Mr, em, Mr, highSpeed, rowSpeed, MalletSpeed, tableLeft, tableUpper, WindowWide, WindowHight, gr, playerlife);
-	enemy_m->GetRevivaled();
+	enemy_m->SetXY(WindowWide / 2, tableUpper + Mr);
+	enemy_m->RepairMallet();
 	m_pType->Setm_score(PreScore);
+	pause = false;
 }
 
 void TypeManager::Update()
@@ -412,7 +414,7 @@ void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat)
 	if (ChackHitMan1.nowDuability < ChackHitMan1.preDuability || itagaruTimer1>0)
 	{
 		//攻撃を食らっていた場合。
-		if (itagaruTimer1 < 0.3 && not(pause || gameover))
+		if (itagaruTimer1 < 0.1 && not(pause || gameover))
 		{
 			characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper - 50 + 10 * Periodic::Triangle0_1(0.08), ColorF(1.0, 0.7, 0.7));
 		}

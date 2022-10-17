@@ -85,7 +85,7 @@ void Enemy::CollidePac(Vec2 v,double damage)
 
 void Enemy::ColideTim()
 {
-	duability -= TimDamage;
+	duability -= Edamage*2100;
 }
 
 int32 Enemy::GetDua()
@@ -108,7 +108,6 @@ void Enemy::BreakMallet()
 
 void Enemy::RepairMallet()
 {
-
 	duability = DuaInit;
 	Break = false;
 }
