@@ -8,6 +8,7 @@ protected:
 	double FlashInterval = 0.05;
 	double ActButtonTime = 0.5;
 	bool flag = false;
+	const Audio push{ U"Audios/button06.mp3" };
 public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;

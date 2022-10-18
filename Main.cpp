@@ -39,7 +39,7 @@ void SetTextureCharacters()
 	//横の絵
 	const Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
 	const Texture textureAttackedTsAnnna{ U"Images/AttackedTableSideAnnna.png" };
-	const Texture textureTsAlien{ U"Images/TableSideAlien2.png" };
+	const Texture textureTsAlien{ U"Images/TableSideAlien2.1.png" };
 	//マレットドット絵
 	const Texture textureAnnnaOnMallet{ U"Images/AnnnaOnMallet.png" };
 	const Texture textureAlienOnMallet{ U"Images/AlienOnMallet.png" };
@@ -133,6 +133,8 @@ public:
 	{
 		text << reader1.readAll();
 		text << reader2.readAll();
+		text << reader3.readAll();
+		text << reader4.readAll();
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"タイトルへ", Vec2(WindowWide - tableLeft + 220, WindowHight-tableUpper-100), 30, 110, Palette::White, BACK_TO_TITLE);
 		b_manager.SetButton(U"次のページ", Vec2(WindowWide-tableLeft+220, tableUpper), 30, 110, Palette::White, START);
@@ -143,7 +145,8 @@ public:
 		b_manager.Update();
 		if (changeSc)
 		{
-			NowPage++;
+			if(NowPage<text.size()-1)
+				NowPage++;
 			changeSc = false;
 		}
 		if (BackChangeSc)
@@ -174,6 +177,8 @@ private:
 	Rect TextWindow{ tableLeft - 210,0,tableWide + 420,WindowHight };
 	TextReader reader1{ U"story1.txt" };
 	TextReader reader2{ U"story2.txt" };
+	TextReader reader3{ U"story3.txt" };
+	TextReader reader4{ U"story4.txt" };
 };
 
 class Game : public App::Scene
@@ -517,7 +522,7 @@ public:
 
 void Main()
 {
-	ResetRanking();//ハイスコアランキングをリセットしたいときはここのコメントを外す
+	//ResetRanking();//ハイスコアランキングをリセットしたいときはここのコメントを外す
 
 	System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 

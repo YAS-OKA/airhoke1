@@ -29,6 +29,7 @@ void Start::Update()
 	if (KeyZ.down())
 	{
 		isZpushed = true;
+		push.playOneShot();
 	}
 	if (isZpushed)
 	{
@@ -99,6 +100,7 @@ void Retry::Update()
 	if (KeyZ.down())
 	{
 		isZpushed = true;
+		push.playOneShot();
 	}
 	if (isZpushed)
 	{
@@ -170,6 +172,7 @@ void ReBegin::Update()
 	if (KeyZ.down())
 	{
 		isZpushed = true;
+		push.playOneShot();
 	}
 	if (isZpushed)
 	{
@@ -240,6 +243,7 @@ void Restart::Update()
 	if (KeyZ.down())
 	{
 		isZpushed = true;
+		push.playOneShot();
 	}
 	if (isZpushed)
 	{
@@ -313,6 +317,7 @@ void BackToTitle::Update()
 	if (KeyZ.down())
 	{
 		isZpushed = true;
+		push.playOneShot();
 	}
 	if (isZpushed)
 	{
@@ -382,6 +387,7 @@ void ExStory::Update()
 {
 	if (KeyZ.down())
 	{
+		push.playOneShot();
 		isZpushed = true;
 	}
 	if (isZpushed)
@@ -456,6 +462,7 @@ void Flag::Update()
 	if (KeyZ.down())
 	{
 		isZpushed = true;
+		push.playOneShot();
 	}
 	if (isZpushed)
 	{
@@ -527,6 +534,7 @@ void Quit::Update()
 	if (KeyZ.down())
 	{
 		isZpushed = true;
+		push.playOneShot();
 	}
 	if (isZpushed)
 	{
