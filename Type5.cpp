@@ -150,7 +150,10 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 		case 3:
 			ball5->BallAllExtingishWithoutRay();
 			if (taikyuuTime >= 8 && taikyuuTime < 43)
+			{
 				i = 0;
+				stopwatch.restart();
+			}
 			FirstGene = true;
 			break;
 		default:
@@ -302,9 +305,9 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 					intervalTime -= 0.6;
 				}
 			}
-			ball1->IntersectsHunsui(pac, Scene::DeltaTime()*1000);
-			ball2->IntersectsifUe(pac, Scene::DeltaTime() * 500);
-			ball3->IntersectsJun(pac, Scene::DeltaTime() * 100);
+			ball1->IntersectsHunsui(pac, Scene::DeltaTime()*1000, &m_score);
+			ball2->IntersectsifUe(pac, Scene::DeltaTime() * 500, &m_score);
+			ball3->IntersectsJun(pac, Scene::DeltaTime() * 100, &m_score);
 			ball1->RayIntersectsPlayer(player);
 			ball2->RayIntersectsPlayer(player);
 			ball3->RayIntersectsPlayer(player);
@@ -404,6 +407,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 					else
 					{
 						stopwatch.restart();
+						
 						from << to[i];
 						from << to[i + 1];
 						i += 2;

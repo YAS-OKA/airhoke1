@@ -131,19 +131,21 @@ Array<bool> EneBall::IntersectsPac(Pac* pac, Vec2 start,int32 *score)
 	return intersects;
 }
 
-void EneBall::IntersectsHunsui(Pac* pac, double iryoku)
+void EneBall::IntersectsHunsui(Pac* pac, double iryoku,int32 *score)
 {
 	for (auto it = Ray.begin(); it != Ray.end();)
 	{
+		
 		if (it->line.intersects(pac->GetPac()))
 		{
+			*score += 7000 * Scene::DeltaTime();
 			pac->SetVelocity(Vec2(pac->GetPacVelocity().x, pac->GetPacVelocity().y - iryoku));
 		}
 		it++;
 	}
 }
 
-void EneBall::IntersectsifUe(Pac* pac, double iryoku)
+void EneBall::IntersectsifUe(Pac* pac, double iryoku,int32 *score)
 {
 	if (pac->GetPacVelocity().y <= 0)
 	{
@@ -151,6 +153,7 @@ void EneBall::IntersectsifUe(Pac* pac, double iryoku)
 		{
 			if (it->line.intersects(pac->GetPac()))
 			{
+				*score += 7000 * Scene::DeltaTime();
 				pac->SetVelocity(Vec2(pac->GetPacVelocity().x, pac->GetPacVelocity().y - iryoku));
 			}
 			it++;
@@ -158,7 +161,7 @@ void EneBall::IntersectsifUe(Pac* pac, double iryoku)
 	}
 }
 
-void EneBall::IntersectsJun(Pac* pac, double iryoku)
+void EneBall::IntersectsJun(Pac* pac, double iryoku,int32 *score)
 {
 	if (pac->GetPacVelocity().y <= 0)
 	{
@@ -166,6 +169,7 @@ void EneBall::IntersectsJun(Pac* pac, double iryoku)
 		{
 			if (it->line.intersects(pac->GetPac()))
 			{
+				*score += 7000 * Scene::DeltaTime();
 				pac->SetVelocity(Vec2(pac->GetPacVelocity().x, pac->GetPacVelocity().y - iryoku));
 			}
 			it++;
@@ -177,6 +181,7 @@ void EneBall::IntersectsJun(Pac* pac, double iryoku)
 		{
 			if (it->line.intersects(pac->GetPac()))
 			{
+				*score += 7000 * Scene::DeltaTime();
 				pac->SetVelocity(Vec2(pac->GetPacVelocity().x, pac->GetPacVelocity().y + iryoku));
 			}
 			it++;
