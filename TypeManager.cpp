@@ -94,6 +94,16 @@ double TypeManager::itagaruTimer1 = 0;
 
 int32 TypeManager::ShowBombGage = 0;
 
+bool TypeManager::GoalFlag = false;
+
+double TypeManager::StartFPrintTimer = 3;
+double TypeManager::PrintTimer = 0;
+
+Vec2 TypeManager::Startfrom{ WindowWide / 4 , WindowHight / 2 };
+Vec2 TypeManager::Startto{ WindowWide / 2,WindowHight / 2 };
+
+bool TypeManager::started = false;
+
 TypeManager::TypeManager(int32 ScoreInit)
 {
 	bat = new Ball_1(1, 8);
@@ -177,8 +187,17 @@ int32 TypeManager::GetNowType()
 	return nowtype;
 }
 
+Array<int32> TypeManager::GoalScore()
+{
+	Array<int32> s;
+	s << 5 - enemy_m->GetLifeNum();
+	s << 5 - player_m->GetLifeNum();
+	return s;
+}
+
 void TypeManager::Retry()
 {
+
 	delete player_m;
 	int32 lifeX = WindowWide - tableLeft + 120;
 	int32 lifeY = WindowHight - 80;
@@ -192,6 +211,22 @@ void TypeManager::Retry()
 
 void TypeManager::Update()
 {
+	GoalFlag = false;
+	if (not started)
+	{
+		PrintTimer += Scene::DeltaTime();
+		//最初の表示
+		if (StartFPrintTimer > PrintTimer)
+		{
+			return;
+		}
+		else
+		{
+			started = true;
+		}
+
+	}
+
 	if (player_m->GetLifeNum() == 0)		//ゲームオーバー
 	{
 		gameover = true;
@@ -283,6 +318,7 @@ void TypeManager::Update()
 	//ゴールした時の処理
 	if (!insP->GetPac().intersects(table))
 	{
+		GoalFlag = true;
 		if (insP->GetPac().y > WindowHight / 2)
 		{
 			//敵のゴール
@@ -317,7 +353,7 @@ void TypeManager::Update()
 	}
 }
 
-void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat)
+void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat,Font SCFont,Font StartFont)
 {
 	Scene::SetBackground(Palette::Black);
 
@@ -469,4 +505,25 @@ void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat)
 	ChackHitMan.nowDuability = player_m->GetDua();
 	ChackHitMan1.preDuability = ChackHitMan1.nowDuability;
 	ChackHitMan1.nowDuability = enemy_m->GetDua();
+
+	if (not started)
+	{
+		if (PrintTimer < 1.5)
+		{
+			// 移動の割合 0.0～1.0
+			const double t = Min(PrintTimer, 1.5);
+
+			// イージング関数を適用
+			const double e = EaseOutExpo(t);
+
+			// スタート位置からゴール位置へ e の割合だけ進んだ位置
+			const Vec2 pos = Startfrom.lerp(Startto, e);
+
+			StartFont(U"READY FOR GAME...").drawAt(pos, ColorF(Palette::Yellow, e));
+		}
+		else if(PrintTimer>1.8){
+			StartFont(U"START").drawAt(WindowWide / 2, WindowHight / 2, ColorF(Palette::Red));
+		}
+	}
+
 }

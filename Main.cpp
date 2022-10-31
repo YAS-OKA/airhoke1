@@ -85,6 +85,11 @@ public:
 	Title(const InitData& init)
 		: IScene(init)
 	{
+		TypeManager::StartFPrintTimer = 3;
+		TypeManager::PrintTimer = 0;
+
+		TypeManager::started = false;
+
 		pause = false;
 		gameover = false;
 		BackChangeSc = false;
@@ -184,6 +189,7 @@ private:
 class Game : public App::Scene
 {
 private:
+	
 	int32 Score;
 	int32 ScoreInit = 0;//ゼロで固定。最初からにしたとき、必ずゼロで始まる（typemanagerデストラクタでm_scoreを0にしている）から
 	TypeManager* t_manager = NULL;
@@ -192,26 +198,53 @@ private:
 	Font Scorefont2{ 22 };
 	Font Sp{ 37 };
 	bool oneTime = true;
-
+	Font SCF{ 140,Typeface::Heavy };
+	Font StartF{ 110 ,Typeface::Heavy };
 	const Texture textureGameBack{ U"Images/game_Back.png" };
+
+	double SCFPrintTimer = 1.5;
+	Vec2 from = { WindowWide * 3 / 8,WindowHight / 2 };
+	Vec2 to = { WindowWide / 2,WindowHight / 2 };
+	Vec2 to2 = { WindowWide * 5 / 8,WindowHight / 2 };
+
+	double Ptimer;
+	bool SCFPrint;
 public:
 	
 	Game(const InitData& init)
 		:IScene(init),Score(0)
 	{
+		SCFPrint = false;
+		Ptimer = 0;
 		SetTextureCharacters();
 		t_manager = new TypeManager(ScoreInit);
 		changeSc = false;
-		t_manager->ChangeType(4);
+		t_manager->ChangeType(0);
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"再開", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RESTART);
 		b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);
 		b_manager.SetButton(U"タイトルに戻る", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 100), 30, 150, Palette::White, BACK_TO_TITLE);
+
 	}
 
 	void update() override
 	{
 		t_manager->Update();
+
+		if (Ptimer > SCFPrintTimer)
+		{
+			SCFPrint = false;
+			Ptimer = 0;
+		}
+		if (t_manager->GetGoalFlag())
+		{
+			SCFPrint=true;
+		}
+		if (SCFPrint)
+		{
+			Ptimer += Scene::DeltaTime();
+		}
+
 
 		if (rebegin)
 		{
@@ -266,10 +299,11 @@ public:
 	void draw() const override
 	{
 		textureGameBack.scaled(4).draw(0, 0,ColorF(0.4));
+
 		if (!changeSc)
 		{
 			Sp(U"必殺技").draw(WindowWide - tableLeft + 10, WindowHight - tableUpper - 100 - 27);
-			t_manager->Draw(Characters, Bat);
+			t_manager->Draw(Characters, Bat,SCF,StartF);
 			if (pause)
 			{
 				Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(Palette::Black, 0.7));
@@ -284,6 +318,33 @@ public:
 			}
 			Scorefont1(U"スコア").draw(WindowWide - tableLeft + 10, WindowHight - 40, ColorF(Palette::Yellow));
 			Scorefont2(t_manager->GetNowScore()).draw(WindowWide - tableLeft + 110, WindowHight - 32, ColorF(Palette::White));
+		}
+		if (SCFPrint)
+		{
+			String s;
+			s = Format(t_manager->GoalScore()[0]);
+			s += U" ー ";
+			s += Format(t_manager->GoalScore()[1]);
+			if (Ptimer < 0.5)
+			{
+				const double t = Min(Ptimer, 0.5);
+
+				const double e = EaseOutExpo(t);
+
+				const Vec2 pos = from.lerp(to, e);
+				SCF(s).drawAt(pos,ColorF(Palette::White,e));
+			}
+			else if (Ptimer < 1) {
+				SCF(s).drawAt(WindowWide / 2, WindowHight / 2);
+			}
+			else if (Ptimer < SCFPrintTimer) {
+				const double t = Min(Ptimer-1, 0.5);
+
+				const double e = EaseOutExpo(t);
+
+				const Vec2 pos = to.lerp(to2, e);
+				SCF(s).drawAt(pos, ColorF(Palette::White,1-e));
+			}
 		}
 	}
 };
@@ -527,8 +588,6 @@ void Main()
 	System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 
 	Window::Resize(WindowWide, WindowHight);
-
-	Camera2D camera{ Scene::Center(), 1.0 };
 
 	FontAsset::Register(U"Titlefont", 80, Typeface::Heavy);
 	FontAsset::Register(U"Danmaku", 100, Typeface::Heavy);

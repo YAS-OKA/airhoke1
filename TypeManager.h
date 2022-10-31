@@ -60,8 +60,18 @@ private:
 	static double TimMotionTime;//ティム君の一連の動きに要する時間
 
 	static int32 ShowBombGage;
-
+	static bool GoalFlag;
 public:
+	static double StartFPrintTimer;
+	static double PrintTimer;
+
+	static Vec2 Startfrom;
+	static Vec2 Startto;
+
+	static bool started;
+
+	static bool PrintScoreFlag;
+
 	enum TYPE {
 		TYPE1,
 		TYPE2,
@@ -79,12 +89,14 @@ public:
 	static int32 GetNowScore();
 	static int32 GetScore();
 	static int32 GetNowType();
+	static bool GetGoalFlag() { return GoalFlag; };
+	static Array<int32>GoalScore();
 
 	static void Retry();
 
 	static void Update();
 
-	static void Draw(Array<Texture> characters, Array<Texture>Bat);
+	static void Draw(Array<Texture> characters, Array<Texture>Bat,Font SCFont,Font StartFont);
 
 };
 
