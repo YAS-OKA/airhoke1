@@ -485,8 +485,6 @@ private:
 
 	int32 m_rank = -1;
 
-	//Array<Scores> kariHighScores;
-
 	double FlashTimer=0;
 	double FlashInterval = 0.1;
 	double Timer = 0;
