@@ -168,6 +168,7 @@ public:
 		TextWindow.draw(ColorF(Palette::Black, 0.8));
 		font(text[NowPage]).draw(tableLeft - 200, 10);
 		b_manager.Draw();
+		
 	}
 private:
 	int32 NowPage = 0;
@@ -202,7 +203,7 @@ public:
 		SetTextureCharacters();
 		t_manager = new TypeManager(ScoreInit);
 		changeSc = false;
-		t_manager->ChangeType(4);
+		t_manager->ChangeType(0);
 		b_manager.RemoveAllButton();
 		b_manager.SetButton(U"再開", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RESTART);
 		b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);
@@ -492,6 +493,44 @@ private:
 	double TimeOfBeginingSceneChange = 1;
 };
 
+class Ending : public App::Scene
+{
+public:
+	Ending(const InitData& init) : IScene(init)
+	{
+		//Back_pic<<
+		text = reader.readLines();
+		numLine = 3;
+		RectHight = fontsize * (3 * numLine + 1) / 2;
+		X = 10;
+		Y = WindowHight-X-RectHight;
+		printArea = { X,Y,WindowWide -  X,int32(RectHight) };
+	}
+
+	void update() override
+	{
+		
+	}
+
+	void draw() const override
+	{
+		printArea.draw(ColorF(Palette::Black,0.5));
+		sub(text[nowP]).draw(X + fontsize/2, Y + fontsize/2);
+	}
+private:
+	int32 X;
+	int32 Y;
+	int32 fontsize = 20;
+	double RectHight;
+	int32 numLine;
+	int32 nowP = 0;
+	Array<Texture> Back_pic;
+	Font sub{ fontsize };
+	TextReader reader{ U"Ending.txt" };
+	Array<String> text;
+	Rect printArea;
+};
+
 class GameClear : public App::Scene
 {
 public:
@@ -546,7 +585,9 @@ void Main()
 
 	manager.add<GameClear>(State::GameClear);
 
-	
+	manager.add<Ending>(State::Ending);
+
+	//manager.init(State::Ending);
 
 	while (System::Update())
 	{
