@@ -81,6 +81,8 @@ private:
 	Font font{ 40 };
 	const Texture textureGameBack{ U"Images/game_Back.png" };
 	Font fontYN{ 25 };
+	bool onetime=true;
+	Font fontNannido{ 22 };
 public:
 	Title(const InitData& init)
 		: IScene(init)
@@ -107,17 +109,46 @@ public:
 
 		if (changeSc)
 		{
-			changeScene(State::Game);
+			if (onetime)
+			{
+				b_manager.RemoveAllButton();
+				b_manager.SetButton(U"お祭りモード", Vec2(WindowWide / 2 - 70, WindowHight / 2-50), 30, 140, Palette::Green, RETRY);
+				b_manager.SetButton(U"弾幕祭モード", Vec2(WindowWide / 2 - 70, WindowHight / 2 + 100), 30, 140, Palette::Blue, REBEGIN);
+				b_manager.SetButton(U"戻る", Vec2(WindowWide / 2 - 70, WindowHight / 2 + 250), 30, 140, Palette::White, BACK_TO_TITLE);
+				onetime = false;
+			}
+			if (retry)//お祭り
+			{
+				Nannido = true;
+				changeScene(State::Game);
+				retry = false;
+			}
+			if (rebegin)//弾幕祭
+			{
+				Nannido = false;
+				changeScene(State::Game);
+				rebegin = false;
+			}
+			if (BackChangeSc)
+			{
+				BackChangeSc = changeSc = false;
+				changeScene(State::Title);
+			}
 		}
-		if (changeExst)
+		else
 		{
-			changeScene(State::Story);
+			if (changeExst)
+			{
+				changeScene(State::Story);
+			}
 		}
 	}
 
 	void draw()const override
 	{
 		textureGameBack.scaled(4).draw(0, 0,ColorF(0.9));
+		if(changeSc)
+			Rect{ WindowWide / 2 - 200,WindowHight / 2 - 100,400,450 }.draw(ColorF(Palette::Black, 0.5));
 
 		b_manager.Draw();
 
@@ -129,6 +160,12 @@ public:
 
 		font(U"z...決定").draw(30, WindowHight - 70);
 		fontYN(U"2022 やっさん").draw(WindowWide *5 / 6, WindowHight - 50);
+
+		if (changeSc)
+		{			
+			fontNannido(U"　　　お祭り用の難易度です。\n適度に遊び、適度に挑みたいという\n　　　　　方におすすめです。").drawAt(WindowWide / 2, WindowHight / 2 + 40,ColorF(Palette::Lime));
+			fontNannido(U"　 　　やや高難易度です。\nある程度弾幕を乗り越えてきたという\n　　　方ならきっと楽勝でしょう。").drawAt(WindowWide / 2, WindowHight / 2 + 190, ColorF(Palette::Cyan));
+		}
 	}
 };
 
@@ -756,11 +793,6 @@ public:
 			if (m_Credits[k].first == nameSmall)
 			{
 				NomalName(m_Credits[k].second).drawAt(WindowWide / 2, CreditY[k]);
-				/*
-				for (auto& name : m_Credits[k].second)
-				{
-					NomalName(name).drawAt()
-				}*/
 			}
 			else
 			{
@@ -798,7 +830,7 @@ void Main()
 
 	manager.add<Ending>(State::Ending);
 
-	manager.init(State::Credit);
+	//manager.init(State::Credit);
 
 	while (System::Update())
 	{

@@ -72,6 +72,8 @@ Array<Vec2> GorlSide{ {(WindowWide - goalWide) / 2,tableUpper},{(WindowWide + go
 
 int32 nowtype = 0;
 
+bool Nannido = false;
+
 int32 TypeManager::PreScore = 0;
 int32 TypeManager::Score = 0;
 int32 TypeManager::sc = 0;
@@ -121,6 +123,19 @@ TypeManager::TypeManager(int32 ScoreInit)
 	enemy_m = new Enemy(WindowWide / 2, tableUpper + Mr, eme, Mr, highSpeed, rowSpeed, MalletSpeed, tableLeft, tableUpper, WindowWide, WindowHight, gr, enemylife);
 
 	Explo = false; ExploTimer = 0; Timerinterval = 0; BombBibTimer = 0;
+
+	if (Nannido)
+	{
+		RepairTime = 5;
+		damage = DuaInit / 5;
+		TimDamage = 500;
+	}
+	else
+	{
+		RepairTime = 6;
+		damage = DuaInit / 4;
+		TimDamage = 400;
+	}
 }
 
 TypeManager::~TypeManager()
