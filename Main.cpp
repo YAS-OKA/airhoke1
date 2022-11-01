@@ -507,13 +507,24 @@ public:
 
 	void update() override
 	{
+		if (KeyZ.down())
+		{
+			if (nowP < size(text)-1)
+			{
+				nowP++;
+			}
+		}
+		texts=text[nowP].split(',');
 		
 	}
 
 	void draw() const override
 	{
 		printArea.draw(ColorF(Palette::Black,0.5));
-		sub(text[nowP]).draw(X + fontsize/2, Y + fontsize/2);
+		for (auto& i : step(size(texts)))
+		{
+			sub(texts[i]).draw(X + fontsize / 2, Y + fontsize / 2 + fontsize * 3 * i / 2);
+		}
 	}
 private:
 	int32 X;
@@ -526,6 +537,7 @@ private:
 	Font sub{ fontsize };
 	TextReader reader{ U"Ending.txt" };
 	Array<String> text;
+	Array<String> texts;
 	Rect printArea;
 };
 
@@ -585,7 +597,7 @@ void Main()
 
 	manager.add<Ending>(State::Ending);
 
-	//manager.init(State::Ending);
+	manager.init(State::Ending);
 
 	while (System::Update())
 	{
