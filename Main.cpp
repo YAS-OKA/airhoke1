@@ -174,6 +174,7 @@ public:
 		TextWindow.draw(ColorF(Palette::Black, 0.8));
 		font(text[NowPage]).draw(tableLeft - 200, 10);
 		b_manager.Draw();
+		
 	}
 private:
 	int32 NowPage = 0;
@@ -546,12 +547,79 @@ private:
 
 	int32 m_rank = -1;
 
-	//Array<Scores> kariHighScores;
-
 	double FlashTimer=0;
 	double FlashInterval = 0.1;
 	double Timer = 0;
 	double TimeOfBeginingSceneChange = 1;
+};
+
+class Ending : public App::Scene
+{
+public:
+	Ending(const InitData& init) : IScene(init)
+	{
+		const Texture p1{ U"Images/ending/1.JPG" };
+		const Texture p2{ U"Images/ending/2.JPG" };
+		const Texture p3{ U"Images/ending/3.JPG" };
+		const Texture p4{ U"Images/ending/4.JPG" };
+		const Texture p5{ U"Images/ending/5.JPG" };
+		const Texture p6{ U"Images/ending/6.JPG" };
+
+		pictures << p1;
+		pictures << p2;
+		pictures << p3;
+		pictures << p4;
+		pictures << p5;
+		pictures << p6;
+
+		text = reader.readLines();
+		numLine = 3;
+		RectHight = fontsize * (3 * numLine + 1) / 2;
+		X = 10;
+		Y = WindowHight-X-RectHight;
+		printArea = { X,Y,WindowWide -  X,int32(RectHight) };
+	}
+
+	void update() override
+	{
+		if (KeyZ.down())
+		{
+			if (nowP < size(text)-1)
+			{
+				if(nowP==3 or nowP==5 or nowP==12 or nowP==25 or nowP==29)
+					KindPic++;
+				nowP++;
+			}
+		}
+		texts=text[nowP].split(',');
+		
+	}
+
+	void draw() const override
+	{
+		pictures[KindPic].scaled(0.6).drawAt(WindowWide / 2, WindowHight / 2);
+
+		printArea.draw(ColorF(Palette::Black,0.5));
+		for (auto& i : step(size(texts)))
+		{
+			sub(texts[i]).draw(X + fontsize / 2, Y + fontsize / 2 + fontsize * 3 * i / 2);
+		}
+	}
+private:
+	int32 X;
+	int32 Y;
+	int32 fontsize = 20;
+	double RectHight;
+	int32 numLine;
+	int32 nowP = 0;
+	Array<Texture> Back_pic;
+	Font sub{ fontsize };
+	TextReader reader{ U"Ending.txt" };
+	Array<Texture> pictures;
+	Array<String> text;
+	Array<String> texts;
+	Rect printArea;
+	int32 KindPic=0;
 };
 
 class GameClear : public App::Scene
@@ -590,7 +658,7 @@ private:
 	};
 
 	Font PrintTitleFont{ 80,Typeface::Bold };
-	double PrintTitleTime = 7;
+	double PrintTitleTime = 9;
 	double PrintTitleTimer = 0;
 
 	int32 Bigsize = 30;
@@ -599,7 +667,7 @@ private:
 	Font BigName{ Bigsize };
 	Font NomalName{ Smallsize };
 
-	int32 ScrollSpeed = 30;
+	int32 ScrollSpeed = 20;
 
 	int32 SmallGyouSpace = 30;//名前の行のスペース
 	int32 BigGyouSpace = 60;
@@ -615,9 +683,11 @@ private:
 		{nameSmall,U"VS2019  C++  Siv3d"},
 		{nameBig,U"テストプレイヤー"},
 		{nameSmall,U"友人　KYT"},
-		{nameSmall,U""},
+		{nameSmall,U"怪しい5人衆"},
 		{nameSmall,U"サークルの方々"},
-		{nameBig,U"ゲームクリアおめでとう!!!"}
+		{nameBig,U"ゲームクリア係"},
+		{nameSmall,U"あなた"},
+		{nameSmall,U"おめでとう！！"},
 	};
 	Array<double>CreditY;//各クレジットのy座標
 
@@ -643,7 +713,7 @@ public:
 		for (auto& y : CreditY)
 			y -= t*ScrollSpeed;
 
-		if (PrintNum < size(m_Credits) - 1)
+		if (PrintNum < size(m_Credits))
 		{
 			if (m_Credits[PrintNum - 1].first == nameSmall)
 			{
@@ -677,7 +747,7 @@ public:
 		if (PrintTitleTimer < PrintTitleTime)
 		{
 			if (PrintTitleTimer < PrintTitleTimer - 1)
-				PrintTitleFont(U"Thank you for playing!").drawAt(WindowWide / 2, WindowHight / 2 - 100, ColorF(Palette::Yellow, Min(PrintTitleTimer/2, 1.0)));
+				PrintTitleFont(U"Thank you for playing!").drawAt(WindowWide / 2, WindowHight / 2 - 100, ColorF(Palette::Yellow, Min(PrintTitleTimer/4, 1.0)));
 			else
 				PrintTitleFont(U"Thank you for playing!").drawAt(WindowWide / 2, WindowHight / 2 - 100, ColorF(Palette::Yellow, PrintTitleTime-PrintTitleTimer));
 		}
@@ -726,7 +796,9 @@ void Main()
 
 	manager.add<Credit>(State::Credit);
 
-	manager.init(State::Title);
+	manager.add<Ending>(State::Ending);
+
+	manager.init(State::Credit);
 
 	while (System::Update())
 	{
