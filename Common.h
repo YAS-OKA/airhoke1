@@ -10,6 +10,7 @@ enum class State
 	GameClear,
 	Ending,
 	Credit,
+	Explain,
 };
 
 struct Scores

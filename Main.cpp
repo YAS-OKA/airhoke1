@@ -98,9 +98,10 @@ public:
 		changeSc = false;
 		changeExst = false;
 		b_manager.RemoveAllButton();
-		b_manager.SetButton(U"スタート", Vec2(WindowWide / 2-70, WindowHight / 2), 30, 140, Palette::White, START);
-		b_manager.SetButton(U"状況・設定など", Vec2(WindowWide / 2 - 70, WindowHight / 2 + 50), 30, 140, Palette::White, STORY);
-		b_manager.SetButton(U"終了", Vec2(WindowWide / 2-70, WindowHight / 2 + 100), 30, 140, Palette::White, QUIT);
+		b_manager.SetButton(U"スタート", Vec2(WindowWide / 2-100, WindowHight / 2), 30, 200, Palette::White, START);
+		b_manager.SetButton(U"操作・ルール説明", Vec2(WindowWide / 2 - 100, WindowHight / 2+50), 30, 200, Palette::White, RETRY);
+		b_manager.SetButton(U"キャラ・物語など", Vec2(WindowWide / 2 - 100, WindowHight / 2 + 100), 30, 200, Palette::White, STORY);
+		b_manager.SetButton(U"終了", Vec2(WindowWide / 2-100, WindowHight / 2 + 150), 30, 200, Palette::White, QUIT);
 	}
 
 	void update() override
@@ -140,6 +141,11 @@ public:
 			if (changeExst)
 			{
 				changeScene(State::Story);
+			}
+			if (retry)
+			{
+				retry = false;
+				changeScene(State::Explain);
 			}
 		}
 	}
@@ -223,6 +229,58 @@ private:
 	TextReader reader2{ U"story2.txt" };
 	TextReader reader3{ U"story3.txt" };
 	TextReader reader4{ U"story4.txt" };
+};
+
+class Explain : public App::Scene
+{
+public:
+	Explain(const InitData& init) :IScene(init)
+	{
+		text << reader1.readAll();
+		text << reader2.readAll();
+		b_manager.RemoveAllButton();
+		b_manager.SetButton(U"タイトルへ", Vec2(WindowWide - tableLeft + 220, WindowHight - tableUpper - 100), 30, 110, Palette::White, BACK_TO_TITLE);
+		b_manager.SetButton(U"次のページ", Vec2(WindowWide - tableLeft + 220, tableUpper), 30, 110, Palette::White, START);
+		b_manager.SetButton(U"前のページ", Vec2(tableLeft - 330, tableUpper), 30, 110, Palette::White, FLAG);
+	}
+	void update() override
+	{
+		b_manager.Update();
+		if (changeSc)
+		{
+			if (NowPage < text.size() - 1)
+				NowPage++;
+			changeSc = false;
+		}
+		if (BackChangeSc)
+		{
+			BackChangeSc = false;
+			changeScene(State::Title);
+		}
+		if (b_manager.GetFlag())
+		{
+			if (NowPage > 0)
+				NowPage--;
+			b_manager.SetFlag(false);
+		}
+	}
+	void draw() const override
+	{
+		textureGameBack.scaled(4).draw();
+		TextWindow.draw(ColorF(Palette::Black, 0.8));
+		font(text[NowPage]).draw(tableLeft - 200, 10);
+		b_manager.Draw();
+
+	}
+private:
+	int32 NowPage = 0;
+	const Texture textureGameBack{ U"Images/game_Back.png" };
+	Font font{ 25 };
+	Array<String> text;
+	Rect TextWindow{ tableLeft - 210,0,tableWide + 420,WindowHight };
+	TextReader reader1{ U"操作説明.txt" };
+	TextReader reader2{ U"ルール説明.txt" };
+	
 };
 
 class Game : public App::Scene
@@ -714,8 +772,8 @@ private:
 		{nameSmall,U"プログラム   安田"},
 		{nameSmall,U"作画   安田"},
 		{nameBig,U"お借りしたキャラクター"},
-		{nameSmall,U"アンナちゃん   りゅーの様から"},
-		{nameSmall,U"ティムソートくん    WithBall様から"},
+		{nameSmall,U"アンナちゃん   りゅーの様 から"},
+		{nameSmall,U"ティムソートくん    WithBall様 から"},
 		{nameBig,U"開発環境　/  ツール"},
 		{nameSmall,U"VS2019  C++  Siv3d"},
 		{nameBig,U"テストプレイヤー"},
@@ -829,6 +887,8 @@ void Main()
 	manager.add<Credit>(State::Credit);
 
 	manager.add<Ending>(State::Ending);
+
+	manager.add<Explain>(State::Explain);
 
 	//manager.init(State::Credit);
 
