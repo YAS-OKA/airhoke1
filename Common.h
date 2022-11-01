@@ -8,6 +8,7 @@ enum class State
 	Game,
 	Ranking,
 	GameClear,
+	Credit,
 };
 
 struct Scores

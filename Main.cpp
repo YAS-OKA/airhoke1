@@ -78,9 +78,9 @@ void SetTextureCharacters()
 class Title : public App::Scene
 {
 private:
-	Font font{ 30 };
+	Font font{ 40 };
 	const Texture textureGameBack{ U"Images/game_Back.png" };
-
+	Font fontYN{ 25 };
 public:
 	Title(const InitData& init)
 		: IScene(init)
@@ -127,7 +127,8 @@ public:
 		FontAsset(U"Titlefont")(U"エアホッケー").draw(500, 190, ColorF(Palette::Aqua));
 
 
-		font(U"z...決定").draw(10, WindowHight - 50);
+		font(U"z...決定").draw(30, WindowHight - 70);
+		fontYN(U"2022 やっさん").draw(WindowWide *5 / 6, WindowHight - 50);
 	}
 };
 
@@ -580,6 +581,124 @@ public:
 	}
 };
 
+class Credit : public App::Scene
+{
+private:
+	enum {
+		nameBig,
+		nameSmall
+	};
+
+	Font PrintTitleFont{ 80,Typeface::Bold };
+	double PrintTitleTime = 7;
+	double PrintTitleTimer = 0;
+
+	int32 Bigsize = 30;
+	int32 Smallsize = 25;
+
+	Font BigName{ Bigsize };
+	Font NomalName{ Smallsize };
+
+	int32 ScrollSpeed = 30;
+
+	int32 SmallGyouSpace = 30;//名前の行のスペース
+	int32 BigGyouSpace = 60;
+
+	Array<std::pair<int32, String>>m_Credits{
+		{nameBig,U"弾幕エアホッケー　　スタッフ"},
+		{nameSmall,U"プログラム   安田"},
+		{nameSmall,U"作画   安田"},
+		{nameBig,U"お借りしたキャラクター"},
+		{nameSmall,U"アンナちゃん   りゅーの様から"},
+		{nameSmall,U"ティムソートくん    WithBall様から"},
+		{nameBig,U"開発環境　/  ツール"},
+		{nameSmall,U"VS2019  C++  Siv3d"},
+		{nameBig,U"テストプレイヤー"},
+		{nameSmall,U"友人　KYT"},
+		{nameSmall,U""},
+		{nameSmall,U"サークルの方々"},
+		{nameBig,U"ゲームクリアおめでとう!!!"}
+	};
+	Array<double>CreditY;//各クレジットのy座標
+
+	int32 PrintNum;//クレジットをいくつ表示するか。
+
+public:
+
+	Credit(const InitData& init) :IScene(init)
+	{
+		CreditY << WindowHight + Bigsize + BigGyouSpace;
+		PrintNum = 1;
+	}
+
+	void update() override
+	{
+		const double t = Scene::DeltaTime();
+
+		if (PrintTitleTimer < PrintTitleTime)
+		{
+			PrintTitleTimer += t;
+		}
+
+		for (auto& y : CreditY)
+			y -= t*ScrollSpeed;
+
+		if (PrintNum < size(m_Credits) - 1)
+		{
+			if (m_Credits[PrintNum - 1].first == nameSmall)
+			{
+				if (m_Credits[PrintNum].first == nameBig)
+				{
+					if (CreditY[PrintNum - 1] < WindowHight - BigGyouSpace)
+					{
+						PrintNum++;
+						CreditY << WindowHight + Bigsize;
+					}
+				}
+				else if (CreditY[PrintNum - 1] < WindowHight - SmallGyouSpace)
+				{
+					PrintNum++;
+					CreditY << WindowHight + Smallsize;
+				}
+			}
+			else
+			{
+				if (CreditY[PrintNum - 1] < WindowHight - BigGyouSpace)
+				{
+					PrintNum++;
+					CreditY << WindowHight + Bigsize;
+				}
+			}
+		}
+	}
+
+	void draw() const override
+	{
+		if (PrintTitleTimer < PrintTitleTime)
+		{
+			if (PrintTitleTimer < PrintTitleTimer - 1)
+				PrintTitleFont(U"Thank you for playing!").drawAt(WindowWide / 2, WindowHight / 2 - 100, ColorF(Palette::Yellow, Min(PrintTitleTimer/2, 1.0)));
+			else
+				PrintTitleFont(U"Thank you for playing!").drawAt(WindowWide / 2, WindowHight / 2 - 100, ColorF(Palette::Yellow, PrintTitleTime-PrintTitleTimer));
+		}
+		for (auto k : step(PrintNum))
+		{
+			if (m_Credits[k].first == nameSmall)
+			{
+				NomalName(m_Credits[k].second).drawAt(WindowWide / 2, CreditY[k]);
+				/*
+				for (auto& name : m_Credits[k].second)
+				{
+					NomalName(name).drawAt()
+				}*/
+			}
+			else
+			{
+				BigName(m_Credits[k].second).drawAt(WindowWide / 2, CreditY[k]);
+			}
+		}
+	}
+};
 
 void Main()
 {
@@ -605,7 +724,9 @@ void Main()
 
 	manager.add<GameClear>(State::GameClear);
 
-	
+	manager.add<Credit>(State::Credit);
+
+	manager.init(State::Title);
 
 	while (System::Update())
 	{
