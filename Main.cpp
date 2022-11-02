@@ -40,6 +40,7 @@ void SetTextureCharacters()
 	const Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
 	const Texture textureAttackedTsAnnna{ U"Images/AttackedTableSideAnnna.png" };
 	const Texture textureTsAlien{ U"Images/TableSideAlien2.1.png" };
+	const Texture textureAttackedTsAlien{ U"Images/TableSideAlien2.2.png" };
 	//マレットドット絵
 	const Texture textureAnnnaOnMallet{ U"Images/AnnnaOnMallet.png" };
 	const Texture textureAlienOnMallet{ U"Images/AlienOnMallet.png" };
@@ -58,10 +59,11 @@ void SetTextureCharacters()
 
 	Characters << textureAnnnaOnMallet;
 	Characters << textureAlienOnMallet;
-	Characters << textureTsAnnna;
 
+	Characters << textureTsAnnna;
 	Characters << textureAttackedTsAnnna;
 	Characters << textureTsAlien;
+	Characters << textureAttackedTsAlien;
 
 	Characters << textureTim1;
 	Characters << textureTim2;
@@ -120,13 +122,13 @@ public:
 			}
 			if (retry)//お祭り
 			{
-				Nannido = true;
+				Nannido = 1;
 				changeScene(State::Game);
 				retry = false;
 			}
 			if (rebegin)//弾幕祭
 			{
-				Nannido = false;
+				Nannido = 0;
 				changeScene(State::Game);
 				rebegin = false;
 			}
@@ -158,8 +160,6 @@ public:
 
 		b_manager.Draw();
 
-		Scene::SetBackground(ColorF(0.3, 0.4, 0.5));
-
 		FontAsset(U"Danmaku")(U"弾幕").draw(300, 170, ColorF(Palette::Lime));
 		FontAsset(U"Titlefont")(U"エアホッケー").draw(500, 190, ColorF(Palette::Aqua));
 
@@ -170,7 +170,7 @@ public:
 		if (changeSc)
 		{			
 			fontNannido(U"　　　お祭り用の難易度です。\n適度に遊び、適度に挑みたいという\n　　　　　方におすすめです。").drawAt(WindowWide / 2, WindowHight / 2 + 40,ColorF(Palette::Lime));
-			fontNannido(U"　 　　やや高難易度です。\nある程度弾幕を乗り越えてきたという\n　　　方ならきっと楽勝でしょう。").drawAt(WindowWide / 2, WindowHight / 2 + 190, ColorF(Palette::Cyan));
+			fontNannido(U"　 　  難易度が少し上がります。\nある程度弾幕を乗り越えてきたという\n　　　方ならきっと楽勝でしょう。").drawAt(WindowWide / 2, WindowHight / 2 + 190, ColorF(Palette::Cyan));
 		}
 	}
 };
@@ -385,6 +385,10 @@ public:
 		{
 			t_manager->ChangeType(t_manager->GetNowType());
 			t_manager->Retry();
+			b_manager.RemoveAllButton();
+			b_manager.SetButton(U"再開", Vec2(WindowWide - 300, tableUpper + tableHight * 3 / 4), 30, 120, Palette::White, RESTART);
+			b_manager.SetButton(U"最初から始める", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 50), 30, 150, Palette::White, REBEGIN);
+			b_manager.SetButton(U"タイトルに戻る", Vec2(WindowWide - 315, tableUpper + tableHight * 3 / 4 + 100), 30, 150, Palette::White, BACK_TO_TITLE);
 			oneTime = true;
 			changeSc = false;
 			gameover = false;
@@ -530,7 +534,7 @@ public:
 		if (changeSc && BackChangeSc)
 			changeScene(State::Title);//タイトルに戻るを選択してランキングシーンに飛んだ場合
 		else if(changeSc)
-			changeScene(State::GameClear);//ゲームをクリアしてからランキングシーンに飛んだ場合
+			changeScene(State::Ending);//ゲームをクリアしてからランキングシーンに飛んだ場合
 		if (m_rank != -1) {
 			if (board->isEnter() && not board->GetName().isEmpty())
 			{
@@ -659,6 +663,7 @@ public:
 		const Texture p4{ U"Images/ending/4.JPG" };
 		const Texture p5{ U"Images/ending/5.JPG" };
 		const Texture p6{ U"Images/ending/6.JPG" };
+		
 
 		pictures << p1;
 		pictures << p2;
@@ -696,6 +701,8 @@ public:
 
 	void draw() const override
 	{
+		BackPic.drawAt(WindowWide / 2, WindowHight / 2 );
+		Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(0, 0.5));
 		pictures[KindPic].scaled(0.6).drawAt(WindowWide / 2, WindowHight / 2);
 
 		printArea.draw(ColorF(Palette::Black,0.5));
@@ -719,6 +726,8 @@ private:
 	Array<String> texts;
 	Rect printArea;
 	int32 KindPic=0;
+
+	Texture BackPic{ U"Images/game_Back.png" };
 };
 
 class GameClear : public App::Scene
@@ -751,16 +760,23 @@ public:
 class Credit : public App::Scene
 {
 private:
+
+	Texture BackPic{ U"Images/game_Back.png" };
+
 	enum {
 		nameBig,
 		nameSmall
 	};
+	Array<Texture>CreditIllust{
+
+	};
+	double TexturePrintTimer = 0;
 
 	Font PrintTitleFont{ 80,Typeface::Bold };
 	double PrintTitleTime = 9;
 	double PrintTitleTimer = 0;
 
-	int32 Bigsize = 30;
+	int32 Bigsize = 33;
 	int32 Smallsize = 25;
 
 	Font BigName{ Bigsize };
@@ -773,8 +789,8 @@ private:
 
 	Array<std::pair<int32, String>>m_Credits{
 		{nameBig,U"弾幕エアホッケー　　スタッフ"},
-		{nameSmall,U"プログラム   安田"},
-		{nameSmall,U"作画   安田"},
+		{nameSmall,U"プログラム   安田真生"},
+		{nameSmall,U"作画   安田真生"},
 		{nameBig,U"お借りしたキャラクター"},
 		{nameSmall,U"アンナちゃん   りゅーの様 から"},
 		{nameSmall,U"ティムソートくん    WithBall様 から"},
@@ -786,7 +802,7 @@ private:
 		{nameSmall,U"サークルの方々"},
 		{nameBig,U"ゲームクリア係"},
 		{nameSmall,U"あなた"},
-		{nameSmall,U"おめでとう！！"},
+		{nameSmall,U"クリアおめでとう！！"},
 	};
 	Array<double>CreditY;//各クレジットのy座標
 
@@ -796,6 +812,7 @@ public:
 
 	Credit(const InitData& init) :IScene(init)
 	{
+		
 		CreditY << WindowHight + Bigsize + BigGyouSpace;
 		PrintNum = 1;
 	}
@@ -843,6 +860,9 @@ public:
 
 	void draw() const override
 	{
+		BackPic.scaled(4).drawAt(WindowWide / 2, WindowHight / 2);
+		Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(0, 0.7));
+
 		if (PrintTitleTimer < PrintTitleTime)
 		{
 			if (PrintTitleTimer < PrintTitleTimer - 1)
@@ -894,7 +914,7 @@ void Main()
 
 	manager.add<Explain>(State::Explain);
 
-	manager.init(State::Ending);
+	//manager.init(State::Ending);
 
 	while (System::Update())
 	{

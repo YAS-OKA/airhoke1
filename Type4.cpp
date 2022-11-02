@@ -15,8 +15,8 @@ Type4::Type4(int32 sco)
 	ball6 = new Ball_1(ball_r, ball_R);
 	ball7 = new Ball_1(ball_r, ball_R);
 
-	bullet100 = new RainShot(90, 150, 50, 3.14 / 72);
-	bullet200 = new RainShot(140, 150, 50, 3.14 / 72);
+	bullet100 = new RainShot(90+Nannido*10, 150, 50, 3.14 / 72);
+	bullet200 = new RainShot(140+Nannido*20, 150, 50, 3.14 / 72);
 	b = bullet100->RemainderShotSet();
 	bullet1 = new EneBullet_1(0, b[0]);
 	bullet2 = new EneBullet_1(0, b[1]);
@@ -188,11 +188,11 @@ void Type4::Update(Pac* pac, Player* player, Enemy* enemy)
 				}
 			}
 			TypeTimer += Scene::DeltaTime();
-			c_bullet1->ColumnShot(ball1, interval+30, BallSpeed *2 / 5);
-			c_bullet2->ColumnShot(ball2, interval+30, BallSpeed *2 / 5);
+			c_bullet1->ColumnShot(ball1, interval+30, BallSpeed *2 / 5-15);
+			c_bullet2->ColumnShot(ball2, interval+30, BallSpeed *2 / 5-15);
 			c_bullet1->Move_if(ball1);
 			c_bullet2->Move_if(ball2);
-			if (TypeTimer > GeneTime)
+			if (TypeTimer > GeneTime+Nannido*0.5)
 			{
 				if (RorL)
 				{

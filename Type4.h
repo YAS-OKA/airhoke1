@@ -10,7 +10,7 @@ private:
 	double BallSpeed = 200;
 	double TypeTimer = 0;
 	double TypeTimer2 = 0;
-	double interval = 110;//交差弾幕の間隔
+	double interval = 90+Nannido*20;//交差弾幕の間隔
 	Vec2 velo = { 0,-40 };//敵の武器が動く速さ
 	Vec2 velo2 = { 40,0 };
 	double GeneTime = 2.5;//type=2で敵が追加されていく秒間隔

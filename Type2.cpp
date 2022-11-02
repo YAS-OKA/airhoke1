@@ -68,7 +68,7 @@ void Type2::Update(Pac* pac, Player* player, Enemy* enemy)
 		if (enemy->GetDua() < DuaInit * 3 / 4) {
 			TypeChange = true; type++;
 		}
-		bullet1->Shotball(ball1, BallSpeed * 3 / 4, 0.3);
+		bullet1->Shotball(ball1, BallSpeed * 3 / 4, 0.3+Nannido*0.1);
 		ball1->BallMove();
 		bullet1->SwingNeck_360(1);
 		break;
@@ -82,9 +82,9 @@ void Type2::Update(Pac* pac, Player* player, Enemy* enemy)
 		if (enemy->GetDua() < DuaInit * 2 / 5) {
 			TypeChange = true; type++;
 		}
-		bullet1->Shotball(ball1, BallSpeed * 3 / 4, 0.15);
+		bullet1->Shotball(ball1, BallSpeed * 3 / 4, 0.15+Nannido*0.1);
 		ball1->BallMove();
-		bullet1->SwingNeck_360(3);
+		bullet1->SwingNeck_360(3+Nannido);
 		break;
 	case 2:
 		if (FirstGene)
@@ -94,13 +94,13 @@ void Type2::Update(Pac* pac, Player* player, Enemy* enemy)
 			if (bullet1->TimerNotCount() && bullet2->TimerNotCount())
 				FirstGene = false;
 		}
-		bullet1->Shotball(ball1, BallSpeed, 4, 0.15);
-		bullet2->Shotball(ball1, BallSpeed * 6 / 7, 4, 0.15);
+		bullet1->Shotball(ball1, BallSpeed * 6 / 7 -Nannido*50, 4, 0.15+Nannido*0.1);
+		bullet2->Shotball(ball1, BallSpeed * 6 / 7 - Nannido * 50, 4, 0.15 + Nannido * 0.1);
 		bullet1->MoveGrab(Vec2(WindowWide / 2, tableUpper + tableHight / 4),4000);
 		bullet2->MoveGrab(Vec2(WindowWide / 2, tableUpper + tableHight / 4), 4000);
 		ball1->BallMove(BallSpeed / 3);
-		bullet1->SwingNeck_360(4);
-		bullet2->SwingNeck_360(4);
+		bullet1->SwingNeck_360(4+Nannido*2);
+		bullet2->SwingNeck_360(4 + Nannido * 2);
 		break;
 	default:
 		break;

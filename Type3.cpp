@@ -186,8 +186,8 @@ void Type3::Update(Pac* pac, Player* player, Enemy* enemy)
 		bullet1->Shotball(ball1, BallSpeed / 4, 2, 0.2, 0.8);
 		bullet2->Shotball(ball1, BallSpeed / 4, Random(2.0, 3.0), 0.2, 0.8);
 		bullet3->Shotball(ball1, BallSpeed / 4, Random(2.0, 3.0), 0.2, 0.8);
-		bullet4->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8);
-		bullet5->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8);
+		bullet4->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8+Nannido);
+		bullet5->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8+Nannido*2);
 		ball1->BallFall(player->GetMallet().center);
 		ball1->BallMoveMax(BallSpeed / 3);
 		bullet1->SwingNeck_360(3);
@@ -209,10 +209,10 @@ void Type3::Update(Pac* pac, Player* player, Enemy* enemy)
 		bullet1->Shotball(ball1, BallSpeed / 4, 2, 0.2, 0.8);
 		bullet2->Shotball(ball1, BallSpeed / 4, Random(2.0, 3.0), 0.2, 0.8);
 		bullet3->Shotball(ball1, BallSpeed / 4, Random(2.0, 3.0), 0.2, 0.8);
-		bullet4->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8);
-		bullet5->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8);
-		bullet6->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8);
-		bullet7->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8);
+		bullet4->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8+Nannido);
+		bullet5->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8+Nannido*2);
+		bullet6->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8+Nannido*2);
+		bullet7->Shotball(ball1, BallSpeed / 4, Random(3.0, 4.0), 0.2, 0.8+Nannido*2);
 		ball1->BallFall(player->GetMallet().center);
 		ball1->BallMoveMax(BallSpeed / 3);
 		bullet1->SwingNeck_360(3);
@@ -250,8 +250,8 @@ void Type3::Update(Pac* pac, Player* player, Enemy* enemy)
 		bullet5->GeneBullet_1(0.5);
 		bullet1->Shotball(ball1, BallSpeed / 3, Random(0.5, 1.0), 0.25);
 		bullet1->SwingNeck_360(5);
-		bullet4->AimShot(player, ball2, BallSpeed * 1.5, 0, 0.7);
-		bullet5->AimShot(player, ball2, BallSpeed * 1.5, 0, 0.7);
+		bullet4->AimShot(player, ball2, BallSpeed * 1.5, 0, 0.6+Nannido*1.5);
+		bullet5->AimShot(player, ball2, BallSpeed * 1.5, 0, 0.9+Nannido*1.2);
 		ball1->BallFall_if(bullet2->Getenebullet()[0].pos, 0.1, bullet1->Getenebullet()[0].pos, Distance(bullet1->Getenebullet()[0].pos, bullet2->Getenebullet()[0].pos) * 1.2);
 		ball1->BallFall_if(bullet3->Getenebullet()[0].pos, 0.1, bullet1->Getenebullet()[0].pos, Distance(bullet1->Getenebullet()[0].pos, bullet2->Getenebullet()[0].pos) * 1.2);
 		ball1->BallMoveMax(BallSpeed * 4 / 5);

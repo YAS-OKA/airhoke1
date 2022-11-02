@@ -19,6 +19,7 @@ enum class CharactersState
 	TsAnnna,
 	AttackedTsAnnna,
 	TsAlien,
+	AttackedTsAlien,
 	Tim1,
 	Tim2,
 	Tim3,

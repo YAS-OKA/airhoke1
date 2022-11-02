@@ -35,9 +35,9 @@ void Hanabi::Explo(Ball_1* ball)
 				it->GeneTimer = 0.2;
 				it->Velocity.y += 1;
 				double dir = 0;
-				for (auto i : step(12))
+				for (auto i : step(12-Nannido*6))
 				{
-					ball->shot(it->pos, dir + 3.14 * 2 * i / 12 + 3.14 * it->Velocity.y / 12, it->Velocity.x, 100, 0, 70);
+					ball->shot(it->pos, dir + 3.14 * 2 * i / (12-Nannido*6) + 3.14 * it->Velocity.y / (12-Nannido*6), it->Velocity.x-Nannido*50, 100, 0, 70);
 				}
 				it->ShotTimer = 0;
 				it->Velocity.x -= 30;

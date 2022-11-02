@@ -152,7 +152,10 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			if (taikyuuTime >= 8 && taikyuuTime < 43)
 			{
 				i = 0;
+				from.clear();
+				from = { { tableLeft,WindowHight / 2 },{ WindowWide - tableLeft,WindowHight - tableUpper } };
 				stopwatch.restart();
+				
 			}
 			FirstGene = true;
 			break;
@@ -229,7 +232,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			NeutronStar->NeutronStarRay(ball7, hutosa, Palette::Skyblue, pac,&S);
 			Setm_score(S);
 
-			uzu->uzukaiten(ball6, 3.14 / 17, 1.7, 110, Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 12, &BaseDir);
+			uzu->uzukaiten(ball6, 3.14 / 17, 1.7+Nannido*0.3, 110, Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 12, &BaseDir);
 			if (enemy->GetDua() < DuaInit * 4 / 5) {
 				TypeChange = true; type++;
 			}
@@ -255,7 +258,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			NeutronStar->NeutronStarRay(ball7, hutosa, Palette::Skyblue, pac, &S);
 			Setm_score(S);
 
-			uzu->uzukaiten(ball6, 3.14 / 10, 0.9, 140, Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 12, &BaseDir);
+			uzu->uzukaiten(ball6, 3.14 / 10, 0.9+Nannido*0.4, 140, Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 12, &BaseDir);
 			if (enemy->GetDua() < DuaInit * 3 / 5) {
 				TypeChange = true; type++;
 			}
@@ -290,7 +293,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			Ueziguzagu->NobiShotRay(ball2, tableHight / 2 + 90, 5, Palette::Lightcyan, 12);
 			Shitaziguzagu->NobiShotRay(ball3, tableHight / 2 - 60, 6, Palette::Deepskyblue, 12);
 			hunsui->NobiShotRay(ball1, 150, 30, Palette::Blue, hutosa);
-			if (wipe->T5Wipe(ball4, wipeTime, intervalTime))
+			if (wipe->T5Wipe(ball4, wipeTime+Nannido, intervalTime))
 			{
 				if (wipeTime > 4.5)
 				{
@@ -339,7 +342,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			hunsui_t3->HunsuiShot(ball4, BallSpeed, BallSpeed * 2 / 3, 0.1, 3.14 / 64, 160);
 			ball1->BallFall();
 			ball2->BallFall();
-			ball1->BallMove(10);
+			ball1->BallMove(10+Nannido*100);
 			ball2->BallMove(50);
 
 			ball4->IntersectsPac(pac, 2.0, &m_score);
@@ -430,7 +433,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 						}
 
 					}
-					jikinerai->AimShot(player, ball3, BallSpeed * 1.6, 0, 0.6);
+					jikinerai->AimShot(player, ball3, BallSpeed * 1.6, 0, 0.6+Nannido*1.5);
 					michi->Shotball(ball5, BallSpeed * 0.7, 40, 0.07);
 					michi->SwingingSIN(3.14 / 6 + 0.2, 0, 11, jikuDir);
 				}

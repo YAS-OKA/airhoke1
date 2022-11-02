@@ -72,7 +72,7 @@ Array<Vec2> GorlSide{ {(WindowWide - goalWide) / 2,tableUpper},{(WindowWide + go
 
 int32 nowtype = 0;
 
-bool Nannido = false;
+int32 Nannido = 0;
 
 int32 TypeManager::PreScore = 0;
 int32 TypeManager::Score = 0;
@@ -124,7 +124,7 @@ TypeManager::TypeManager(int32 ScoreInit)
 
 	Explo = false; ExploTimer = 0; Timerinterval = 0; BombBibTimer = 0;
 
-	if (Nannido)
+	if (Nannido==1)
 	{
 		RepairTime = 5;
 		damage = DuaInit / 5;
@@ -460,9 +460,13 @@ void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat,Font SCFont,
 	}
 
 	bat->DrawBat(Bat, 1);
-	
-	//エイリアンちゃん描写
-	if (ChackHitMan1.nowDuability < ChackHitMan1.preDuability || itagaruTimer1>0)
+	//宇宙人ちゃん描写
+	if (enemy_m->GetBreak())
+	{
+		characters[int32(CharactersState::AttackedTsAlien)].draw(WindowWide - tableLeft, tableUpper - 50);///itagaru
+		itagaruTimer1 = 0;
+	}
+	else if (ChackHitMan1.nowDuability < ChackHitMan1.preDuability || itagaruTimer1>0)
 	{
 		//攻撃を食らっていた場合。
 		if (itagaruTimer1 < 0.1 && not(pause || gameover))
@@ -478,10 +482,6 @@ void TypeManager::Draw(Array<Texture> characters, Array<Texture>Bat,Font SCFont,
 
 		if (itagaruTimer1 > itagaruLimit)
 			itagaruTimer1 = 0;
-	}
-	else if (player_m->GetBreak())
-	{
-		characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper - 50);///itagaru
 	}
 	else
 		characters[int32(CharactersState::TsAlien)].draw(WindowWide - tableLeft, tableUpper - 50);
