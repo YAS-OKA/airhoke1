@@ -685,6 +685,10 @@ public:
 					KindPic++;
 				nowP++;
 			}
+			else
+			{
+				changeScene(State::Credit, 3s);
+			}
 		}
 		texts=text[nowP].split(',');
 		
@@ -890,7 +894,7 @@ void Main()
 
 	manager.add<Explain>(State::Explain);
 
-	//manager.init(State::Credit);
+	manager.init(State::Ending);
 
 	while (System::Update())
 	{
