@@ -664,7 +664,6 @@ public:
 		const Texture p5{ U"Images/ending/5.JPG" };
 		const Texture p6{ U"Images/ending/6.JPG" };
 		
-
 		pictures << p1;
 		pictures << p2;
 		pictures << p3;
@@ -701,7 +700,7 @@ public:
 
 	void draw() const override
 	{
-		BackPic.drawAt(WindowWide / 2, WindowHight / 2 );
+		CreditIlust.drawAt(WindowWide / 2, WindowHight / 2 );
 		Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(0, 0.5));
 		pictures[KindPic].scaled(0.6).drawAt(WindowWide / 2, WindowHight / 2);
 
@@ -727,7 +726,7 @@ private:
 	Rect printArea;
 	int32 KindPic=0;
 
-	Texture BackPic{ U"Images/game_Back.png" };
+	Texture CreditIlust{ U"Images/game_Back.png" };
 };
 
 class GameClear : public App::Scene
@@ -767,20 +766,22 @@ private:
 		nameBig,
 		nameSmall
 	};
-	Array<Texture>CreditIllust{
 
-	};
+	Array<std::pair<Texture,double>>CreditIllust;
+	
 	double TexturePrintTimer = 0;
 
-	Font PrintTitleFont{ 80,Typeface::Bold };
+	Font PrintTitleFont{ 60,Typeface::Medium };
 	double PrintTitleTime = 9;
 	double PrintTitleTimer = 0;
 
-	int32 Bigsize = 33;
-	int32 Smallsize = 25;
+	int32 Bigsize = 38;
+	int32 Smallsize = 30;
 
-	Font BigName{ Bigsize };
-	Font NomalName{ Smallsize };
+	Font BigName{ Bigsize ,Typeface::Medium};
+	Font NomalName{ Smallsize , Typeface::Medium};
+
+	Font SkipFont{ 25 };
 
 	int32 ScrollSpeed = 20;
 
@@ -788,7 +789,6 @@ private:
 	int32 BigGyouSpace = 60;
 
 	Array<std::pair<int32, String>>m_Credits{
-		{nameBig,U"弾幕エアホッケー　　スタッフ"},
 		{nameSmall,U"プログラム   安田真生"},
 		{nameSmall,U"作画   安田真生"},
 		{nameBig,U"お借りしたキャラクター"},
@@ -802,32 +802,115 @@ private:
 		{nameSmall,U"サークルの方々"},
 		{nameBig,U"ゲームクリア係"},
 		{nameSmall,U"あなた"},
-		{nameSmall,U"クリアおめでとう！！"},
+		{nameBig,U"クリアおめでとうございます！"},
 	};
 	Array<double>CreditY;//各クレジットのy座標
 
 	int32 PrintNum;//クレジットをいくつ表示するか。
 
-public:
+	double CreditIllustSpeedKeisuu = 2;
 
+	double CreditIlustW = 800;
+	double CreditIlustH = 480;
+
+	Vec2 PicStartPos{ CreditIlustW / 2,CreditIlustH / 2 + 100 };
+	Vec2 PicPos;
+	double PicTime = 8;
+	double intervalTime = 2;
+
+	Vec2 PicVelo = { CreditIllustSpeedKeisuu*ScrollSpeed * Cos(Math::Pi / 4),CreditIllustSpeedKeisuu *ScrollSpeed * Sin(Math::Pi / 4) };
+
+	int32 KindOfIllust = 0;
+
+	double FirstPrintTime = 3;
+
+	bool allowTxturePrint = false;
+	bool PrintEnd = false;
+
+	int32 Skip = 0;
+
+	Texture LastIllust{ U"Images/Credit/おわかれ1.png" };
+
+	Vec2 LastIllustPos{ WindowWide / 2,WindowHight + 250 };
+	double LastIllustTimer = 0;
+
+	Font ThankFont{ 70,Typeface::Medium };
+
+	double ChangeTitleTime = 5;
+public:
 	Credit(const InitData& init) :IScene(init)
 	{
-		
+		const Texture p01{ U"Images/Credit/スクリーンショット 2022-11-04 200645.png" };
+		const Texture p02{ U"Images/Credit/スクリーンショット 2022-11-04 200526.png" };
+		const Texture p03{ U"Images/ending/2.JPG" };
+		const Texture p04{ U"Images/ending/6.JPG" };
+		const Texture p1{ U"Images/Credit/1766.png" };
+		const Texture p2{ U"Images/Credit/1768.png" };
+		const Texture p7{ U"Images/Credit/世田キャン巡り.png" };
+
+		CreditIllust << std::pair(p01,0.4);
+		CreditIllust << std::pair(p02,0.4);
+		CreditIllust << std::pair(p03, 0.4);
+		CreditIllust << std::pair(p04, 0.4);
+		CreditIllust << std::pair(p1,0.5);
+		CreditIllust << std::pair(p2,0.5);
+		CreditIllust << std::pair(p7,0.7);
+
 		CreditY << WindowHight + Bigsize + BigGyouSpace;
 		PrintNum = 1;
+
+		PicPos = PicStartPos;
 	}
 
 	void update() override
 	{
-		const double t = Scene::DeltaTime();
+		if (KeyZ.pressed())
+		{
+			Skip = 1;
+		}
+		else
+		{
+			Skip = 0;
+		}
+
+		
+		const double t = Scene::DeltaTime()*(Skip*5+1);
 
 		if (PrintTitleTimer < PrintTitleTime)
 		{
 			PrintTitleTimer += t;
 		}
 
+		if (PrintEnd)
+		{
+			if (LastIllustPos.y > WindowHight / 2 - 50)
+				LastIllustPos.y -= t * ScrollSpeed;
+			else
+				LastIllustTimer += t;
+		}
+		if (LastIllustTimer > ChangeTitleTime)
+			changeScene(State::Title,6s);
+	
+
 		for (auto& y : CreditY)
 			y -= t*ScrollSpeed;
+
+		if(not PrintEnd)
+			TexturePrintTimer += t;
+
+		if (allowTxturePrint==false&&TexturePrintTimer > FirstPrintTime)
+		{
+			allowTxturePrint = true;
+			TexturePrintTimer = 0;
+		}
+		if (TexturePrintTimer > PicTime+intervalTime)
+		{
+			TexturePrintTimer = 0;
+			if (KindOfIllust < size(CreditIllust) - 1)
+				KindOfIllust++;
+			else
+				PrintEnd = true;
+		}
 
 		if (PrintNum < size(m_Credits))
 		{
@@ -856,29 +939,67 @@ public:
 				}
 			}
 		}
+
+		if (PicPos.x > WindowWide - CreditIlustW / 2&&PicVelo.x>0)
+		{
+			PicVelo.x = -PicVelo.x;
+		}
+		if(PicPos.x<CreditIlustW/2&&PicVelo.x<0)
+		{
+			PicVelo.x = -PicVelo.x;
+		}
+		if (PicPos.y > WindowHight - CreditIlustH / 2 && PicVelo.y > 0)
+		{
+			PicVelo.y = -PicVelo.y;
+		}
+		if (PicPos.y < CreditIlustH / 2 && PicVelo.y < 0)
+		{
+			PicVelo.y = -PicVelo.y;
+		}
+
+		PicPos += PicVelo * t;
 	}
 
 	void draw() const override
 	{
 		BackPic.scaled(4).drawAt(WindowWide / 2, WindowHight / 2);
-		Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(0, 0.7));
+		Rect{ 0,0,WindowWide,WindowHight }.draw(ColorF(0, 0.5));
+
+		SkipFont(U"早送り　Z").draw(WindowWide - 140, WindowHight - 40);
+
+		if (PrintEnd)
+		{
+			LastIllust.scaled(0.4).drawAt(LastIllustPos);
+			ThankFont(U"Thank you for playing!!").drawAt(LastIllustPos.x, LastIllustPos.y + 300,ColorF(Palette::Yellow));
+		}
+
+		if (allowTxturePrint)
+		{
+			if(TexturePrintTimer<1)
+				CreditIllust[KindOfIllust].first.scaled(CreditIllust[KindOfIllust].second).drawAt(PicPos,ColorF{1,TexturePrintTimer});
+			else if(TexturePrintTimer<PicTime-1)
+				CreditIllust[KindOfIllust].first.scaled(CreditIllust[KindOfIllust].second).drawAt(PicPos);
+			else
+				CreditIllust[KindOfIllust].first.scaled(CreditIllust[KindOfIllust].second).drawAt(PicPos, ColorF(1,Max(PicTime-TexturePrintTimer,0.0)));
+		}
+		
 
 		if (PrintTitleTimer < PrintTitleTime)
 		{
 			if (PrintTitleTimer < PrintTitleTimer - 1)
-				PrintTitleFont(U"Thank you for playing!").drawAt(WindowWide / 2, WindowHight / 2 - 100, ColorF(Palette::Yellow, Min(PrintTitleTimer/4, 1.0)));
+				PrintTitleFont(U"弾幕エアホッケー　スタッフ").drawAt(WindowWide / 2, WindowHight / 2 - 100, ColorF(Palette::White,Min(PrintTitleTimer/4, 1.0)));
 			else
-				PrintTitleFont(U"Thank you for playing!").drawAt(WindowWide / 2, WindowHight / 2 - 100, ColorF(Palette::Yellow, PrintTitleTime-PrintTitleTimer));
+				PrintTitleFont(U"弾幕エアホッケー　スタッフ").drawAt(WindowWide / 2, WindowHight / 2 - 100, ColorF(Palette::White, PrintTitleTime-PrintTitleTimer));
 		}
 		for (auto k : step(PrintNum))
 		{
 			if (m_Credits[k].first == nameSmall)
 			{
-				NomalName(m_Credits[k].second).drawAt(WindowWide / 2, CreditY[k]);
+				NomalName(m_Credits[k].second).drawAt(WindowWide / 2, CreditY[k],ColorF(Palette::Gold));
 			}
 			else
 			{
-				BigName(m_Credits[k].second).drawAt(WindowWide / 2, CreditY[k]);
+				BigName(m_Credits[k].second).drawAt(WindowWide / 2, CreditY[k],ColorF(Palette::Gold));
 			}
 		}
 	}
@@ -914,7 +1035,7 @@ void Main()
 
 	manager.add<Explain>(State::Explain);
 
-	//manager.init(State::Ending);
+	//manager.init(State::Credit);
 
 	while (System::Update())
 	{

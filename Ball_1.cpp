@@ -13,6 +13,7 @@ Ball_1::~Ball_1()
 
 void Ball_1::shot(Vec2 start, double dir, double speed, double decele, double t)
 {
+	
 	ball b = { start,dir,speed,decele ,t };
 	Balls << b;
 }
