@@ -5,6 +5,14 @@ class Ball_1:public EneBall
 private:
 	int32 R;	//Ball_1のビジュアル半径
 	double g;//重力
+	/*Array<Audio> oto_shot{Audio{U"Audios/発射音.mp3"},Audio{U"Audios/発射音.mp3"},Audio{U"Audios/発射音.mp3"},Audio{U"Audios/発射音.mp3"},Audio{U"Audios/発射音.mp3"},
+	Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" },
+	Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" },
+	Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" },
+	Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" },
+	Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" }, Audio{ U"Audios/発射音.mp3" },
+	};*/
+	int32 count = 0;
 public:
 	Ball_1(int32 r,int32 R);//rは当たり判定、Rはビジュアル半径
 	~Ball_1();

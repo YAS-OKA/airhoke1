@@ -118,6 +118,7 @@ void ButtonManager::SetFlag(bool ft)
 
 void ButtonManager::Change(int32 button)
 {
+
 	int32 count = 0;// bool skip = false;
 	if (m_pButton != NULL)
 	{
@@ -196,6 +197,7 @@ void ButtonManager::Change(int32 button)
 		}
 		count++;
 	}
+
 }
 
 void ButtonManager::Update()
@@ -208,6 +210,7 @@ void ButtonManager::Update()
 			Change(nowButton - 1);
 			PressedTimer = 0;
 			ChangeTimer = 0;
+			m_pButton->GetAudioDriftButton().playOneShot(0.5);
 		}
 		else
 		{
@@ -216,6 +219,7 @@ void ButtonManager::Update()
 				Change(nowButton + 1);
 				PressedTimer = 0;
 				ChangeTimer = 0;
+				m_pButton->GetAudioDriftButton().playOneShot(0.5);
 			}
 		}
 		//長押し移動
@@ -228,6 +232,7 @@ void ButtonManager::Update()
 				{
 					Change(nowButton - 1);
 					ChangeTimer = 0;
+					m_pButton->GetAudioDriftButton().playOneShot(0.5);
 				}
 				ChangeTimer += Scene::DeltaTime();
 			}
@@ -243,6 +248,7 @@ void ButtonManager::Update()
 					{
 						Change(nowButton + 1);
 						ChangeTimer = 0;
+						m_pButton->GetAudioDriftButton().playOneShot(0.5);
 					}
 					ChangeTimer += Scene::DeltaTime();
 				}

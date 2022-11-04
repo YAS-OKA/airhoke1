@@ -14,6 +14,7 @@ void Hanabi::HanabiShot(Ball_1* ball, double Maxct, double Minct)
 	ShotTimer += Scene::DeltaTime();
 	if (ShotTimer >= Random(Minct, Maxct))
 	{
+		oto_shot.playOneShot();
 		RectF r{ tableLeft + tableWide / 6,tableUpper + tableHight / 10-50,tableWide * 2 / 3,tableHight * 2 / 5 };
 		bullets b{ RandomVec2(r),0,0.3,0,Vec2(150,0) };
 		enebullets << b;
@@ -32,6 +33,7 @@ void Hanabi::Explo(Ball_1* ball)
 		{
 			if (it->ShotTimer >= it->GeneTimer)
 			{
+				oto_shot.playOneShot();
 				it->GeneTimer = 0.2;
 				it->Velocity.y += 1;
 				double dir = 0;

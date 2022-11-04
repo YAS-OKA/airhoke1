@@ -11,6 +11,8 @@ private:
 
 	double GeneTime = 4.0;		//敵がテーブル上にいないとき、敵を生み出すまでの時間
 
+
+	double otoTime = 0;
 	double Time = 0;//経過時間計測　T5Wipeで使う
 	double Time1 = 0;//経過時間（ショートタイム）
 	double kasandir = 0;//積分用dir

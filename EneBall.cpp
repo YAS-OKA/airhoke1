@@ -196,6 +196,7 @@ bool EneBall::IntersectsPlayer(Player* player)
 		const Circle enemyCircle{ itEneButs->pos,r };
 		if (enemyCircle.intersects(player->GetAtarihantei()))
 		{
+			PlayerHited.playOneShot();
 			player->duabilityDown();
 			return true;
 		}
@@ -208,6 +209,7 @@ bool EneBall::RayIntersectsPlayer(Player* player)
 {
 	for (auto it = Ray.begin(); it != Ray.end();)
 	{
+
 		double theta;
 		if (it->line.end.x - it->line.center().x < 0)
 		{
@@ -222,6 +224,9 @@ bool EneBall::RayIntersectsPlayer(Player* player)
 		{
 			if (rayRect.rotated(theta).intersects(player->GetAtarihantei()))
 			{
+				if (not RayIntersectPlayerNow)
+					PlayerHited.playOneShot();
+				RayIntersectPlayerNow = true;
 				player->duabilityDownContinuous();
 				
 				return true;
@@ -229,6 +234,7 @@ bool EneBall::RayIntersectsPlayer(Player* player)
 		}
 		it++;
 	}
+	RayIntersectPlayerNow = false;
 	return false;
 }
 

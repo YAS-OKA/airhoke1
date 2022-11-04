@@ -85,6 +85,9 @@ void Pac::intersects(Mallet* m)
 {
 	if (pac.intersects(m->GetMallet()))
 	{
+		if (PacCol.isPlaying())
+			PacCol.stop();
+		PacCol.play();
 		if (pacMoveType)//もしレーザにあたっていない（パックの見た目の動きがそのままなら
 		{
 			//すべてマレットに対するパックの相対的な値
@@ -165,6 +168,10 @@ bool Pac::intersects(Enemy* e)
 {
 	if (pac.intersects(e->GetMallet()))
 	{
+		if (PacCol.isPlaying())
+			PacCol.stop();
+		PacCol.play();
+
 		e->CollidePac(PacVelocity, Edamage);
 		e->HitBackPac(pac.x);
 		//すべてマレットに対するパックの相対的な値
@@ -216,11 +223,17 @@ void Pac::reflect(double e)
 {
 	if (pac.x <= tl + pac.r && PacVelocity.x < 0)
 	{
+		if (PacCol.isPlaying())
+			PacCol.stop();
+		PacCol.play();
 		pac.x = tl + pac.r;
 		PacVelocity.x = -PacVelocity.x * e;
 	}
 	if (pac.x >= ww - tl - pac.r && PacVelocity.x > 0)
 	{
+		if (PacCol.isPlaying())
+			PacCol.stop();
+		PacCol.play();
 		pac.x = ww - tl - pac.r;
 		PacVelocity.x = -PacVelocity.x * e;
 	}
@@ -229,6 +242,9 @@ void Pac::reflect(double e)
 	{
 		if (!pac.intersects(egoal))//!(WindowWide / 2 - goalWide / 2 + Pr <= pac.x && WindowWide / 2 + goalWide / 2 - Pr >= pac.x))		//ゴールの条件
 		{
+			if (PacCol.isPlaying())
+				PacCol.stop();
+			PacCol.play();
 			pac.y = tu + pac.r;
 			PacVelocity.y = -PacVelocity.y * e;
 		}
@@ -246,6 +262,10 @@ void Pac::reflect(double e)
 			{
 				if (Distance(*it, pac.center) <= pac.r)
 				{
+					if (PacCol.isPlaying())
+						PacCol.stop();
+					PacCol.play();
+
 					pac.center = Merikomi(pac, PacVelocity, *it);
 
 					if (PacVelocity.x * PacVelocity.y > 0)
@@ -266,6 +286,9 @@ void Pac::reflect(double e)
 	{
 		if (!pac.intersects(pgoal))//!(WindowWide / 2 - goalWide / 2 + Pr <= pac.x && WindowWide / 2 + goalWide / 2 - Pr >= pac.x))		//ゴールの条件
 		{
+			if (PacCol.isPlaying())
+				PacCol.stop();
+			PacCol.play();
 			pac.y = wh - tu - pac.r;
 			PacVelocity.y = -PacVelocity.y * e;
 		}
@@ -273,6 +296,9 @@ void Pac::reflect(double e)
 		{
 			//敵の得点
 			//もしパックがゴールのかどにあたったら
+			if (PacCol.isPlaying())
+				PacCol.stop();
+			PacCol.play();
 			for (auto it = GorlSide.begin(); it != GorlSide.end();)
 			{
 				if (Distance(*it, pac.center) <= pac.r)
@@ -345,3 +371,12 @@ Vec2 Pac::GetPacXY()
 	return pac.center;
 }
 
+void Pac::AudioPause()
+{
+	oto_Pause.playOneShot(0.5);
+}
+
+void Pac::AudioTokuten()
+{
+	oto_Tokuten.playOneShot();
+}

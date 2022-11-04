@@ -36,6 +36,7 @@ protected:
 	bool Revivaled;
 
 	Array<Vec2> lifes;
+
 public:
 	Mallet(double x, double y, double e, double m_r, double h_s, double r_s, double m_s, double tableleft,
 		double tableupper, double windowwide, double windowhight, double g_r, Array<Vec2> life);
@@ -78,6 +79,8 @@ public:
 	void SetRevivaled(bool b);
 
 	int32 GetLifeNum();
+
+	void PlayAudioIfHited();
 };
 
 #endif //_MALLET_H_

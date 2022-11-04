@@ -15,7 +15,7 @@ protected:
 	Ball_1* ball5 = 0;
 	Ball_1* ball6 = 0;
 	Ball_1* ball7 = 0;
-
+	Audio oto_shot{ U"Audios/発射音.mp3" };
 public:
 	BaseType(int32 scor);
 	int32 Getm_score();

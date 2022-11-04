@@ -71,6 +71,7 @@ void EneBullet_1::RemoveHanabimae()
 
 void EneBullet_1::Shotball(Ball_1* ball, double Speed, double ct,double MinDece,double MaxDece)
 {
+	bool shoted = false;//一回打ったら音を鳴らさない
 	for (auto itB_1 = enebullets.begin(); itB_1 != enebullets.end();)
 	{
 		//itB_1->ShotCoolTime = ct;
@@ -79,6 +80,9 @@ void EneBullet_1::Shotball(Ball_1* ball, double Speed, double ct,double MinDece,
 		{
 			if (itB_1->GeneTimer == 0)
 			{
+				if (not shoted)
+					oto_shot.playOneShot();
+				shoted = true;
 				ball->shot(itB_1->pos, itB_1->dir, Speed, Random(MinDece, MaxDece), 0);
 			}
 			itB_1->ShotTimer = 0;
@@ -89,6 +93,8 @@ void EneBullet_1::Shotball(Ball_1* ball, double Speed, double ct,double MinDece,
 
 void EneBullet_1::Shotball(Ball_1* ball, double Speed, double ct)
 {
+	bool shoted = false;//一回打ったら音を鳴らさない
+
 	for (auto itB_1 = enebullets.begin(); itB_1 != enebullets.end();)
 	{
 		//itB_1->ShotCoolTime = ct;
@@ -97,6 +103,9 @@ void EneBullet_1::Shotball(Ball_1* ball, double Speed, double ct)
 		{
 			if (itB_1->GeneTimer == 0)
 			{
+				if (not shoted)
+					oto_shot.playOneShot();
+				shoted = true;
 				ball->shot(itB_1->pos, itB_1->dir, Speed, 0, 0);		
 			}
 			itB_1->ShotTimer = 0;
@@ -107,6 +116,8 @@ void EneBullet_1::Shotball(Ball_1* ball, double Speed, double ct)
 
 void EneBullet_1::Shotball(Ball_1* ball, double Speed, double dece, double ct)
 {
+	bool shoted = false;//一回打ったら音を鳴らさない
+
 	for (auto itB_1 = enebullets.begin(); itB_1 != enebullets.end();)
 	{
 		itB_1->ShotTimer += Scene::DeltaTime();
@@ -114,6 +125,9 @@ void EneBullet_1::Shotball(Ball_1* ball, double Speed, double dece, double ct)
 		{
 			if (itB_1->GeneTimer == 0)
 			{
+				if (not shoted)
+					oto_shot.playOneShot();
+				shoted = true;
 				ball->shot(itB_1->pos, itB_1->dir, Speed, dece, 0);
 			}
 			itB_1->ShotTimer = 0;
@@ -125,6 +139,7 @@ void EneBullet_1::Shotball(Ball_1* ball, double Speed, double dece, double ct)
 void EneBullet_1::Shotball(Ball_1* ball, double Speed, double ct,Array<double> dir,double zurasu,double MinDece,double MaxDece)
 {
 	int i = 0;
+	bool shoted=false;//一回打ったら音を鳴らさない
 	for (auto itB_1 = enebullets.begin(); itB_1 != enebullets.end();)
 	{
 		//itB_1->ShotCoolTime = ct;
@@ -133,6 +148,9 @@ void EneBullet_1::Shotball(Ball_1* ball, double Speed, double ct,Array<double> d
 		{
 			if (itB_1->GeneTimer == 0)
 			{
+				if (not shoted)
+					oto_shot.playOneShot();
+				shoted = true;
 				ball->shot(itB_1->pos, dir[i]+zurasu, Speed, Random(MinDece, MaxDece),0);
 			}
 			itB_1->ShotTimer = 0;
@@ -143,11 +161,15 @@ void EneBullet_1::Shotball(Ball_1* ball, double Speed, double ct,Array<double> d
 
 void EneBullet_1::RandomShotball(Ball_1* ball, double MinSpeed, double MaxSpeed, Array<double> dir, double baratsuki, double MinD, double MaxD)
 {
+	bool shoted = false;
 	int i = 0;
 	for (auto itB_1 = enebullets.begin(); itB_1 != enebullets.end();)
 	{
 		if (itB_1->GeneTimer == 0)
 		{
+			if (not shoted)
+				oto_shot.playOneShot();
+			shoted = true;
 			ball->shot(itB_1->pos, dir[i] + Random(-baratsuki,baratsuki), Random(MinSpeed,MaxSpeed), Random(MinD, MaxD), 0);
 		}
 		itB_1++; i++;
@@ -174,13 +196,21 @@ void EneBullet_1::ShotRay(Ball_1* ball, int32 hutosa, Color c, double len)
 
 void EneBullet_1::HunsuiShot(Ball_1* ball, double maxs, double mins, double ct, double zurasu, double grab)
 {
+	bool Shoted = false;
 	for (auto it = enebullets.begin(); it != enebullets.end();)
 	{
 		it->ShotTimer += Scene::DeltaTime();
 		if (it->ShotTimer >= ct)
 		{
-			if(it->GeneTimer==0)
+			if (it->GeneTimer == 0)
+			{
+				if (not Shoted)
+				{
+					oto_shot.playOneShot(0.1);
+				}
+				Shoted = true;
 				ball->shot(it->pos, it->dir + Random(-zurasu, zurasu), Random(mins, maxs), 0, 0, grab);
+			}
 			it->ShotTimer = 0;
 		}
 		it++;
@@ -423,6 +453,14 @@ bool EneBullet_1::T5Wipe(Ball_1* ball, double t1,double t2)
 {
 	double deltatime = Scene::DeltaTime();
 	Time += deltatime;
+
+	if (otoTime > 0)
+	{//計測始まってたら
+		otoTime += deltatime;
+		if (otoTime > 0.1)
+			otoTime = 0;
+	}
+
 	if (t2 >= Time)
 	{
 		kasandir = 0;
@@ -437,7 +475,14 @@ bool EneBullet_1::T5Wipe(Ball_1* ball, double t1,double t2)
 		if (Time1 >= t1/24)
 		{
 			if (dir >= dir * (Time - t2) * 2 / t1)
-				ball->shot(Vec2(WindowWide - tableLeft, tableUpper), dir * (Time - t2)*2 / t1 + CalDir(Vec2(WindowWide - tableLeft, tableUpper), Vec2(WindowWide - tableLeft, WindowHight - tableUpper)) + Random(-3.14 / 60, 3.14 / 60), Random(300, 400), Random(20, 40), 0);
+			{
+				if (otoTime == 0)
+				{
+					oto_shot.playOneShot();
+					otoTime += deltatime;
+				}
+				ball->shot(Vec2(WindowWide - tableLeft, tableUpper), dir * (Time - t2) * 2 / t1 + CalDir(Vec2(WindowWide - tableLeft, tableUpper), Vec2(WindowWide - tableLeft, WindowHight - tableUpper)) + Random(-3.14 / 60, 3.14 / 60), Random(300, 400), Random(20, 40), 0);
+			}
 			if (Time1 >= t1 / 5)
 				Time1 = 0;
 		}
@@ -464,10 +509,17 @@ bool EneBullet_1::T5Wipe(Ball_1* ball, double t1,double t2)
 	{
 		double dir = CalDir(Vec2(WindowWide - tableLeft, tableUpper), Vec2(tableLeft, WindowHight - tableUpper)) - CalDir(Vec2(WindowWide - tableLeft, tableUpper), Vec2(WindowWide - tableLeft, WindowHight - tableUpper))+3.14 / 16;
 		Time1 += deltatime;
-		if (Time1 >=  t1/ 24)
+		if (Time1 >= t1 / 24)
 		{
-			if (dir >= dir * (Time - 2 * t1 - t2 * 3) *2 / t1)
-				ball->shot(Vec2(tableLeft, tableUpper), dir * (Time - 2 * t1 - t2 * 3)*2 /t1 + 3.14 * 5 / 11  - dir + Random(-3.14 / 60, 3.14 / 60), Random(300, 400), Random(20, 40), 0);
+			if (dir >= dir * (Time - 2 * t1 - t2 * 3) * 2 / t1)
+			{
+				if (otoTime == 0)
+				{
+					oto_shot.playOneShot();
+					otoTime += deltatime;
+				}
+				ball->shot(Vec2(tableLeft, tableUpper), dir * (Time - 2 * t1 - t2 * 3) * 2 / t1 + 3.14 * 5 / 11 - dir + Random(-3.14 / 60, 3.14 / 60), Random(300, 400), Random(20, 40), 0);
+			}
 			if (Time1 >= t1 / 5)
 				Time1 = 0;
 		}

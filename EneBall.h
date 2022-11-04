@@ -27,6 +27,9 @@ protected:
 	int32 r;				//弾の大きさ(当たり判定)
 	int32 vr;				//弾の大きさ（見ため）
 	Effect effect;			//パックにあたって消滅するときのエフェクト
+	Audio PlayerHited{ U"Audios/被弾.mp3" };
+
+	bool RayIntersectPlayerNow=false;//レーザーがプレイヤーに当たった直後かどうか
 public:
 	EneBall(int32 BallR,int32 BallVR=4);
 	virtual ~EneBall();

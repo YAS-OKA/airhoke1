@@ -19,7 +19,7 @@ protected:
 	int32 r;
 
 	Effect effect;
-
+	Audio oto_shot{ U"Audios/発射音.mp3" };
 public:
 	EneBullet(int32 BulletR);
 	virtual ~EneBullet();

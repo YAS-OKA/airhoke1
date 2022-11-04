@@ -103,7 +103,7 @@ void EneBullet::ChangeDir(double delta)
 
 void EneBullet::AimShot(Player* player, Ball_1* ball, double Speed,double dec,double ct)		//自機狙い
 {
-
+	bool shoted = false;
 	for (auto itB_1 = enebullets.begin(); itB_1 != enebullets.end();)
 	{
 		//itB_1->ShotCoolTime = ct;
@@ -112,6 +112,11 @@ void EneBullet::AimShot(Player* player, Ball_1* ball, double Speed,double dec,do
 		{
 			if (itB_1->GeneTimer == 0)
 			{
+				if (not shoted)
+				{
+					oto_shot.playOneShot();
+				}
+				shoted = true;
 				Vec2 dir{ player->GetXY() - itB_1->pos };
 				ball->shot(itB_1->pos, acos(dir.normalized().x), Speed, dec, 0);
 			}

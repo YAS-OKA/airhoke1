@@ -3,7 +3,10 @@
 
 Ball_1::Ball_1(int32 r1, int32 r2) :EneBall(r1,r2), R(r2)
 {
-
+	/*for (auto& oto : oto_shot)
+	{
+		oto.setVolume(0.3);
+	}*/
 }
 
 Ball_1::~Ball_1()
@@ -13,7 +16,22 @@ Ball_1::~Ball_1()
 
 void Ball_1::shot(Vec2 start, double dir, double speed, double decele, double t)
 {
-	
+	/*for (auto i : step(size(oto_shot)))
+	{
+		if (oto_shot[i].isPlaying())
+		{
+			if (i == size(oto_shot) - 1)
+			{
+				oto_shot[i].stop();
+				oto_shot[i].play();
+			}
+		}
+		else
+		{
+			oto_shot[i].play();
+		}
+	}*/
+
 	ball b = { start,dir,speed,decele ,t };
 	Balls << b;
 }

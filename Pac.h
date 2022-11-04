@@ -8,6 +8,10 @@
 class Pac
 {
 private:
+	Audio PacCol{ U"Audios/打ち返す.mp3" };
+
+	Audio oto_Pause{ U"Audios/ポーズ.mp3" };//タイプマネージャーがスタティックだからここでならすしかない。。。。
+	Audio oto_Tokuten{ U"Audios/得点.mp3" };//同文
 	Circle pac;
 	Vec2 PacVelocity;
 	Vec2 PreXY;
@@ -61,6 +65,9 @@ public:
 	Vec2 GetPreXY() { return PreXY; };
 
 	void AddScore(int32* score);
+
+	void AudioPause();
+	void AudioTokuten();
 };
 
 #endif //_PAC_H_

@@ -14,6 +14,10 @@ private:
 	double thetaRange = Maxt - mint;
 
 	bool CantHitBack = false;
+
+	Audio TimPanch{ U"Audios/ティム殴る.mp3" };
+	Audio Down{ U"Audios/宇宙人ダウン.mp3" };
+
 public:
 	Enemy(double x, double y, double e, double m_r, double h_s, double r_s, double m_s, double tableleft, double tableupper,
 		double windowwide, double windowhight, double g_r,Array<Vec2> life);

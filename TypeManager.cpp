@@ -249,6 +249,7 @@ void TypeManager::Update()
 
 	if (KeyEscape.down())
 	{
+		insP->AudioPause();
 		pause = !pause;
 	}
 	if (pause || gameover)
@@ -333,6 +334,7 @@ void TypeManager::Update()
 	//ゴールした時の処理
 	if (!insP->GetPac().intersects(table))
 	{
+		insP->AudioTokuten();
 		GoalFlag = true;
 		if (insP->GetPac().y > WindowHight / 2)
 		{

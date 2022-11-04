@@ -66,4 +66,4 @@ extern bool ColTim;//ティム君が衝突したかどうか。メイン関数�
 
 extern int32 BombGage;//ボムを吐いてから次のボムが復活するまでに必要なスコア
 
-extern int32 Nannido;//難易度　falseなら弾幕祭　trueならお祭り
+extern int32 Nannido;//難易度 0なら弾幕祭 1ならお祭り

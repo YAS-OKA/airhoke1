@@ -1009,6 +1009,7 @@ void Main()
 {
 	//ResetRanking();//ハイスコアランキングをリセットしたいときはここのコメントを外す
 
+
 	System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 
 	Window::Resize(WindowWide, WindowHight);

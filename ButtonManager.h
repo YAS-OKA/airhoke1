@@ -23,6 +23,7 @@ private:
 	Array<m_Button> b;
 	double PressedTimer = 0;
 	double ChangeTimer = 0;
+
 public:
 	ButtonManager();
 

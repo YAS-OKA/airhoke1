@@ -15,6 +15,8 @@ private:
 	bool HaveBomb;//ボムがあるかないか
 	int32 PiggyBomb;//ボムを使った時のスコアを保持
 	int32 CountBombExplo;//ボムを使った回数をカウント
+	Audio GetRepaired{ U"Audios/プレイヤー回復.mp3" };
+	Audio GetTim{ U"Audios/ティム回復.mp3" };
 public:
 	Player(double x, double y, double em, double m_r, double h_s, double r_s, double m_s, double tableleft, double tableupper,
 		double windowwide, double windowhight, double g_r,Array<Vec2> life);

@@ -21,6 +21,7 @@ int32 Player::AccumulateBomb(int32 nowscore)
 	{
 		if (nowscore - PiggyBomb > BombGage)
 		{
+			GetTim.playOneShot();
 			HaveBomb = true;
 		}
 		else if (nowscore < PiggyBomb)
@@ -198,6 +199,7 @@ void Player::RepairMallet()
 	duability += Scene::DeltaTime() * DuaInit / RepairTime;
 	if (duability >= DuaInit)
 	{
+		GetRepaired.playOneShot();
 		Repaired();
 	}
 }

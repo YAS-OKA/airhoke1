@@ -85,6 +85,7 @@ void Enemy::CollidePac(Vec2 v,double damage)
 
 void Enemy::ColideTim()
 {
+	TimPanch.playOneShot(0.3);
 	duability -= Edamage*2100;
 }
 
@@ -100,7 +101,8 @@ void Enemy::SetDua(int32 d)
 
 void Enemy::BreakMallet()
 {
-
+	if (not Break)
+		Down.playOneShot();
 	SetXY(-1000, -1000);
 	duability = 0;
 	Break = true;
