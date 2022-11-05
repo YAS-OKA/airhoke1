@@ -533,7 +533,7 @@ public:
 		if (changeSc && BackChangeSc)
 			changeScene(State::Title);//タイトルに戻るを選択してランキングシーンに飛んだ場合
 		else if(changeSc)
-			changeScene(State::Ending,10s);//ゲームをクリアしてからランキングシーンに飛んだ場合
+			changeScene(State::Ending);//ゲームをクリアしてからランキングシーンに飛んだ場合
 		if (m_rank != -1) {
 			if (board->isEnter() && not board->GetName().isEmpty())
 			{
@@ -1006,7 +1006,7 @@ public:
 
 void Main()
 {
-	ResetRanking();//ハイスコアランキングをリセットしたいときはここのコメントを外す
+	//ResetRanking();//ハイスコアランキングをリセットしたいときはここのコメントを外す
 
 
 	System::SetTerminationTriggers(UserAction::CloseButtonClicked);
