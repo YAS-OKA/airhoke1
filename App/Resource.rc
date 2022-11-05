@@ -85,18 +85,22 @@ Resource(engine/texture/box-shadow/8.png)
 //
 //	Fonts
 //
+Resource(engine/font/mplus/mplus-1p-light.ttf.zstdcmp)
 Resource(engine/font/mplus/mplus-1p-regular.ttf.zstdcmp)
+Resource(engine/font/mplus/mplus-1p-medium.ttf.zstdcmp)
+Resource(engine/font/mplus/mplus-1p-bold.ttf.zstdcmp)
+Resource(engine/font/mplus/mplus-1p-heavy.ttf.zstdcmp)
 Resource(engine/font/noto-cjk/NotoSansCJK-Regular.ttc.zstdcmp)
 //Resource(engine/font/noto-cjk/NotoSansJP-Regular.otf.zstdcmp)
 
 //
 //	Emoji Fonts
 //
-Resource(engine/font/noto-emoji/NotoColorEmoji.ttf.zstdcmp)
-Resource(engine/font/mplus/mplus-1p-heavy.ttf.zstdcmp)
+
 //
 //	Icons
 //
+Resource(engine/font/materialdesignicons/materialdesignicons-webfont.ttf.zstdcmp)
 
 //
 //	Sound Font
@@ -108,7 +112,52 @@ Resource(engine/font/mplus/mplus-1p-heavy.ttf.zstdcmp)
 //
 //////////////////////////////////////////////////////
 
-
+Resource(score.txt)
+Resource(story1.txt)
+Resource(story2.txt)
+Resource(story3.txt)
+Resource(story4.txt)
+Resource(Ending.txt)
+Resource(ルール説明.txt)
+Resource(操作説明.txt)
+Resource(Images/AlienOnMallet.png)
+Resource(Images/AnnnaOnMallet.png)
+Resource(Images/AttackedTableSideAnnna.png)
+Resource(Images/Bat1.png)
+Resource(Images/Bat2.png)
+Resource(Images/Bat3.png)
+Resource(Images/BombMark.png)
+Resource(Images/game_Back.png)
+Resource(Images/TableSideAlien2.1.png)
+Resource(Images/TableSideAlien2.2.png)
+Resource(Images/TableSideAnnna.png)
+Resource(Images/Tim1.png)
+Resource(Images/Tim2.png)
+Resource(Images/Tim3.png)
+Resource(Images/Tim4.png)
+Resource(Images/Credit/1766.png)
+Resource(Images/Credit/1768.png)
+Resource(Images/Credit/おわかれ1.png)
+MYIDENTIFIER_1 FILE "Images/Credit/スクリーンショット 2022-11-04 200526.png"
+MYIDENTIFIER_2 FILE "Images/Credit/スクリーンショット 2022-11-04 200645.png"
+Resource(Images/Credit/世田キャン巡り.png)
+Resource(Images/ending/1.JPG)
+Resource(Images/ending/2.JPG)
+Resource(Images/ending/3.JPG)
+Resource(Images/ending/4.JPG)
+Resource(Images/ending/5.JPG)
+Resource(Images/ending/6.JPG)
+Resource(Audios/button06.mp3)
+Resource(Audios/ティム殴る.mp3)
+Resource(Audios/ティム回復.mp3)
+Resource(Audios/プレイヤー回復.mp3)
+Resource(Audios/ポーズ.mp3)
+Resource(Audios/ボタン移動.mp3)
+Resource(Audios/宇宙人ダウン.mp3)
+Resource(Audios/打ち返す.mp3)
+Resource(Audios/得点.mp3)
+Resource(Audios/発射音.mp3)
+Resource(Audios/被弾.mp3)
 
 /* examples 
 

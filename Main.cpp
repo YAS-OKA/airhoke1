@@ -1,5 +1,4 @@
 ﻿#include <Siv3D.hpp>
-#include<HamFramework.hpp>
 #include"data.h"
 #include"Mallet.h"
 #include"Player.h"
