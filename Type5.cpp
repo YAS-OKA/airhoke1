@@ -184,7 +184,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			break;
 		case 2:
 			enemy->SetCantHitBack(false);
-			Edamage = 0.017;
+			Edamage = 0.017+Nannido*0.03;
 			ball1->BallAllExtingish();
 			ball2->BallAllExtingish();
 			ball3->BallAllExtingish();
@@ -232,7 +232,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			NeutronStar->NeutronStarRay(ball7, hutosa, Palette::Skyblue, pac,&S);
 			Setm_score(S);
 
-			uzu->uzukaiten(ball6, 3.14 / 17, 1.7+Nannido*0.3, 110, Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 12, &BaseDir);
+			uzu->uzukaiten(ball6, 3.14 / 17, 1.7+Nannido*0.5, 110, Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 12-Nannido*6, &BaseDir);
 			if (enemy->GetDua() < DuaInit * 4 / 5) {
 				TypeChange = true; type++;
 			}
@@ -258,7 +258,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 			NeutronStar->NeutronStarRay(ball7, hutosa, Palette::Skyblue, pac, &S);
 			Setm_score(S);
 
-			uzu->uzukaiten(ball6, 3.14 / 10, 0.9+Nannido*0.4, 140, Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 12, &BaseDir);
+			uzu->uzukaiten(ball6, 3.14 / 10, 0.9+Nannido*0.5, 140, Vec2(tableLeft + tableWide / 2, tableUpper + tableHight * 2 / 5), 12-Nannido*6, &BaseDir);
 			if (enemy->GetDua() < DuaInit * 3 / 5) {
 				TypeChange = true; type++;
 			}
@@ -375,7 +375,6 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 					}
 				}
 				
-
 				nokogiri_down->NobiShotRay(ball1, tableHight / 6, 4, Palette::Deepskyblue, 8);
 				nokogiri_mid->NobiShotRay(ball2, tableHight / 6, 4, Palette::Deepskyblue, 8);
 				nokogiri_upper->NobiShotRay(ball3, tableHight / 6, 4, Palette::Deepskyblue, 8);
@@ -385,15 +384,15 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 
 				if (taikyuuTime <= 5)
 				{
-					nokogiri_down->ColumnSetV(Vec2(-70 * (taikyuuTime - 3), 0));
-					nokogiri_upper->ColumnSetV(Vec2(-70 * (taikyuuTime - 3), 0));
-					nokogiri_mid->ColumnSetV(Vec2(70 * (taikyuuTime - 3), 0));
+					nokogiri_down->ColumnSetV(Vec2(-(70-Nannido*27) * (taikyuuTime - 3), 0));
+					nokogiri_upper->ColumnSetV(Vec2(-(70-Nannido*27) * (taikyuuTime - 3), 0));
+					nokogiri_mid->ColumnSetV(Vec2((70-Nannido*27) * (taikyuuTime - 3), 0));
 				}
 				else
 				{
-					nokogiri_down->ColumnSetV(Vec2(-140, 0));
-					nokogiri_upper->ColumnSetV(Vec2(-140, 0));
-					nokogiri_mid->ColumnSetV(Vec2(140, 0));
+					nokogiri_down->ColumnSetV(Vec2(-(70 - Nannido * 27)*2, 0));
+					nokogiri_upper->ColumnSetV(Vec2(-(70 - Nannido * 27)*2, 0));
+					nokogiri_mid->ColumnSetV(Vec2((70 - Nannido * 27)*2, 0));
 				}
 
 				if (taikyuuTime < 8)
@@ -405,7 +404,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 					if (stopwatch.sF() < time[i / 2] + 2) {
 						const Vec2 pos = from[i].lerp(to[i], t);
 						const Vec2 pos2 = from[i + 1].lerp(to[i + 1], t);
-						RectLaser->RectArea(ball4, pos, pos2, 12, Palette::Gold);
+						RectLaser->RectArea(ball4, pos, pos2, 12, Palette::Khaki);
 					}
 					else
 					{
@@ -434,7 +433,7 @@ void Type5::Update(Pac* pac, Player* player, Enemy* enemy)
 
 					}
 					jikinerai->AimShot(player, ball3, BallSpeed * 1.6, 0, 0.6+Nannido*1.5);
-					michi->Shotball(ball5, BallSpeed * 0.7, 40, 0.07);
+					michi->Shotball(ball5, BallSpeed * 0.7, 40, 0.07+Nannido*0.6);
 					michi->SwingingSIN(3.14 / 6 + 0.2, 0, 11, jikuDir);
 				}
 				if (taikyuuTime >= 75 && taikyuuTime < 76)

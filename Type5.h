@@ -25,7 +25,7 @@ private:
 	EneBullet_1* wipe = 0;
 	Hanabi* hanabi = 0;
 
-	int32 ziguzaguinterval = tableWide/4;
+	int32 ziguzaguinterval = tableWide / 4;
 	int32 hunsuiinterval = 20;
 	int32 nokointerval = 150;
 	int32 hutosa = 6;

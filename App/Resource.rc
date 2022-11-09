@@ -111,7 +111,7 @@ Resource(engine/font/materialdesignicons/materialdesignicons-webfont.ttf.zstdcmp
 //	Siv3D App Resources (Your application resources here)
 //
 //////////////////////////////////////////////////////
-
+/*
 Resource(score.txt)
 Resource(story1.txt)
 Resource(story2.txt)
@@ -157,7 +157,7 @@ Resource(Audios/‰F’ˆlƒ_ƒEƒ“.mp3)
 Resource(Audios/‘Å‚¿•Ô‚·.mp3)
 Resource(Audios/“¾“_.mp3)
 Resource(Audios/”­Ë‰¹.mp3)
-Resource(Audios/”í’e.mp3)
+Resource(Audios/”í’e.mp3)*/
 
 /* examples 
 
@@ -169,7 +169,6 @@ Resource(Audios/”í’e.mp3)
 	Resource(example/windmill.png)		// ok
 	Resource(assets/a b c.txt)			// error: contains white spaces
 	Resource("example/windmill.png")	// error: contains double quotation marks
-
 	//
 	// If your file contains a white space, define the identifier without using Resource() macro.
 	//

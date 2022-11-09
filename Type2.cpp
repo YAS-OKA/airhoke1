@@ -89,13 +89,13 @@ void Type2::Update(Pac* pac, Player* player, Enemy* enemy)
 	case 2:
 		if (FirstGene)
 		{
-			bullet1->GeneBullet_1(0.5);
-			bullet2->GeneBullet_1(0.5);
+			bullet1->GeneBullet_1(1);
+			bullet2->GeneBullet_1(0.7);
 			if (bullet1->TimerNotCount() && bullet2->TimerNotCount())
 				FirstGene = false;
 		}
-		bullet1->Shotball(ball1, BallSpeed * 6 / 7 -Nannido*50, 4, 0.15+Nannido*0.1);
-		bullet2->Shotball(ball1, BallSpeed * 6 / 7 - Nannido * 50, 4, 0.15 + Nannido * 0.1);
+		bullet1->Shotball(ball1, BallSpeed * 6 / 7 -Nannido*50, 4, 0.15+Nannido*0.3);
+		bullet2->Shotball(ball1, BallSpeed * 6 / 7 - Nannido * 50, 4, 0.15 + Nannido * 0.3);
 		bullet1->MoveGrab(Vec2(WindowWide / 2, tableUpper + tableHight / 4),4000);
 		bullet2->MoveGrab(Vec2(WindowWide / 2, tableUpper + tableHight / 4), 4000);
 		ball1->BallMove(BallSpeed / 3);

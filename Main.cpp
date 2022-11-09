@@ -36,7 +36,7 @@ void ResetRanking()
 void SetTextureCharacters()
 {
 	//横の絵
-	const Texture textureTsAnnna{ U"Images/TableSideAnnna.png" };
+	const Texture textureTsAnnna{U"Images/TableSideAnnna.png" };
 	const Texture textureAttackedTsAnnna{ U"Images/AttackedTableSideAnnna.png" };
 	const Texture textureTsAlien{ U"Images/TableSideAlien2.1.png" };
 	const Texture textureAttackedTsAlien{ U"Images/TableSideAlien2.2.png" };
@@ -168,8 +168,8 @@ public:
 
 		if (changeSc)
 		{			
-			fontNannido(U"　　　お祭り用の難易度です。\n適度に遊び、適度に挑みたいという\n　　　　　方におすすめです。").drawAt(WindowWide / 2, WindowHight / 2 + 40,ColorF(Palette::Lime));
-			fontNannido(U"　 　  難易度が少し上がります。\nある程度弾幕を乗り越えてきたという\n　　　方ならきっと楽勝でしょう。").drawAt(WindowWide / 2, WindowHight / 2 + 190, ColorF(Palette::Cyan));
+			fontNannido(U"　お祭り用の難易度です。\n気軽に遊びたいという方へ").drawAt(WindowWide / 2, WindowHight / 2 + 40,ColorF(Palette::Lime));
+			fontNannido(U"　 　  難易度が少し上がります。\nある程度弾幕を乗り越えてきたという\n　　　　方には楽勝でしょう").drawAt(WindowWide / 2, WindowHight / 2 + 190, ColorF(Palette::Cyan));
 		}
 	}
 };
